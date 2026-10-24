@@ -1,35 +1,40 @@
-# Publishing and repository visibility
+# GitHub Pages deployment
 
-Reviewed 2026-10-24. Repository: <https://github.com/jakubfalenczyk/grand-theft-survivors>, currently **private**. Initial commit: `ba42ca3` (`init`). No hosting deployment, second repository, visibility change or project license has been approved.
+The project uses a public [GitHub repository](https://github.com/jakubfalenczyk/grand-theft-survivors) and [GitHub Pages](https://jakubfalenczyk.github.io/grand-theft-survivors/). The original code and documentation use the MIT license, with attribution to Jakub Falenczyk. Third-party licenses remain separate.
 
-## GitHub Pages eligibility
+## Release workflow
 
-GitHub Free supports Pages from public repositories. It does not require choosing an open-source license. GitHub Pro, Team and Enterprise also support Pages from private repositories. Private source visibility should not be confused with access control on a published website. [GitHub Pages availability](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages).
+`.github/workflows/pages.yml` runs on pushes to `main` or a manual dispatch. Its build job installs Node.js 22 and locked npm dependencies, installs Chromium, and runs `npm run check`.
 
-| Option                                             | Source visibility                                          | Tradeoff                                                                  |
-| -------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------- |
-| Public source repository + Pages                   | Source/history visible                                     | Straightforward community workflow; choose reuse permissions deliberately |
-| Private source + public build repository + Pages   | Editable source/history private; deployed JS/assets public | Free Pages route with a second release destination to maintain            |
-| Private source + eligible paid GitHub plan + Pages | Source private; deployed client assets still downloadable  | Simpler repository arrangement; depends on account plan                   |
+After the checks pass, it rebuilds with `--base=/grand-theft-survivors/`. A separate browser test loads that build at the repository path and checks the game canvas, dialogs, asset URLs and license links. GitHub receives only `dist/` as the Pages artifact. A deployment job publishes it through the `github-pages` environment.
 
-## Build-only public repository
+The build job can read repository content and Pages configuration. The deployment job has `pages: write` and `id-token: write`. It does not need a stored personal access token. A newer deployment cancels an unfinished older one.
 
-This is technically feasible: run checks and build from the private repository, then copy only `dist/` to a separate public repository and deploy it there. For project Pages, build with `vite build --base=/PUBLIC_REPOSITORY_NAME/` and verify all asset/license links at that path. Do not copy source history, `sources/`, credentials or editor files. Keep sourcemaps disabled unless intentionally publishing them; do not strip required license notices.
+To reproduce the Pages build locally:
 
-A manual initial release can avoid cross-repository automation credentials. If automated later, the source workflow needs explicit, narrowly scoped access to the destination; its default repository token should not be assumed to write another repository. Configure publication in the destination repository. GitHub's Pages artifact workflow is documented in [custom Pages workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
+```sh
+npm ci
+npx playwright install chromium
+npm run check
+npm run build -- --base=/grand-theft-survivors/
+npm run test:pages
+npm run preview -- --base=/grand-theft-survivors/
+```
 
-Minification is a delivery optimization, not source protection: the browser downloads and executes JavaScript and downloads game assets. It hides TypeScript source structure, comments and private history, but a determined person can format and inspect the shipped code. Private server logic can remain secret; this prototype has no server.
+Open `http://localhost:4173/grand-theft-survivors/`. The production build does not expose the development debug bridge. It includes the project license and dependency notices under `licenses/`.
 
-Pages currently limits published sites to 1 GB and has a soft 100 GB/month bandwidth limit. Revisit hosting before adding large audio packs or a substantial audience. [Pages limits](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits).
+## Licensing and visibility
 
-## Public source and community value
+MIT allows use, modification and redistribution, including commercial use. Copies must retain the copyright and license notices. It does not require a visible author credit on every screen. The game includes a voluntary author credit in its credits section. See [LICENSE](../LICENSE) and the [third-party register](THIRD-PARTY-ASSETS.md).
 
-My recommendation for the proposed YouTube/devlog direction is to consider a public repository once the project identity, asset rights and desired reuse policy are settled. It can provide concrete material for discussion, reproducible bug reports and visible development progress. This is a project strategy judgment, not a forecast of audience growth.
+The `private` field in `package.json` prevents accidental npm publication. It does not control GitHub repository visibility.
 
-Anyone with public access can technically clone the repository. There is no defensible numerical estimate here for whether someone will turn this particular prototype into a competing game. Repository privacy reduces immediate access to editable sources; it does not prevent others from copying a published game's observable mechanics. Ongoing design, balancing, recognizable art and community interaction are valuable beyond the initial code snapshot.
+Reference screenshots in `sources/` are not part of the MIT grant or the deployed build. Audio candidates remain research links, with no audio files included.
 
-Public does not automatically mean open source. GitHub distinguishes publication from licensing and permits viewing/forking public repositories under its terms; selecting a license defines broader reuse permissions. MIT/Apache-style licenses intentionally permit broad reuse, including commercial reuse subject to conditions. Copyleft is a different sharing choice, not clone prevention. Code, original art and third-party assets may need distinct notices. [GitHub repository licensing](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository).
+## Hosting limits
 
-Before deciding on public source, review reference screenshots separately from shipped assets and select a policy for original code/art. Existing dependency licenses must still be honored; using open tools, public references or AI assistance does not by itself pick a license for the whole project. No license or ownership conclusion is inferred merely from the development method.
+GitHub Free supports Pages from public repositories. GitHub Pro, Team and Enterprise also support private source repositories. See [Pages availability](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages).
 
-Decision pending: remain private with build-only hosting, use private-source Pages under an eligible plan, or publish the source for community development. No action on these options is scheduled.
+GitHub documents a 1 GB published-site limit and a soft bandwidth limit of 100 GB per month. Recheck those limits before adding large audio files or changing hosting. See [Pages limits](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits).
+
+The browser downloads the game's JavaScript and assets. Minification reduces their size; it does not prevent inspection or copying. Publishing the source supports bug reports and contributions. It also lets others reuse the code under MIT.

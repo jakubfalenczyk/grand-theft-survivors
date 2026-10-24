@@ -12,7 +12,7 @@ test('boots without browser errors and renders the playable city', async ({ page
   await page.reload();
   await page.waitForFunction(() => window.__gameDebug?.isReady());
   await expect(page.locator('#game canvas')).toBeVisible();
-  await expect(page).toHaveTitle('Grand Theft Survivors — city prototype');
+  await expect(page).toHaveTitle('Grand Theft Survivors city prototype');
   expect((await state(page)).buildings).toBeGreaterThan(100);
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(300);

@@ -78,11 +78,80 @@ test('English text and accessible names are available in every interface mode', 
   await expect(page.getByRole('button', { name: 'Pause game' })).toBeVisible();
   await page.getByRole('button', { name: 'Controls H' }).click();
   await expect(page.getByRole('dialog')).toContainText('Walk backward');
-  await expect(page.getByRole('dialog')).toHaveAccessibleName('FIRST TIME ON THE STREETS?');
+  await expect(page.getByRole('dialog')).toHaveAccessibleName('CONTROLS');
   await page.keyboard.press('Escape');
   await page.keyboard.press('m');
-  await expect(page.getByRole('dialog')).toHaveAccessibleName('FIND YOUR WAY.');
+  await expect(page.getByRole('dialog')).toHaveAccessibleName('CITY MAP');
   await page.keyboard.press('m');
   await expect(page.locator('#district-name')).toHaveText('Ironworks');
   await expect(page.locator('body')).not.toContainText('{{');
+});
+
+test('switching dialogs restores the original focus and blocks background content', async ({
+  page,
+}) => {
+  const help = page.getByRole('button', { name: 'Controls H' });
+  const map = page.locator('#open-map');
+  for (const sequence of [
+    { opener: help, keys: ['m', 'h', 'm'] },
+    { opener: map, keys: ['h', 'm', 'h'] },
+  ]) {
+    await sequence.opener.click();
+    for (const key of sequence.keys) {
+      await page.keyboard.press(key);
+      await expect(page.getByRole('dialog')).toHaveCount(1);
+      await page.keyboard.press('Shift+Tab');
+      expect(
+        await page.evaluate(() => Boolean(document.activeElement?.closest('[role="dialog"]'))),
+      ).toBe(true);
+      expect(
+        await page
+          .locator('#asset-credits')
+          .evaluate((node) => node instanceof HTMLElement && node.inert),
+      ).toBe(true);
+    }
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await expect(sequence.opener).toBeFocused();
+    expect(
+      await page
+        .locator('#asset-credits')
+        .evaluate((node) => node instanceof HTMLElement && node.inert),
+    ).toBe(false);
+  }
+});
+
+test('destroying an open dialog restores external focus and removes its handlers', async ({
+  page,
+}) => {
+  await page.goto('/tests/fixtures/lifecycle.html');
+  await expect(page.locator('#restarts')).toHaveText('1');
+  const outside = page.locator('#restart-scene');
+  await outside.focus();
+  await page.keyboard.press('h');
+  await expect(page.getByRole('dialog')).toHaveAccessibleName('CONTROLS');
+  await page.locator('#destroy-interface').click();
+  await expect(page.locator('#app')).toBeEmpty();
+  await expect(outside).toBeFocused();
+  await page.keyboard.press('h');
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+});
+
+test('keyboard-opened dialogs return focus to a visible control', async ({ page }) => {
+  await page.evaluate(() => {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+  });
+  await page.keyboard.press('h');
+  await page.keyboard.press('m');
+  await page.keyboard.press('Escape');
+  expect(
+    await page.evaluate(() => {
+      const active = document.activeElement;
+      return (
+        active instanceof HTMLElement &&
+        active !== document.body &&
+        !active.closest('[hidden], [inert]')
+      );
+    }),
+  ).toBe(true);
 });

@@ -1,13 +1,23 @@
 # Localization
 
-English is the only shipped locale (`en`). The source catalog is `src/shared/intl/en.ts`; every player-facing label belongs there, including accessible names, keycaps, street names, credits, map labels and document title. Technical IDs, error diagnostics and numeric gameplay configuration are not translations.
+English is the only current language. `src/shared/intl/en.ts` contains all player-facing text, including accessible names, controls, street names, credits, city map labels and the page title. Keep technical IDs, diagnostic errors and gameplay numbers outside the catalog.
 
-`t(key, values)` checks message keys and required interpolation parameters at compile time. It returns plain text for DOM `textContent` or Canvas text. Do not concatenate translated sentences. Use named parameters; future quantities should use `Intl.NumberFormat` and plural selection rather than English suffixes. The current zoom and coordinates use explicit catalog patterns.
+## Messages
 
-The static HTML shell uses `{{message.key}}` markers. `translateMarkup` checks keys and escapes values for text and quoted attributes. It never evaluates HTML from translations. The Vite HTML transform resolves the document title before delivery, and the UI sets the document language/title when mounted. Unit tests reject unresolved markers and uncatalogued shell labels.
+Use `t(key, values)` for DOM `textContent` and Canvas text. TypeScript checks the message key and required named parameters. Translate whole sentences rather than concatenating fragments. The current zoom and coordinate messages use named parameters. Future quantities should use `Intl.NumberFormat` and plural rules.
 
-Snapshots carry `DistrictId`, not translated names. The UI resolves IDs to messages; Canvas renderers use the same catalog. Text baked into textures is created once; switching language during a session is deliberately not implemented.
+The HTML shell uses `{{message.key}}` markers. `translateMarkup` checks each key and escapes its value for text and quoted attributes. Translations contain plain text. The Vite HTML transform resolves the page title, and mounting the interface sets the document language and title.
 
-To add a locale, supply a catalog satisfying `Catalog`, validate that each translated message has the same named placeholders, then add explicit locale selection and fallback to English. At that point inject the selected translator into text consumers and include locale in text-bearing texture keys or invalidate those textures. Do not introduce a second English catalog, silently accept missing keys or promise live switching before handling texture regeneration. No translation library is needed for the current single-locale scope.
+Game snapshots contain `DistrictId`. The HUD resolves that ID to a message. Canvas renderers read the same catalog. Street names become part of the ground texture when the scene creates it.
 
-Verification: `npm run check` includes catalog/template contracts and English accessible names across help, pause and map modes.
+## Adding a language
+
+1. Create a catalog satisfying `Catalog` and check that its named parameters match English.
+2. Add language selection and an English fallback.
+3. Pass the selected translator to text consumers.
+4. Regenerate text-bearing textures or include the language in their keys.
+5. Check text length, accessible names and glyph coverage in the new language.
+
+Language switching during a run is not implemented. Changing a text-bearing texture needs an explicit regeneration step. Do not add a second English catalog.
+
+Unit tests check interpolation, unknown keys and shell coverage. Browser tests check English text and accessible names in the help, pause and map dialogs.

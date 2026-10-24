@@ -17,13 +17,13 @@ Keep square or chamfered corners, hard 4/6 px shadows, 48 px targets and a 3 px 
 
 ## World art: version 0.3.0
 
-The monochrome city came from `world.neutral-mix`: every material interpolated only asphalt and concrete. The earlier integration overextended the UI accent restrictions into a ban on colored physical materials. That restriction is superseded here.
+The monochrome city came from `world.neutral-mix`: every material interpolated only asphalt and concrete. Version 0.3.0 adds colored physical materials while retaining the existing UI accent roles.
 
 Keep neutral roads, foundations, machinery and strong silhouettes. `world.materials` now defines subdued physical surface inks: brick and warm masonry in Old Town; blue steel in Ironworks; patinated roofs and warm plaster in Greenfield; layered green foliage/parks, restrained vehicle paint and occasional amber windows/lamps. All remain flat fills with hard shadows. Lamps do not emit glow. These tokens are world surfaces, not new UI accents. Saturated semantic colors remain reserved for readable interaction signals.
 
 `world.districts` references material names; `worldInk` combines neutral mixes with material values. Roofs use Canvas textures generated once, while facades use projected Phaser polygons. Geometry, seeds, footprints, collision and movement balance are unchanged. The minimap remains a simplified neutral navigation view with an acid player marker.
 
-This is the first color pass, not final authored city art. Future readable landmarks and faction signage require explicit data and labels. Do not recolor arbitrary districts using faction accents as decoration.
+City art will need another review once landmarks and faction signs exist. Future readable landmarks and faction signage require explicit data and labels. Do not recolor arbitrary districts using faction accents as decoration.
 
 ## Adding tokens and components
 

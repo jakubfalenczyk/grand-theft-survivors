@@ -4,7 +4,7 @@ Hand this folder to the agent. It contains everything needed to build game UI (H
 
 ## Files
 
-- `tokens.json`: source of truth (colors, factions, fonts, scale, shape). Port to the target engine/framework from here.
+- `tokens.json`: token source (colors, factions, fonts, scale, shape). Port to the target engine/framework from here.
 - `tokens.css` / `components.css`: ready-made CSS (web, Electron, HTML-based game UI). Prefix `kb-`.
 - `components.html`: live reference of every component. Open it in a browser to see the target look.
 - `AGENT_PROMPT.md`: a short brief to paste to the agent.

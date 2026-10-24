@@ -16,7 +16,7 @@ const session = new GameSession(),
 const services = { session, bus };
 const ui = createInterface(element(document, '#app'), services);
 const game = createGame(ui.host, services);
-installDebugBridge(game, session);
+const removeDebug = installDebugBridge(game, session);
 let restarts = 0;
 bus.on(EVENTS.WORLD_READY, () => {
   // Game installs its own blur handler after the first Scene.create returns.
@@ -31,3 +31,11 @@ bus.on(EVENTS.WORLD_READY, () => {
 element(document, '#restart-scene').addEventListener('click', () =>
   game.scene.getScene(GAME.scene).scene.restart(),
 );
+
+element(document, '#destroy-interface').addEventListener('click', () => {
+  removeDebug();
+  game.destroy(true);
+  ui.destroy();
+  session.destroy();
+  bus.destroy();
+});

@@ -1,84 +1,90 @@
 # Grand Theft Survivors
 
-A browser game prototype combining a top-down city sandbox with the planned progression of a survival action game. Built with **Phaser 3.90, strict TypeScript and Vite 7**, with original procedural graphics and the Kerbside interface design system.
+A top-down city game prototype built with Phaser 3.90, TypeScript and Vite 7. Explore Westbridge on foot, with building collisions, a following camera and a Kerbside interface.
+
+[Play in your browser](https://jakubfalenczyk.github.io/grand-theft-survivors/). A keyboard is required to move.
 
 ![Westbridge prototype](docs/prototype-desktop.png)
 
-## Play locally
+## Current version
 
-Use Node.js **22.12+** and npm. The project uses one `package-lock.json` and Phaser's bundled TypeScript definitions.
+Westbridge has a seeded 2520 × 2520 layout with three district palettes, parks and parked cars. Roofs and facades shift with the camera to show building height. The interface includes a minimap, city map, pause, controls, zoom and position reset.
+
+Combat, enemies, XP, bosses, moving traffic and sound are planned. The health bar is a preview. Cars and trees are scenery without collision.
+
+The planned game uses player actions to raise hostility with three gangs and the police. Hostile factions send reinforcements and bosses. See the [design](docs/DESIGN.md) and [backlog](docs/BACKLOG.md) for the agreed rules and proposals.
+
+## Run locally
+
+Install Node.js 22.12 or later and npm, then run:
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Open [the game](http://localhost:5173/) or the [Kerbside component reference](http://localhost:5173/design-system/kerbside-design-system/components.html). The interface adapts to small screens; movement currently requires a keyboard. Fonts are served locally.
+Open [the local game](http://localhost:5173/). The [Kerbside reference](http://localhost:5173/design-system/kerbside-design-system/components.html) shows the shared interface styles. The game serves fonts locally.
 
-| Input                 | Action                          |
-| --------------------- | ------------------------------- |
-| W / Up                | Walk forward                    |
-| S / Down              | Walk backward at the same speed |
-| A / D or Left / Right | Turn                            |
-| Shift + forward       | Run                             |
-| M                     | Toggle city map                 |
-| Esc                   | Pause / resume                  |
-| H / Controls button   | Help                            |
-| Mouse wheel / − / +   | Camera zoom                     |
+| Input                 | Action                     |
+| --------------------- | -------------------------- |
+| W / Up                | Walk forward               |
+| S / Down              | Walk backward              |
+| A / D or Left / Right | Turn                       |
+| Shift + forward       | Run                        |
+| M                     | Open or close the city map |
+| Esc                   | Pause or resume            |
+| H                     | Show controls              |
+| Mouse wheel / − / +   | Change camera zoom         |
 
-## Current prototype
-
-Explore Westbridge: a deterministic 2520 × 2520 city with three district material palettes, parks, side streets and decorative parked cars. The player walks, turns and runs, collides with buildings/world boundaries, and is followed by a camera with projected high roofs and facades. Minimap, full map, pause/help dialogs, camera zoom and position reset are implemented.
-
-**Combat, enemies, XP, bosses, traffic and sound are not implemented.** Health is explicitly a HUD preview; parked cars and trees are scenery without collision. The current block grid is a prototype, not the final city design.
-
-The intended direction is a living city where player actions build hostility with three gangs and the police, provoking raids and faction bosses. Weapons and upgrades will be configurable. Future systems require design review before implementation; see [Design](docs/DESIGN.md).
-
-## Development and verification
+## Check and build
 
 ```sh
-npm run theme:build    # regenerate CSS after editing token JSON
-npm run typecheck     # Vite does not type-check
-npm run lint
-npm run format:check
+npm run check         # theme, types, lint, formatting, tests and build
+npm run theme:build   # regenerate CSS after editing tokens.json
+npm run typecheck     # check TypeScript separately
 npm run test:unit
 npx playwright install chromium
 npm run test:e2e
-npm run check         # all of the above checks, plus production build
-npm run build         # output: dist/
-npm run preview       # serve production build on port 4173
+npm run build         # create dist/
+npm run preview       # preview dist/ on port 4173
 ```
 
-`npm run check` checks theme synchronization/usage, types, lint, formatting, unit contracts, build and Chromium behavior. E2E covers movement, collisions, perspective, dialogs, keyboard focus, scene restarts, local fonts, English accessibility and mobile layout. The Phaser bundle warning remains visible; engine code is split into its own cacheable chunk.
+Use `npm run format` to format files. Vite does not check TypeScript types during a build. Keep `package-lock.json` as the only package-manager lockfile. Phaser supplies its own TypeScript types.
 
-## Project layout
+The tests cover world generation, projection, movement, collisions, dialogs, focus, scene restarts, fonts, English labels and mobile layout. Small screens support the interface; touch movement is not available. Vite reports a size warning for the Phaser chunk, which is about 1.2 MB before gzip.
 
-- `src/app`: application composition, resizing and cleanup.
-- `src/game/scenes`: scene lifecycle and feature coordination.
-- `src/game/features`: player, world generation/rendering and map drawing.
-- `src/shared`: engine-independent contracts, session/events, math and localization.
-- `src/theme`: adapters for canonical Kerbside tokens.
-- `src/ui`: semantic HTML interface, dialogs, HUD and styles.
-- `design-system/kerbside-design-system`: canonical tokens and components.
-- `tests`: unit contracts, browser scenarios and lifecycle fixture.
+## Project files
 
-All player-facing copy uses the English catalog in `src/shared/intl/en.ts`, including accessibility and Canvas labels. Additional languages are planned; no other locale or language selector ships yet.
+| Path                                   | Contents                                               |
+| -------------------------------------- | ------------------------------------------------------ |
+| `src/app`                              | Application setup, resize handling and cleanup         |
+| `src/game/scenes`                      | Scene lifecycle                                        |
+| `src/game/features`                    | Player, city generation, rendering and map drawing     |
+| `src/shared`                           | Data contracts, events, session, math and localization |
+| `src/theme`                            | Kerbside token adapters                                |
+| `src/ui`                               | HTML interface, HUD, dialogs and styles                |
+| `design-system/kerbside-design-system` | Shared tokens and CSS components                       |
+| `tests`                                | Unit and browser tests                                 |
+
+All player-facing text comes from `src/shared/intl/en.ts`. English is the only current language.
 
 ## Documentation
 
-- [Architecture](docs/ARCHITECTURE.md) — boundaries, lifecycle and verification.
-- [Design](docs/DESIGN.md) — current state and intended gameplay.
-- [Backlog](docs/BACKLOG.md) — proposed tasks, dependencies, acceptance criteria and open decisions; no implementation started.
-- [Publishing](docs/PUBLISHING.md) — private/public source and GitHub Pages options.
-- [Localization](docs/LOCALIZATION.md) — keys, interpolation and adding locales.
-- [Theming](docs/THEMING.md) — Kerbside roles and world materials.
-- [Art pipeline](docs/ART-PIPELINE.md) — how graphics work and external asset options.
-- [Audio candidates](docs/AUDIO-CANDIDATES.md) — preliminary research, not integrated assets.
-- [Third-party assets](docs/THIRD-PARTY-ASSETS.md) — used assets and retained licenses.
-- [Agent rules](AGENTS.md) — contribution and architecture constraints.
+- [Game terminology](GLOSSARY.md)
+- [Architecture review](docs/ARCHITECTURE-REVIEW.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Game design](docs/DESIGN.md)
+- [Planned tasks and decisions](docs/BACKLOG.md)
+- [GitHub Pages deployment](docs/PUBLISHING.md)
+- [Localization](docs/LOCALIZATION.md)
+- [Kerbside integration](docs/THEMING.md)
+- [Graphics and asset formats](docs/ART-PIPELINE.md)
+- [Audio candidates](docs/AUDIO-CANDIDATES.md)
+- [Third-party assets and licenses](docs/THIRD-PARTY-ASSETS.md)
+- [Agent instructions](AGENTS.md)
 
-## Assets and project status
+## License
 
-World graphics are generated by project code. Font licenses are retained in `public/licenses/` and linked from the interface. Reference screenshots under `sources/` are research material and are not shipped in the game build. GTA 2 and Vampire Survivors are design references; their assets are not used in the playable prototype.
+The original project code and documentation use the [MIT license](LICENSE). Copyright 2026 Jakub Falenczyk. You may use, modify and distribute them, including commercially, provided you retain the copyright and license notices.
 
-This repository is currently private. No open-source license has been selected for project code or original art. Dependency and third-party asset licenses apply separately. A public release and its licensing are separate decisions.
+Fonts and software dependencies keep their own licenses. The game lists font credits and full licenses in its interface. GTA 2 and Vampire Survivors are design references. Their sprites, logos and audio are not part of the playable game. Screenshots in `sources/` are reference material and are excluded from the project's MIT license and game build.

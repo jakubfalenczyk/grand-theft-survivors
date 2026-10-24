@@ -15,8 +15,7 @@ export function createInterface(root: HTMLElement, { session, bus }: AppServices
   const events = new AbortController();
   const onClick = (id: string, handler: () => void) =>
     $(id).addEventListener('click', handler, { signal: events.signal });
-  const pauseDialog = new DialogController($('overlay'));
-  const mapDialog = new DialogController($('map-overlay'));
+  const dialogs = new DialogController(root);
   onClick('help-button', () => session.setMode('help'));
   onClick('resume-button', () => session.setMode('playing'));
   onClick('pause-button', () => session.togglePause());
@@ -59,25 +58,7 @@ export function createInterface(root: HTMLElement, { session, bus }: AppServices
     { signal: events.signal },
   );
   const stopSession = session.subscribe(({ mode, zoom }) => {
-    $('help-content').hidden = mode !== 'help';
-    $('dialog-title').textContent = mode === 'help' ? t('help.title') : t('pause.title');
-    $('dialog-description').textContent =
-      mode === 'help' ? t('help.description') : t('pause.description');
-    for (const node of root.children)
-      if (node instanceof HTMLElement && node.tagName === 'HEADER') node.inert = session.blocked;
-    for (const node of element(root, '.game-frame').children) {
-      if (node instanceof HTMLElement && node.id !== 'overlay' && node.id !== 'map-overlay')
-        node.inert = session.blocked;
-    }
-    element(root, '.under-game').inert = session.blocked;
-    // Close the old modal before opening the next, preserving focus restoration.
-    if (mode === 'map') {
-      pauseDialog.setOpen(false);
-      mapDialog.setOpen(true);
-    } else {
-      mapDialog.setOpen(false);
-      pauseDialog.setOpen(['paused', 'help'].includes(mode));
-    }
+    dialogs.setMode(mode);
     $('pause-button').textContent = mode === 'playing' ? t('pause.button') : t('resume.short');
     $('pause-button').setAttribute(
       'aria-label',
@@ -93,8 +74,7 @@ export function createInterface(root: HTMLElement, { session, bus }: AppServices
     destroy() {
       events.abort();
       cleanups.forEach((cleanup) => cleanup());
-      pauseDialog.destroy();
-      mapDialog.destroy();
+      dialogs.destroy();
       root.replaceChildren();
     },
   };

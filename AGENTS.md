@@ -1,49 +1,50 @@
-# Zasady współpracy i architektury
+# Collaboration and architecture rules
 
-## Globalne zasady współpracy
+## Collaboration
 
-- Pytaj użytkownika o dodatkowe uprawnienia lub zgodę dopiero wtedy, gdy potrzebna czynność wykracza poza dotychczasowe upoważnienie, jest nieodwracalna albo wybór istotnie zmieni rezultat. Najpierw przygotuj kompletny, możliwy do oceny wynik w granicach udzielonego upoważnienia.
-- Nie opieraj trwałego stanu pracy wyłącznie na historii rozmowy ani plikach tymczasowych, takich jak `/tmp`; istotne ustalenia zapisuj w odpowiednich, trwałych plikach projektu.
-- Jeśli automatyzacja Chromium nie wystarcza do zweryfikowania zachowania, użyj rzeczywistego Chrome na Windows za pośrednictwem dostępnego rozszerzenia lub pluginu. Dobieraj metodę do scenariusza i nie traktuj ograniczeń trybu headless jako ograniczeń całej dostępnej weryfikacji.
+- Ask for additional permission or approval only when an action exceeds the existing authorization, is irreversible, or would materially change the result. First prepare a complete, reviewable result within the authorized scope.
+- Keep important decisions in durable project files. Do not rely only on chat history or temporary files such as `/tmp`.
+- If Chromium automation cannot verify a behavior, use real Chrome on Windows through an available extension or plugin. Choose the verification method for the scenario. Headless limitations do not rule out other available methods.
+- Write repository content in English, including documentation, agent instructions, comments, identifiers, test fixtures and screenshots. Add future translations through the localization catalog.
 
-## GitHub i commity
+## GitHub and commits
 
-- Twórz commity odpowiadające pojedynczemu zadaniu lub spójnej funkcjonalności. Związane z nią zmiany kodu, testów i dokumentacji umieszczaj razem.
-- Listę zadań wykonuj po kolei i zapisuj osobny commit po ukończeniu każdego zadania wymagającego zmian w repozytorium. Trzy takie zadania powinny dać trzy kolejne commity, zamiast jednego zbiorczego.
-- Po ukończeniu i zweryfikowaniu całej listy wypchnij przygotowane commity jednym pushem do `origin/main`, chyba że użytkownik wskaże inny sposób publikacji.
-- Stosuj Conventional Commits w formacie `type(scope): description`. Zakres jest opcjonalny. Dobieraj typ do zmiany, np. `feat`, `fix`, `refactor`, `docs`, `test`, `build`, `ci` lub `chore`.
-- Wiadomości commitów pisz po angielsku. Opisuj konkretną zmianę krótko, w trybie rozkazującym, np. `feat(audio): add footsteps`.
-- Przed każdym `git commit` zastosuj skill `unslop` do tytułu i ewentualnej treści wiadomości. Usuń ogólniki i zbędne słowa, zachowując format Conventional Commits.
+- Make each commit cover one task or coherent feature. Include its related code, tests and documentation together.
+- Complete task lists in order. Commit each completed task that changes the repository separately. Three such tasks should produce three commits rather than one combined commit.
+- After completing and verifying the whole list, push the prepared commits together to `origin/main`, unless the user requests another publication workflow.
+- Use Conventional Commits in the form `type(scope): description`. The scope is optional. Choose the type that matches the change, such as `feat`, `fix`, `refactor`, `docs`, `test`, `build`, `ci` or `chore`.
+- Write commit messages in English. Describe the change briefly in the imperative, for example `feat(audio): add footsteps`.
+- Before every `git commit`, apply the `unslop` skill to the subject and any body text. Remove vague language and unnecessary words while preserving the Conventional Commits format.
 
-## Obowiązujący stos
+## Required stack
 
-- Phaser **3.90**, TypeScript `strict`, Vite 7, Node.js 22.12+, npm z jednym `package-lock.json`. Typy Phasera pochodzą z jego pakietu; nie dodawaj `@types/phaser`.
-- Używaj `.ts`, jawnych kontraktów danych i `import type`. Nie dodawaj `any`, `@ts-ignore` ani wyłączenia `strict` w celu obejścia błędów. Zawężaj typy; asercje ograniczaj do sprawdzonych granic bibliotek.
-- Nie aktualizuj głównej wersji Phasera ani nie dodawaj drugiego menedżera pakietów w ramach zwykłego feature. Uzasadnienie wyboru narzędzi: `docs/ARCHITECTURE.md`.
+- Use Phaser **3.90**, strict TypeScript, Vite 7, Node.js 22.12 or later, and npm with one `package-lock.json`. Phaser supplies its own types. Do not add `@types/phaser`.
+- Use `.ts`, explicit data contracts and `import type`. Do not add `any`, `@ts-ignore` or disable `strict` to work around errors. Narrow types and restrict assertions to checked library interfaces.
+- Do not upgrade Phaser's major version or add a second package manager as part of an ordinary feature. Tooling decisions are documented in `docs/ARCHITECTURE.md`.
 
-## Granice modułów
+## Module boundaries
 
-- `src/main.ts` to wyłącznie importy stylów i bootstrap. `src/app` składa aplikację, zarządza rozmiarem i sprzątaniem.
-- `src/game/scenes` koordynuje systemy i cykl życia sceny. Każda scena ma własny plik. Logikę gracza, generacji, renderowania i przyszłych feature umieszczaj w `src/game/features/<nazwa>/`.
-- `src/game` nie odwołuje się do `document`/`window` ani nie importuje `ui`/`app`. `src/ui` nie importuje Phasera ani klas scen. Łącz je przez typowane zdarzenia, `GameSession` i niemutowalne snapshoty danych.
-- `src/shared` zawiera wyłącznie kontrakty i kod niezależny od silnika, DOM oraz motywu. Nie przenoś tam kodu tylko dlatego, że trudno znaleźć mu miejsce.
-- Dane świata, obrysy kolizji i renderer to odrębne odpowiedzialności. Generator zwraca zwykłe dane i przyjmuje seed; bez `Math.random`, GameObjectów i odwołań do sceny. Renderer nie dopisuje obiektów Phasera do wygenerowanego layoutu.
-- Nie twórz na zapas pustych feature, frameworka ECS, globalnych singletonów ani generycznego systemu pluginów. Dodawaj abstrakcję po pojawieniu się rzeczywistej potrzeby.
+- Keep `src/main.ts` limited to style imports and bootstrap. `src/app` composes the application and owns resizing and cleanup.
+- `src/game/scenes` coordinates systems and scene lifecycle. Each scene has its own file. Put player logic, generation, rendering and future features in `src/game/features/<feature>/`.
+- `src/game` must not access `document` or `window`, or import `ui` or `app`. `src/ui` must not import Phaser or scene classes. Connect them through typed events, `GameSession` and immutable data snapshots.
+- `src/shared` contains only contracts and code independent of the engine, DOM and theme. Do not move code there merely because its correct location is unclear.
+- Keep world data, collision footprints and rendering separate. The generator accepts a seed and returns plain data without `Math.random`, GameObjects or scene references. The renderer must not add Phaser objects to the generated layout.
+- Do not create empty features, an ECS framework, global singletons or a generic plugin system for hypothetical needs. Add abstractions when a feature requires them.
 
 ## Kerbside
 
-- Przeczytaj `design-system/kerbside-design-system/README.md` i `docs/THEMING.md` przed pracą nad wyglądem.
-- Jedynym źródłem tokenów jest `design-system/kerbside-design-system/tokens.json`. Nowy token dodaj tam, potem `npm run theme:build`. Nie edytuj wygenerowanego `tokens.css`.
-- Wspólne komponenty `.kb-*` są w kanonicznym `components.css`. Układ aplikacji jest w `src/ui/styles`. Kolory JS/Canvas/Phaser bierz z `src/theme/theme.ts`. Zakaz lokalnych literałów kolorów w UI i rendererach.
-- Zachowuj role akcentów, fonty, twarde cienie, ścięcia i rozmiar celów 48 px. Bez rozmyć, świecenia, miękkich gradientów i zaokrąglonych kart. Frakcja zawsze z etykietą i właściwym kolorem tekstu; `muted` tylko dla tekstu nieaktywnego.
-- Dialogi korzystają z `DialogController`, zatrzymują grę przez `GameSession`, zarządzają focusem i mają dostępne etykiety. Nie dopisuj niezależnych booleans dla mapy/pauzy/pomocy.
+- Read `design-system/kerbside-design-system/README.md` and `docs/THEMING.md` before changing appearance.
+- `design-system/kerbside-design-system/tokens.json` is the only token source. Add new tokens there, then run `npm run theme:build`. Do not edit the generated `tokens.css`.
+- Shared `.kb-*` components belong in the canonical `components.css`. Application layout belongs in `src/ui/styles`. Get JavaScript, Canvas and Phaser colors from `src/theme/theme.ts`. Do not use local color literals in UI or renderers.
+- Preserve accent roles, fonts, hard shadows, chamfered corners and 48 px targets. Do not add blur, glow, soft gradients or rounded cards. Pair faction colors with labels and use the correct text color. Use `muted` only for disabled text.
+- Dialogs use `DialogController`, pause gameplay through `GameSession`, manage focus and have accessible labels. Do not add independent booleans for map, pause or help state.
 
-## Cykl życia, wydajność i weryfikacja
+## Lifecycle, performance and verification
 
-- Każda subskrypcja ma właściciela i cleanup. Zdarzenia na `game.events` usuwaj z konkretną funkcją podczas `SHUTDOWN`; nigdy cudzych listenerów. Sprzątaj DOM listenery, obserwatory i debug bridge przy odmontowaniu aplikacji.
-- Tekstury są globalne w obrębie gry. Używaj stabilnych kluczy i sprawdzaj istnienie przed utworzeniem; restart sceny nie może mnożyć zasobów.
-- Ruch licz w jednostkach świata/s, obrót w rad/s. Zachowaj jednakowy chód przód/tył (105), bieg do przodu (176), obrót (4.8). Nie zmieniaj balansu przy refaktorze.
-- HUD aktualizuj snapshotami, nie zapisami do DOM w każdej klatce. Render świata nie może zależeć od fps. Pooling przeciwników i pocisków wprowadzaj z tymi feature, nie wcześniej.
-- `npm run check` musi przejść: tokeny, typy, lint, format, unit, build, E2E. Testuj kontrakty, zachowanie i regresje; nie pisz testów wyłącznie odtwarzających implementację.
-- Vite transpiluje TS bez sprawdzania typów. Udany dev server/build nie zastępuje `npm run typecheck`.
-- Ustalenia architektury utrzymuj w `docs/ARCHITECTURE.md`, kierunek gry w `docs/DESIGN.md`, zasady motywu w `docs/THEMING.md`. Dokumentację aktualizuj razem z kodem.
+- Every subscription needs an owner and cleanup. Remove listeners on `game.events` with their exact handler during `SHUTDOWN`. Never remove another owner's listeners. Clean up DOM listeners, observers and the debug bridge when unmounting the application.
+- Textures are global within a game instance. Use stable keys and check whether a texture exists before creating it. Restarting a scene must not multiply resources.
+- Calculate movement in world units per second and rotation in radians per second. Keep forward and backward walking at 105, forward running at 176 and turning at 4.8. Do not change balance during a refactor.
+- Update the HUD from snapshots rather than writing to the DOM every frame. World rendering must not depend on frame rate. Add enemy and projectile pooling when those features arrive.
+- `npm run check` must pass token checks, types, lint, formatting, unit tests, build and E2E. Test contracts, behavior and regressions rather than tests that only reproduce the implementation.
+- Vite transpiles TypeScript without checking types. A working dev server or build does not replace `npm run typecheck`.
+- Keep architecture decisions in `docs/ARCHITECTURE.md`, game direction in `docs/DESIGN.md` and theme rules in `docs/THEMING.md`. Update documentation with the code.

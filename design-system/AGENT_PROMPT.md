@@ -1,3 +1,3 @@
-# Integracja Kerbside
+# Kerbside integration
 
-Przeczytaj [kanoniczny brief](kerbside-design-system/AGENT_PROMPT.md), [README paczki](kerbside-design-system/README.md) i [THEMING](../docs/THEMING.md). Reguły architektury projektu znajdują się w [AGENTS.md](../AGENTS.md).
+Read the [canonical brief](kerbside-design-system/AGENT_PROMPT.md), [package README](kerbside-design-system/README.md) and [integration guide](../docs/THEMING.md). Follow the project architecture rules in [AGENTS.md](../AGENTS.md).

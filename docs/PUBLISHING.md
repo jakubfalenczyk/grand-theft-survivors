@@ -2,6 +2,14 @@
 
 The project uses a public [GitHub repository](https://github.com/jakubfalenczyk/grand-theft-survivors) and [GitHub Pages](https://jakubfalenczyk.github.io/grand-theft-survivors/). The original code and documentation use the MIT license, with attribution to Jakub Falenczyk. Third-party licenses remain separate.
 
+## Repository access
+
+The repository is public and allows forks. Only the owner, `jakubfalenczyk`, has write access. Pull requests remain enabled for the owner's use, with `pull_request_creation_policy` set to `collaborators_only`. External pull requests are not accepted.
+
+The access review on 2026-10-24 found no other collaborators, pending invitations or deploy keys. Default GitHub Actions tokens have read permissions and cannot approve pull requests. The deployment workflow requests Pages publication permissions without repository-content write access.
+
+Keep these settings unless the owner explicitly changes the contribution policy. Fork owners can modify their own repositories under MIT; that does not grant write access here.
+
 ## Release workflow
 
 `.github/workflows/pages.yml` runs on pushes to `main` or a manual dispatch. Its build job installs Node.js 22 and locked npm dependencies, installs Chromium, and runs `npm run check`.
@@ -37,4 +45,4 @@ GitHub Free supports Pages from public repositories. GitHub Pro, Team and Enterp
 
 GitHub documents a 1 GB published-site limit and a soft bandwidth limit of 100 GB per month. Recheck those limits before adding large audio files or changing hosting. See [Pages limits](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits).
 
-The browser downloads the game's JavaScript and assets. Minification reduces their size; it does not prevent inspection or copying. Publishing the source supports bug reports and contributions. It also lets others reuse the code under MIT.
+The browser downloads the game's JavaScript and assets. Minification reduces their size; it does not prevent inspection or copying. Publishing the source supports bug reports and lets others reuse the code under MIT.

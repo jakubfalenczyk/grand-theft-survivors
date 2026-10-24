@@ -83,6 +83,10 @@ All player-facing text comes from `src/shared/intl/en.ts`. English is the only c
 - [Third-party assets and licenses](docs/THIRD-PARTY-ASSETS.md)
 - [Agent instructions](AGENTS.md)
 
+## Contributions
+
+Jakub Falenczyk maintains this repository. External pull requests are not accepted. You may fork and modify the project under the MIT license.
+
 ## License
 
 The original project code and documentation use the [MIT license](LICENSE). Copyright 2026 Jakub Falenczyk. You may use, modify and distribute them, including commercially, provided you retain the copyright and license notices.

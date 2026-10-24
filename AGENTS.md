@@ -15,6 +15,7 @@
 
 ## GitHub and commits
 
+- Keep the repository public and forkable. `jakubfalenczyk` is the only account allowed to write to this repository. Restrict pull request creation to collaborators and do not grant another account write access without the owner's explicit instruction.
 - Make each commit cover one task or coherent feature. Include its related code, tests and documentation together.
 - Complete task lists in order. Commit each completed task that changes the repository separately. Three such tasks should produce three commits rather than one combined commit.
 - After completing and verifying the whole list, push the prepared commits together to `origin/main`, unless the user requests another publication workflow.

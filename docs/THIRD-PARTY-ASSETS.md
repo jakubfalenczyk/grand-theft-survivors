@@ -1,32 +1,36 @@
-# Rejestr użytych materiałów zewnętrznych
+# Third-party assets in use
 
-Weryfikacja: 2026-10-24. Zasady: `../AGENTS.md`. Lista UI: sekcja „Autorzy i licencje” w `src/ui/shell.html`. Kopie licencji w `public/licenses/` są kopiowane przez Vite do publikowanego builda.
+Audit date: 2026-10-24. UI credits use the English catalog through `src/ui/shell.html`. License copies under `public/licenses/` are included in the Vite production build.
 
-## Fonty
+## Fonts
 
-Źródłem warunków i poniższych oznaczeń praw są pliki `LICENSE` i metadane zainstalowanych paczek Fontsource, wersja 5.3.0 (wersje rozstrzyga `package-lock.json`). Pliki WOFF2 i warianty zapasowe WOFF są osadzane lokalnie przez `src/theme/index.css`; nie modyfikujemy fontów. W tabeli podano pliki WOFF2; dla każdego do builda trafia również plik WOFF o tej samej nazwie bazowej. Nie ustalono daty pierwotnego pobrania; data audytu powyżej.
+The installed Fontsource packages and their license files supplied the notices below (the exact installed versions are resolved by `package-lock.json`; the earlier audit recorded 5.3.0). Fonts are served locally and unmodified. Original download dates were not recorded. Both WOFF2 and fallback WOFF files referenced by CSS are bundled.
 
-| Materiał / podpis                                                                                     | Źródło paczki                                                   | Użyte pliki / zastosowanie                                                                                               | Licencja w buildzie                         |
-| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------- |
-| Big Shoulders Display — Google Inc. (oznaczenie praw w paczce)                                        | https://www.npmjs.com/package/@fontsource/big-shoulders-display | `files/big-shoulders-display-latin-900-normal.woff2`, `files/big-shoulders-display-latin-ext-900-normal.woff2`; nagłówki | `public/licenses/big-shoulders-display.txt` |
-| Barlow Semi Condensed — Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow)     | https://www.npmjs.com/package/@fontsource/barlow-semi-condensed | `files/barlow-semi-condensed-latin-600-normal.woff2`, `files/barlow-semi-condensed-latin-ext-600-normal.woff2`; tekst UI | `public/licenses/barlow-semi-condensed.txt` |
-| Martian Mono — Copyright 2020 The Martian Mono Project Authors (https://github.com/evilmartians/mono) | https://www.npmjs.com/package/@fontsource/martian-mono          | `files/martian-mono-{latin,latin-ext}-{400,700}-normal.woff2`; etykiety i liczby                                         | `public/licenses/martian-mono.txt`          |
+| Font and notice                                                   | Package/source                                                                                                                   | Used files and purpose                                  | Retained license                            |
+| ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------- |
+| Big Shoulders Display — Google Inc. (package copyright notice)    | [Fontsource package](https://www.npmjs.com/package/@fontsource/big-shoulders-display)                                            | Latin/Latin Extended, weight 900; headings              | `public/licenses/big-shoulders-display.txt` |
+| Barlow Semi Condensed — Copyright 2017 The Barlow Project Authors | [Fontsource package](https://www.npmjs.com/package/@fontsource/barlow-semi-condensed), [upstream](https://github.com/jpt/barlow) | Latin/Latin Extended, weight 600; interface labels      | `public/licenses/barlow-semi-condensed.txt` |
+| Martian Mono — Copyright 2020 The Martian Mono Project Authors    | [Fontsource package](https://www.npmjs.com/package/@fontsource/martian-mono), [upstream](https://github.com/evilmartians/mono)   | Latin/Latin Extended, weights 400/700; metadata/numbers | `public/licenses/martian-mono.txt`          |
 
-Wszystkie trzy: SIL Open Font License 1.1. Warunek dystrybucji: zachować oznaczenia praw i pełny tekst licencji z fontami (spełniany przez dołączone kopie). Podpis w UI jest dodatkową zasadą projektu, sama OFL nie wymaga osobnego ekranu credits. Przy zmianach fontów sprawdzić także zastrzeżone nazwy i pozostałe warunki OFL.
+All three use SIL Open Font License 1.1. Preserve the copyright and full license notices with distributed fonts. The interface credit is an additional project practice; the OFL does not require a separate credits screen. Check reserved names and all license conditions before modifying a font.
 
-## Audio, modele i grafiki
+## Graphics and audio
 
-Proponowane paczki audio nie zostały jeszcze użyte; pozostają w `AUDIO-CANDIDATES.md`. Grafika świata jest rysowana przez kod projektu, nie pochodzi z tych paczek. Rejestr dotyczy materiałów twórczych; licencje zależności programistycznych wymagają osobnej ewidencji przed publikacją.
+World graphics are generated by project code. No third-party audio, model or sprite pack is integrated. `AUDIO-CANDIDATES.md` lists unintegrated candidates only. GTA reference screenshots under `sources/` are research material, not shipped game assets or evidence of permission to reuse their contents.
 
-## Szablon nowego wpisu
+This register covers creative assets; software dependency notices need a separate release review. It does not select a license for original project code or art.
 
-Weryfikacja wdrożenia sekcji UI (2026-10-24): build produkcyjny poprawny; sprawdzono rozwinięcie credits, dostępność wszystkich trzech pełnych licencji w buildzie i brak poziomego przepełnienia przy szerokości 390 px. Pełny zestaw E2E: 7/9 poprawnych; nie przeszły test zatrzymania na budynkach (x=1343 wobec oczekiwanego <1340) i test restartu sceny (licznik 1 zamiast 2). Przyczyny tych dwóch niepowodzeń nie zostały ustalone w ramach zmiany dokumentacji i credits.
+## Verification record
 
-- Tytuł, autor/podmiot praw i źródło:
-- Wersja, data pobrania i data weryfikacji:
-- Dokładne pliki oraz miejsce użycia w grze:
-- Modyfikacje (lub „brak”):
-- Nazwa/wersja licencji, źródło warunków i ścieżka zachowanej kopii:
-- Użycie komercyjne / modyfikacje / dystrybucja w buildzie / ograniczenia:
-- Attribution wymagane czy dobrowolne, dokładna treść podpisu i pozostałe notices:
-- Miejsce w UI i dokumenty dołączane do publikowanego builda:
+The current full `npm run check` passes, including 10 unit and 10 Chromium E2E tests. English credits remain available and font license copies are retained. The earlier credits-only audit recorded 7/9 passing E2E tests, with collision-position and restart-counter failures whose causes were not established then; that historical result is superseded by the current passing full suite, not retroactively explained.
+
+## New entry checklist
+
+- Title, creator/copyright holder and source URL.
+- Version, download date and review date.
+- Exact files and use in the game.
+- Modifications, or explicitly none.
+- License name/version, source of terms and retained local copy.
+- Commercial use, modifications, build redistribution and restrictions.
+- Required versus voluntary attribution, exact notices and license obligations.
+- Location in UI and accompanying published files.

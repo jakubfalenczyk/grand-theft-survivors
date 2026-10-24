@@ -68,6 +68,8 @@ All player-facing copy uses the English catalog in `src/shared/intl/en.ts`, incl
 
 - [Architecture](docs/ARCHITECTURE.md) — boundaries, lifecycle and verification.
 - [Design](docs/DESIGN.md) — current state and intended gameplay.
+- [Backlog](docs/BACKLOG.md) — proposed tasks, dependencies, acceptance criteria and open decisions; no implementation started.
+- [Publishing](docs/PUBLISHING.md) — private/public source and GitHub Pages options.
 - [Localization](docs/LOCALIZATION.md) — keys, interpolation and adding locales.
 - [Theming](docs/THEMING.md) — Kerbside roles and world materials.
 - [Art pipeline](docs/ART-PIPELINE.md) — how graphics work and external asset options.

@@ -18,7 +18,7 @@ A living city rather than arbitrary timed monster waves: pedestrians follow side
 
 A run targets roughly 15–20 minutes without a hard timer deciding success. The player begins with a pistol. Level-ups pause the action and offer three applicable upgrades to owned weapons. Boss crates offer three new weapon choices. Maxed weapon combinations can evolve into original stronger weapons. Weapons, upgrades, enemy stats, hostility thresholds and directors must be easy to tune from typed configuration.
 
-Each map supports three gangs and police. Defeating the final boss in any one faction's chain is the proposed win condition; it does not require clearing all four factions. The exact number of bosses and trigger policy remain open. The earlier idea of a boss every three minutes conflicts with hostility-driven bosses and needs an explicit decision.
+Each map supports three gangs and police. Defeating the final boss in any one faction's chain is the proposed win condition; it does not require clearing all four factions. Owner decision D01: bosses trigger solely from hostility thresholds, without a time requirement or three-minute interval. D02: auto-fire targets hostiles; neutral NPCs require deliberate provocation. D03: four bosses per faction chain. D04: no global concurrent boss cap; all provoked factions may send a boss simultaneously, while each faction advances its own chain in order.
 
 Westbridge should combine neutral downtown/suburbs and three distinct gang territories, with shortcuts and landmarks that reward replay. Exact size should follow traversal measurements: a city too large to discover in one run can conflict with readable navigation, mobile performance and 15–20 minute pacing. No final map dimensions or faction identities are approved.
 

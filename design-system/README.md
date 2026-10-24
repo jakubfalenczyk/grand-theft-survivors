@@ -1,5 +1,7 @@
 # Kerbside design system
 
+Kerbside is the internal name for the game's custom design system.
+
 Use the [canonical package](kerbside-design-system/README.md) and the [game integration guide](../docs/THEMING.md).
 
 - [tokens.json](kerbside-design-system/tokens.json) defines the tokens.

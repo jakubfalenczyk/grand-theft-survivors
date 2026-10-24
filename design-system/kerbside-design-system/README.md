@@ -1,6 +1,6 @@
-# Kerbside: UI design system for a GTA2-inspired top-down game
+# Kerbside design system
 
-Hand this folder to the agent. It contains everything needed to build game UI (HUD, menus, mission cards, notifications) in a consistent look.
+Kerbside is the internal name of the custom design system for Grand Theft Survivors. Jakub Falenczyk created it in Claude Design for this game. This package defines the interface colors, typography and shared components.
 
 ## Files
 

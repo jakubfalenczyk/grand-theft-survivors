@@ -4,7 +4,7 @@ Updated 2026-10-24. This document separates implemented behavior from the owner'
 
 ## Implemented baseline
 
-Grand Theft Survivors is a browser game with an original top-down Westbridge city and Kerbside interface. Seed 2042 generates a fixed 6 × 6 grid, 2520 units per side, with Old Town, Ironworks and Greenfield material palettes. These district palettes are separate from the planned factions.
+Grand Theft Survivors is a top-down browser game set in Westbridge. Seed 2042 generates a fixed 6 × 6 grid, 2520 units per side, with Old Town, Ironworks and Greenfield material palettes. These district palettes are separate from the planned factions.
 
 The player starts at (1260, 1234). W/S moves forward/backward at 105 units/s; Shift runs forward at 176; A/D turns at 4.8 rad/s. Arrow keys also work. The camera keeps a fixed world orientation and starts at 2× zoom. Collision uses building footprints and world bounds. Cars/trees are scenery without collision.
 

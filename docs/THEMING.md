@@ -1,5 +1,7 @@
 # Kerbside integration
 
+Kerbside is the project's custom design system, created in Claude Design for Grand Theft Survivors. The name identifies the visual style and shared UI components in development documentation.
+
 The canonical package is `design-system/kerbside-design-system/`. Read its README before changing appearance. `tokens.json` is the only token source. `npm run theme:build` generates CSS and the browser theme color; never edit generated `tokens.css`.
 
 ```text

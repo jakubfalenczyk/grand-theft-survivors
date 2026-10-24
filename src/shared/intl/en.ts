@@ -63,7 +63,7 @@ export const en = {
   'credits.unchanged': 'This game uses unmodified fonts.',
   'footer.first': 'WESTBRIDGE CITY',
   'footer.description': 'Walk, run and explore the city.',
-  'footer.edition': '001 / KERBSIDE',
+  'footer.edition': '001 / WESTBRIDGE',
   'separator.slash': '/',
   'key.help': 'H',
   'camera.minus': '−',

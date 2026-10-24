@@ -11,6 +11,8 @@
 
 - Describe the game as a game in public descriptions and interface text. Do not label it a prototype or preview. Keep current feature limitations in development documentation.
 
+- Kerbside is the internal name of the project's custom design system. Use the name in design documentation, not in public game descriptions or interface branding.
+
 ## GitHub and commits
 
 - Make each commit cover one task or coherent feature. Include its related code, tests and documentation together.

@@ -1,6 +1,6 @@
 # Grand Theft Survivors
 
-A top-down city game built with Phaser 3.90, TypeScript and Vite 7. Explore Westbridge on foot, with building collisions, a following camera and a Kerbside interface.
+A top-down city game set in Westbridge, built with Phaser 3.90, TypeScript and Vite 7. Explore the city on foot.
 
 [Play in your browser](https://jakubfalenczyk.github.io/grand-theft-survivors/). A keyboard is required to move.
 
@@ -23,7 +23,7 @@ npm ci
 npm run dev
 ```
 
-Open [the local game](http://localhost:5173/). The [Kerbside reference](http://localhost:5173/design-system/kerbside-design-system/components.html) shows the shared interface styles. The game serves fonts locally.
+Open [the local game](http://localhost:5173/). The [design system reference](http://localhost:5173/design-system/kerbside-design-system/components.html) shows the shared interface styles. The game serves fonts locally.
 
 | Input                 | Action                     |
 | --------------------- | -------------------------- |
@@ -61,7 +61,7 @@ The tests cover world generation, projection, movement, collisions, dialogs, foc
 | `src/game/scenes`                      | Scene lifecycle                                        |
 | `src/game/features`                    | Player, city generation, rendering and map drawing     |
 | `src/shared`                           | Data contracts, events, session, math and localization |
-| `src/theme`                            | Kerbside token adapters                                |
+| `src/theme`                            | Design token adapters                                  |
 | `src/ui`                               | HTML interface, HUD, dialogs and styles                |
 | `design-system/kerbside-design-system` | Shared tokens and CSS components                       |
 | `tests`                                | Unit and browser tests                                 |
@@ -77,7 +77,7 @@ All player-facing text comes from `src/shared/intl/en.ts`. English is the only c
 - [Planned tasks and decisions](docs/BACKLOG.md)
 - [GitHub Pages deployment](docs/PUBLISHING.md)
 - [Localization](docs/LOCALIZATION.md)
-- [Kerbside integration](docs/THEMING.md)
+- [Design system integration](docs/THEMING.md)
 - [Graphics and asset formats](docs/ART-PIPELINE.md)
 - [Audio candidates](docs/AUDIO-CANDIDATES.md)
 - [Third-party assets and licenses](docs/THIRD-PARTY-ASSETS.md)

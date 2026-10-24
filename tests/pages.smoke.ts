@@ -38,3 +38,28 @@ test('the Pages build loads assets, dialogs and licenses at the repository path'
   expect(await license.text()).toContain('Copyright (c) 2026 Jakub Falenczyk');
   expect(errors).toEqual([]);
 });
+
+test('the published task browser includes Markdown and uses the Pages base path', async ({
+  page,
+}) => {
+  const failures: string[] = [];
+  page.on('pageerror', (error) => failures.push(error.message));
+  page.on('response', (response) => {
+    if (response.status() >= 400) failures.push(response.url());
+  });
+  await page.goto('docs/backlog/');
+  await expect(page.getByRole('navigation').getByRole('link')).toHaveCount(10);
+  await page
+    .getByRole('navigation')
+    .getByRole('link', { name: /GTS-04B/ })
+    .click();
+  await expect(page.locator('article')).toContainText(
+    'Each faction has an ordered chain of four bosses',
+  );
+  await expect(page.getByRole('link', { name: 'Open game' })).toHaveAttribute(
+    'href',
+    '/grand-theft-survivors/',
+  );
+  await page.evaluate(() => document.fonts.ready);
+  expect(failures).toEqual([]);
+});

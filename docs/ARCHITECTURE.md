@@ -1,6 +1,6 @@
 # Grand Theft Survivors architecture
 
-Current game architecture, updated 2026-10-24. Future systems are proposals in `BACKLOG.md`, not existing APIs.
+Current game architecture, updated 2026-10-24. Future systems are proposals in [the backlog](backlog/README.md), not existing APIs.
 
 ## Stack and boundaries
 
@@ -49,3 +49,7 @@ Vite separates the Phaser chunk for caching. The engine remains about 1.2 MB bef
 ## Deployment
 
 The GitHub Pages workflow verifies the project, builds it under `/grand-theft-survivors/`, tests that production path and deploys only `dist/`. See `PUBLISHING.md`. The architecture review and selected modal change are recorded in `ARCHITECTURE-REVIEW.md`.
+
+## Task browser
+
+`docs/backlog/index.html` is a separate Vite entry, published alongside the game at `/docs/backlog/`. Its TypeScript module uses an eager raw Markdown glob, so adding or removing a Markdown file changes the list without a registry. Markdown-it renders tables and lists with raw HTML disabled and unsafe link schemes rejected. The browser shares the canonical design tokens, components and local fonts without loading Phaser. Shared decisions live in the backlog README; each task has its own Markdown file. Feedback drafts stay in memory per document, and the copy button prepares a message for the project chat. There is no comment service or repository write access in the page.

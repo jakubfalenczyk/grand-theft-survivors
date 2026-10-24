@@ -7,6 +7,11 @@
 - If Chromium automation cannot verify a behavior, use real Chrome on Windows through an available extension or plugin. Choose the verification method for the scenario. Headless limitations do not rule out other available methods.
 - Write repository content in English, including documentation, agent instructions, comments, identifiers, test fixtures and screenshots. Add future translations through the localization catalog.
 
+## Future work
+
+- Record future tasks in `docs/backlog/`, one Markdown file per task. Keep shared decisions in its README and update task details when the owner gives feedback. Planning is not authorization to implement a task.
+- The task browser discovers Markdown files automatically. Do not add a manually maintained task registry or HTML task list. Use stable task IDs and the file format documented in `docs/backlog/README.md`.
+
 ## Public copy
 
 - Describe the game as a game in public descriptions and interface text. Do not label it a prototype or preview. Keep current feature limitations in development documentation.

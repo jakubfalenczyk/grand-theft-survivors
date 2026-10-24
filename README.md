@@ -12,7 +12,9 @@ Westbridge has a seeded 2520 × 2520 layout with three district palettes, parks 
 
 Combat, enemies, XP, bosses, moving traffic and sound are planned. The health display currently shows a fixed value. Cars and trees are scenery without collision.
 
-The planned game uses player actions to raise hostility with three gangs and the police. Hostile factions send reinforcements and bosses. See the [design](docs/DESIGN.md) and [backlog](docs/BACKLOG.md) for the agreed rules and proposals.
+The planned game uses player actions to raise hostility with three gangs and the police. Hostile factions send reinforcements and bosses. See the [design](docs/DESIGN.md) and [backlog](docs/backlog/README.md) for the agreed rules and proposals.
+
+Browse the [planned tasks](https://jakubfalenczyk.github.io/grand-theft-survivors/docs/backlog/) to review proposals and prepare feedback for the project chat.
 
 ## Run locally
 
@@ -23,7 +25,7 @@ npm ci
 npm run dev
 ```
 
-Open [the local game](http://localhost:5173/). The [design system reference](http://localhost:5173/design-system/kerbside-design-system/components.html) shows the shared interface styles. The game serves fonts locally.
+Open [the local game](http://localhost:5173/). The [design system reference](http://localhost:5173/design-system/kerbside-design-system/components.html) shows the shared interface styles. The game serves fonts locally. Open the [local task browser](http://localhost:5173/docs/backlog/) to review or search the backlog.
 
 | Input                 | Action                     |
 | --------------------- | -------------------------- |
@@ -74,7 +76,7 @@ All player-facing text comes from `src/shared/intl/en.ts`. English is the only c
 - [Architecture review](docs/ARCHITECTURE-REVIEW.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Game design](docs/DESIGN.md)
-- [Planned tasks and decisions](docs/BACKLOG.md)
+- [Planned tasks and decisions](docs/backlog/README.md)
 - [GitHub Pages deployment](docs/PUBLISHING.md)
 - [Localization](docs/LOCALIZATION.md)
 - [Design system integration](docs/THEMING.md)

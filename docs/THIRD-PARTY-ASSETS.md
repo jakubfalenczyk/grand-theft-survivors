@@ -34,6 +34,8 @@ The production build includes these notices in `public/licenses/`:
 
 The notice files retain the supplied license text. Credits link to them in the game. The production browser test checks those links at the GitHub Pages path. A unit test checks that the distributed project license matches `LICENSE`.
 
+The task browser also ships Markdown-it and its browser dependencies: entities, linkify-it, mdurl, punycode.js and uc.micro. Their unmodified installed license notices are retained in `public/licenses/backlog.txt`, linked from the task browser. Markdown-it and these dependencies use MIT licenses except entities, which uses BSD-2-Clause. Versions are recorded in the notice file and lockfile. The browser reuses the same licensed fonts as the game.
+
 ## New entry checklist
 
 - Title, creator/copyright holder and source URL.

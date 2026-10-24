@@ -17,4 +17,5 @@ async function checkDirectory(directory) {
 }
 await checkDirectory('src/ui');
 await checkDirectory('src/game');
-console.log('UI and game renderers use the shared theme.');
+await checkDirectory('docs/backlog');
+console.log('UI, game renderers and task browser use the shared theme.');

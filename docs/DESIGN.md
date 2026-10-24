@@ -1,6 +1,6 @@
 # Game design
 
-Updated 2026-10-24. This document separates implemented behavior from the owner's requested direction. Detailed future tasks belong in `BACKLOG.md`; planning is not authorization to implement them.
+Updated 2026-10-24. This document separates implemented behavior from the owner's requested direction. Detailed future tasks belong in [the backlog](backlog/README.md); planning is not authorization to implement them.
 
 ## Implemented baseline
 

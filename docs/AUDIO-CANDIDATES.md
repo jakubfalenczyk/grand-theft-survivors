@@ -1,6 +1,6 @@
 # Audio candidates
 
-Initial research: 2026-10-24. These are candidates identified from publisher descriptions, **not auditioned, downloaded or integrated assets**. The intended direction is urban ambience, clear footsteps and short combat cues. GTS-01 in `BACKLOG.md` defines the proposed implementation work.
+Initial research: 2026-10-24. These are candidates identified from publisher descriptions, **not auditioned, downloaded or integrated assets**. The intended direction is urban ambience, clear footsteps and short combat cues. GTS-01 in [the backlog](backlog/README.md) defines the proposed implementation work.
 
 ## Candidate shortlist
 

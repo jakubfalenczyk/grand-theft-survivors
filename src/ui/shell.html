@@ -1,0 +1,202 @@
+<header class="topbar">
+  <a class="brand" href="./" aria-label="{{brand.home}}"
+    ><span class="brand-mark" aria-hidden="true">{{brand.short}}</span
+    ><span>{{brand.first}}<br /><span>{{brand.last}}</span></span></a
+  >
+  <p class="kb-meta edition">{{edition}} <span>{{separator.slash}}</span> {{prototype}}</p>
+  <button class="kb-btn kb-btn--secondary" id="help-button">
+    {{controls.title}} <kbd>{{key.help}}</kbd>
+  </button>
+</header>
+<main>
+  <section class="intro">
+    <div>
+      <p class="kb-meta eyebrow">{{intro.eyebrow}}</p>
+      <h1 class="kb-title">{{intro.title}}</h1>
+      <p>{{intro.description}}</p>
+    </div>
+    <div class="edition-stamp">
+      <span class="kb-meta">{{brand.first}} {{brand.last}}</span
+      ><span>{{intro.stamp.first}}<br />{{intro.stamp.last}}</span>
+    </div>
+  </section>
+  <div class="kb-stripes" aria-hidden="true"></div>
+  <section class="game-frame" aria-label="{{game.label}}">
+    <div id="game" aria-label="{{game.instructions}}"></div>
+    <div class="location">
+      <div class="kb-card">
+        <span class="kb-meta">{{location}}</span
+        ><span id="district-name">{{district.ironworks}}</span>
+      </div>
+    </div>
+    <div class="game-tools" role="group" aria-label="{{camera.tools}}">
+      <button class="kb-btn kb-btn--secondary" id="zoom-out" aria-label="{{camera.out}}">
+        {{camera.minus}}</button
+      ><output id="zoom-label" aria-label="{{camera.zoom}}">{{camera.initial}}</output
+      ><button class="kb-btn kb-btn--secondary" id="zoom-in" aria-label="{{camera.in}}">
+        {{camera.plus}}</button
+      ><button class="kb-btn kb-btn--secondary" id="pause-button" aria-label="{{pause.label}}">
+        {{pause.button}}</button
+      ><button
+        class="kb-btn kb-btn--secondary"
+        id="fullscreen-button"
+        aria-label="{{fullscreen.label}}"
+      >
+        <svg
+          viewBox="0 0 20 20"
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path d="M7 3H3v4m10-4h4v4M3 13v4h4m6 0h4v-4" />
+        </svg>
+      </button>
+    </div>
+    <div class="player-card kb-hud">
+      <div class="player-identity">
+        <span class="kb-meta">{{player.identity}}</span
+        ><span class="hud-preview">{{hud.preview}}</span>
+      </div>
+      <div class="health-label">
+        <span>{{hud.health}}</span><span class="kb-meta">{{hud.health.initial}}</span>
+      </div>
+      <div
+        class="kb-bar"
+        role="meter"
+        aria-label="{{hud.health.label}}"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="100"
+      >
+        <i></i>
+      </div>
+    </div>
+    <div class="minimap-wrap">
+      <div class="minimap-heading kb-meta"><span>{{city}}</span><span>{{map.north}}</span></div>
+      <canvas
+        id="minimap"
+        class="kb-minimap"
+        width="180"
+        height="180"
+        aria-label="{{map.mini}}"
+      ></canvas
+      ><button id="open-map" class="kb-btn kb-btn--secondary">
+        {{map.open}} <kbd>{{key.map}}</kbd>
+      </button>
+    </div>
+    <div class="game-bottom kb-meta">
+      <span id="game-status" role="status">{{status.idle}}</span
+      ><span id="coordinates">{{hud.coordinates.initial}}</span>
+    </div>
+    <div
+      id="overlay"
+      class="overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-description"
+      hidden
+    >
+      <div class="dialog-ink">
+        <div class="dialog kb-card">
+          <span class="kb-meta">{{dialog.brand}}</span>
+          <h2 class="kb-card__title" id="dialog-title">{{pause.title}}</h2>
+          <p id="dialog-description">{{pause.description}}</p>
+          <div id="help-content" hidden>
+            <dl>
+              <div>
+                <dt>
+                  <kbd>{{key.forward}}</kbd> {{separator.slash}}
+                  <kbd>{{key.up}}</kbd>
+                </dt>
+                <dd>{{controls.forward}}</dd>
+              </div>
+              <div>
+                <dt>
+                  <kbd>{{key.backward}}</kbd> {{separator.slash}}
+                  <kbd>{{key.down}}</kbd>
+                </dt>
+                <dd>{{controls.backward}}</dd>
+              </div>
+              <div>
+                <dt><kbd>{{key.left}}</kbd> <kbd>{{key.right}}</kbd></dt>
+                <dd>{{controls.turn.help}}</dd>
+              </div>
+              <div>
+                <dt><kbd>{{key.shift}}</kbd></dt>
+                <dd>{{controls.run.help}}</dd>
+              </div>
+              <div>
+                <dt><kbd>{{key.map}}</kbd></dt>
+                <dd>{{controls.map.help}}</dd>
+              </div>
+              <div>
+                <dt><kbd>{{key.escape}}</kbd></dt>
+                <dd>{{controls.pause.help}}</dd>
+              </div>
+            </dl>
+          </div>
+          <button id="resume-button" class="kb-btn">{{resume.button}}</button>
+        </div>
+      </div>
+    </div>
+    <div
+      id="map-overlay"
+      class="overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="map-title"
+      hidden
+    >
+      <div class="dialog-ink map-dialog">
+        <div class="dialog kb-card">
+          <span class="kb-meta">{{map.heading}}</span>
+          <h2 class="kb-card__title" id="map-title">{{map.title}}</h2>
+          <canvas id="city-map" width="540" height="540" aria-label="{{map.full}}"></canvas
+          ><button id="close-map" class="kb-btn">{{map.close}} <kbd>{{key.map}}</kbd></button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="under-game" aria-label="{{controls.title}}">
+    <div class="controls">
+      <div><kbd>{{key.forward}}</kbd><kbd>{{key.backward}}</kbd><span>{{controls.move}}</span></div>
+      <div><kbd>{{key.left}}</kbd><kbd>{{key.right}}</kbd><span>{{controls.turn}}</span></div>
+      <div><kbd>{{key.shift}}</kbd><span>{{controls.run}}</span></div>
+      <div><kbd>{{key.map}}</kbd><span>{{controls.map}}</span></div>
+      <div><kbd>{{key.escape}}</kbd><span>{{pause.button}}</span></div>
+    </div>
+    <button class="kb-btn kb-btn--secondary" id="reset-button">{{reset}}</button>
+  </section>
+  <details id="asset-credits" class="asset-credits">
+    <summary>{{credits.title}}</summary>
+    <p>{{credits.description}}</p>
+    <ul>
+      <li>
+        <a href="https://www.npmjs.com/package/@fontsource/big-shoulders-display"
+          >{{credits.bigShoulders}}</a
+        >
+        {{credits.google}}
+        <a href="./licenses/big-shoulders-display.txt">{{credits.license}}</a>{{punctuation.period}}
+      </li>
+      <li>
+        <a href="https://github.com/jpt/barlow">{{credits.barlow}}</a>
+        {{credits.barlow.copyright}}
+        <a href="./licenses/barlow-semi-condensed.txt">{{credits.license}}</a>{{punctuation.period}}
+      </li>
+      <li>
+        <a href="https://github.com/evilmartians/mono">{{credits.martian}}</a>
+        {{credits.martian.copyright}}
+        <a href="./licenses/martian-mono.txt">{{credits.license}}</a>{{punctuation.period}}
+      </li>
+    </ul>
+    <p>{{credits.unchanged}}</p>
+  </details>
+  <footer>
+    <span class="kb-meta">{{footer.first}}</span><span>{{footer.description}}</span
+    ><span class="kb-meta">{{footer.edition}}</span>
+  </footer>
+</main>

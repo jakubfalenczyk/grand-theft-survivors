@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Kerbside components</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow+Semi+Condensed:wght@500;600&family=Martian+Mono:wght@400;700&display=swap"
+    />
+    <link rel="stylesheet" href="tokens.css" />
+    <link rel="stylesheet" href="components.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 48px;
+        background: var(--kb-asphalt);
+        color: var(--kb-concrete);
+        font: 18px var(--kb-font-ui);
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="kb-hud">
+      <div class="kb-money">$ 00,184,250</div>
+      <div class="kb-mult">x4</div>
+      <div class="kb-lamps" role="img" aria-label="Wanted level 3 of 5">
+        <span class="kb-lamp is-on"></span><span class="kb-lamp is-on"></span
+        ><span class="kb-lamp is-on"></span><span class="kb-lamp"></span
+        ><span class="kb-lamp"></span>
+      </div>
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 6px">
+        <div class="kb-bar"><i style="width: 72%"></i></div>
+        <div class="kb-bar kb-bar--armor"><i style="width: 35%"></i></div>
+      </div>
+    </div>
+    <div style="display: flex; gap: 18px; flex-wrap: wrap">
+      <button class="kb-btn">Start job</button><button class="kb-btn kb-btn--secondary">Map</button
+      ><button class="kb-btn kb-btn--danger">Lose the tail</button
+      ><button class="kb-btn" disabled>Locked</button>
+    </div>
+    <div style="display: flex; gap: 48px; align-items: flex-start">
+      <div class="kb-menu" style="width: 320px">
+        <div class="kb-menu__item is-selected">
+          <span>Continue</span><span class="kb-meta">A</span>
+        </div>
+        <div class="kb-menu__item">New game</div>
+        <div class="kb-menu__item">Garage</div>
+      </div>
+      <div class="kb-card" style="width: 460px">
+        <div style="display: flex; justify-content: space-between">
+          <span class="kb-tag kb-tag--velvet-ward">Velvet Ward</span
+          ><span class="kb-meta">23:41</span>
+        </div>
+        <h2 class="kb-card__title">Pick up the package at the shipyard</h2>
+        <div class="kb-meta">REWARD $ 12,000 / LIMIT 04:30</div>
+      </div>
+      <div class="kb-minimap" role="img" aria-label="Minimap">
+        <span class="kb-minimap__player" style="left: 84px; top: 88px"></span
+        ><span class="kb-minimap__cop" style="left: 44px; top: 60px"></span>
+      </div>
+      <div class="kb-toast" style="width: 240px">
+        <b>Notice</b>A Rust Union car entered your turf.
+      </div>
+    </div>
+    <div class="kb-stripes"></div>
+  </body>
+</html>

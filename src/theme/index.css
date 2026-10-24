@@ -1,0 +1,50 @@
+@import '@fontsource/big-shoulders-display/latin-900';
+@import '@fontsource/big-shoulders-display/latin-ext-900';
+@import '@fontsource/barlow-semi-condensed/latin-600';
+@import '@fontsource/barlow-semi-condensed/latin-ext-600';
+@import '@fontsource/martian-mono/latin-400';
+@import '@fontsource/martian-mono/latin-ext-400';
+@import '@fontsource/martian-mono/latin-700';
+@import '@fontsource/martian-mono/latin-ext-700';
+@import '../../design-system/kerbside-design-system/tokens.css';
+@import '../../design-system/kerbside-design-system/components.css';
+
+* {
+  box-sizing: border-box;
+}
+:root {
+  font: 600 var(--kb-text-ui)/1.4 var(--kb-font-ui);
+  color: var(--kb-concrete);
+  background: var(--kb-asphalt);
+  font-synthesis: none;
+}
+body {
+  margin: 0;
+}
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  font: inherit;
+}
+a {
+  color: inherit;
+}
+[hidden] {
+  display: none !important;
+}
+kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--kb-space-6);
+  padding: var(--kb-space-1) var(--kb-space-2);
+  border: var(--kb-stroke) solid currentColor;
+  font: 400 var(--kb-text-mono-label)/1.2 var(--kb-font-mono);
+  color: inherit;
+}
+svg {
+  display: block;
+  flex-shrink: 0;
+}

@@ -1,0 +1,101 @@
+import { locale, t, translateMarkup } from '../shared/intl/index.ts';
+import type { AppServices } from '../shared/services.ts';
+import shell from './shell.html?raw';
+import { EVENTS } from '../shared/events.ts';
+import { element } from './dom.ts';
+import { DialogController } from './components/DialogController.ts';
+import { attachHud } from './components/Hud.ts';
+import { attachMapView } from './components/MapView.ts';
+
+export function createInterface(root: HTMLElement, { session, bus }: AppServices) {
+  document.documentElement.lang = locale;
+  document.title = t('page.title');
+  root.innerHTML = translateMarkup(shell);
+  const $ = <T extends HTMLElement = HTMLElement>(id: string) => element<T>(root, `#${id}`);
+  const events = new AbortController();
+  const onClick = (id: string, handler: () => void) =>
+    $(id).addEventListener('click', handler, { signal: events.signal });
+  const pauseDialog = new DialogController($('overlay'));
+  const mapDialog = new DialogController($('map-overlay'));
+  onClick('help-button', () => session.setMode('help'));
+  onClick('resume-button', () => session.setMode('playing'));
+  onClick('pause-button', () => session.togglePause());
+  onClick('open-map', () => session.toggleMap());
+  onClick('close-map', () => session.setMode('playing'));
+  onClick('zoom-in', () => session.zoomBy(0.5));
+  onClick('zoom-out', () => session.zoomBy(-0.5));
+  onClick('reset-button', () => bus.emit(EVENTS.RESET_PLAYER, undefined));
+  onClick('fullscreen-button', async () => {
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen();
+      else await element(root, '.game-frame').requestFullscreen();
+    } catch {
+      $('game-status').textContent = t('fullscreen.unavailable');
+    }
+  });
+  // Native events avoid Phaser replaying unregistered menu keys from its queue.
+  window.addEventListener(
+    'keydown',
+    (event) => {
+      if (event.repeat || event.ctrlKey || event.metaKey || event.altKey) return;
+      if (
+        event.target instanceof Element &&
+        event.target.closest('input,textarea,select,[contenteditable="true"]')
+      )
+        return;
+      if (event.code === 'Escape') {
+        event.preventDefault();
+        session.togglePause();
+      }
+      if (event.code === 'KeyM') {
+        event.preventDefault();
+        session.toggleMap();
+      }
+      if (event.code === 'KeyH') {
+        event.preventDefault();
+        session.setMode('help');
+      }
+    },
+    { signal: events.signal },
+  );
+  const stopSession = session.subscribe(({ mode, zoom }) => {
+    $('help-content').hidden = mode !== 'help';
+    $('dialog-title').textContent = mode === 'help' ? t('help.title') : t('pause.title');
+    $('dialog-description').textContent =
+      mode === 'help' ? t('help.description') : t('pause.description');
+    for (const node of root.children)
+      if (node instanceof HTMLElement && node.tagName === 'HEADER') node.inert = session.blocked;
+    for (const node of element(root, '.game-frame').children) {
+      if (node instanceof HTMLElement && node.id !== 'overlay' && node.id !== 'map-overlay')
+        node.inert = session.blocked;
+    }
+    element(root, '.under-game').inert = session.blocked;
+    // Close the old modal before opening the next, preserving focus restoration.
+    if (mode === 'map') {
+      pauseDialog.setOpen(false);
+      mapDialog.setOpen(true);
+    } else {
+      mapDialog.setOpen(false);
+      pauseDialog.setOpen(['paused', 'help'].includes(mode));
+    }
+    $('pause-button').textContent = mode === 'playing' ? t('pause.button') : t('resume.short');
+    $('pause-button').setAttribute(
+      'aria-label',
+      mode === 'playing' ? t('pause.label') : t('resume.label'),
+    );
+    $('zoom-label').textContent = t('camera.factor', { zoom });
+    $<HTMLButtonElement>('zoom-out').disabled = zoom <= 1;
+    $<HTMLButtonElement>('zoom-in').disabled = zoom >= 3;
+  });
+  const cleanups = [stopSession, attachHud(root, bus, session), attachMapView(root, bus, session)];
+  return {
+    host: $('game'),
+    destroy() {
+      events.abort();
+      cleanups.forEach((cleanup) => cleanup());
+      pauseDialog.destroy();
+      mapDialog.destroy();
+      root.replaceChildren();
+    },
+  };
+}

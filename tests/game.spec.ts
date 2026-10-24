@@ -12,12 +12,12 @@ test('boots without browser errors and renders the playable city', async ({ page
   await page.reload();
   await page.waitForFunction(() => window.__gameDebug?.isReady());
   await expect(page.locator('#game canvas')).toBeVisible();
-  await expect(page).toHaveTitle('Grand Theft Survivors city prototype');
+  await expect(page).toHaveTitle('Grand Theft Survivors');
   expect((await state(page)).buildings).toBeGreaterThan(100);
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(300);
   expect(errors).toEqual([]);
-  await page.screenshot({ path: 'docs/prototype-desktop.png' });
+  await page.screenshot({ path: 'docs/game-desktop.png' });
 });
 
 test('tank controls: forward, backward, rotation, and faster running', async ({ page }) => {
@@ -127,7 +127,7 @@ test('mobile layout fits and the viewport resizes', async ({ page }) => {
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
   const canvas = await page.locator('#game canvas').boundingBox();
   expect(canvas!.width).toBeLessThan(390);
-  await page.screenshot({ path: 'docs/prototype-mobile.png' });
+  await page.screenshot({ path: 'docs/game-mobile.png' });
 });
 
 test('high roofs expand in perspective and react to camera movement without moving colliders', async ({

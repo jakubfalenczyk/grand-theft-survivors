@@ -11,7 +11,7 @@ test('the Pages build loads assets, dialogs and licenses at the repository path'
   });
   await page.goto('./');
   await expect(page.locator('#game canvas')).toBeVisible();
-  await expect(page).toHaveTitle('Grand Theft Survivors city prototype');
+  await expect(page).toHaveTitle('Grand Theft Survivors');
   await page.evaluate(() => document.fonts.ready);
   expect(await page.evaluate(() => window.__gameDebug)).toBeUndefined();
   for (const asset of await page.locator('script[src], link[rel="stylesheet"]').all()) {

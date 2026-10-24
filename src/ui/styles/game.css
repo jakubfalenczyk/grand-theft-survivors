@@ -64,9 +64,6 @@
   flex-direction: column;
   gap: var(--kb-space-1);
 }
-.hud-preview {
-  font: 600 var(--kb-text-label) var(--kb-font-ui);
-}
 .health-label {
   display: flex;
   justify-content: space-between;

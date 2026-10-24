@@ -19,8 +19,8 @@ Created 2026-10-24. These tasks are ready for design review. Implementation has 
 
 | Order | Task                                          | Depends on                           | First reviewable deliverable                                                |
 | ----- | --------------------------------------------- | ------------------------------------ | --------------------------------------------------------------------------- |
-| 1     | GTS-01 Audio foundation                       | Current prototype                    | User-gesture unlock, UI sounds and material footsteps                       |
-| 2     | GTS-02 Map definitions and switching          | Current prototype                    | Current Westbridge loaded through a typed map definition; repeatable reload |
+| 1     | GTS-01 Audio foundation                       | Current version                      | User-gesture unlock, UI sounds and material footsteps                       |
+| 2     | GTS-02 Map definitions and switching          | Current version                      | Current Westbridge loaded through a typed map definition; repeatable reload |
 | 3     | GTS-03A Combat and damage foundation          | GTS-02                               | Pistol, deliberate provocation, one civilian and one attacker               |
 | 4     | GTS-04A Living population and hostility       | GTS-03A                              | Sidewalk movement, independent faction response and readable hostility      |
 | 5     | GTS-03B XP, upgrades and weapon content       | GTS-03A, GTS-04A                     | Three real upgrade choices and a small usable weapon roster                 |

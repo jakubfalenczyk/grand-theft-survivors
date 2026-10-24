@@ -3,7 +3,7 @@
     ><span class="brand-mark" aria-hidden="true">{{brand.short}}</span
     ><span>{{brand.first}}<br /><span>{{brand.last}}</span></span></a
   >
-  <p class="kb-meta edition">{{edition}} <span>{{separator.slash}}</span> {{prototype}}</p>
+  <p class="kb-meta edition">{{edition}} <span>{{separator.slash}}</span> {{release.version}}</p>
   <button class="kb-btn kb-btn--secondary" id="help-button">
     {{controls.title}} <kbd>{{key.help}}</kbd>
   </button>
@@ -57,8 +57,7 @@
     </div>
     <div class="player-card kb-hud">
       <div class="player-identity">
-        <span class="kb-meta">{{player.identity}}</span
-        ><span class="hud-preview">{{hud.preview}}</span>
+        <span class="kb-meta">{{player.identity}}</span>
       </div>
       <div class="health-label">
         <span>{{hud.health}}</span><span class="kb-meta">{{hud.health.initial}}</span>

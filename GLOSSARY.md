@@ -1,6 +1,6 @@
 # Grand Theft Survivors
 
-Terms used in the prototype and planned game. Planned gameplay terms do not imply an implemented feature.
+Terms used in the game and planned features. Planned gameplay terms do not imply an implemented feature.
 
 ## City
 

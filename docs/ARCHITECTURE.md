@@ -1,6 +1,6 @@
 # Grand Theft Survivors architecture
 
-Implemented prototype baseline, updated 2026-10-24. Future systems are proposals in `BACKLOG.md`, not existing APIs.
+Current game architecture, updated 2026-10-24. Future systems are proposals in `BACKLOG.md`, not existing APIs.
 
 ## Stack and boundaries
 

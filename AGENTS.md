@@ -7,6 +7,10 @@
 - If Chromium automation cannot verify a behavior, use real Chrome on Windows through an available extension or plugin. Choose the verification method for the scenario. Headless limitations do not rule out other available methods.
 - Write repository content in English, including documentation, agent instructions, comments, identifiers, test fixtures and screenshots. Add future translations through the localization catalog.
 
+## Public copy
+
+- Describe the game as a game in public descriptions and interface text. Do not label it a prototype or preview. Keep current feature limitations in development documentation.
+
 ## GitHub and commits
 
 - Make each commit cover one task or coherent feature. Include its related code, tests and documentation together.

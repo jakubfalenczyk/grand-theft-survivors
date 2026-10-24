@@ -1,8 +1,8 @@
 # Phaser art pipeline
 
-Reviewed 2026-10-24 against the Phaser 3.90 prototype.
+Reviewed 2026-10-24 against the game running on Phaser 3.90.
 
-## How our prototype renders
+## How the game renders
 
 | Responsibility                                                  | Implementation                                                           | When it runs                                                  |
 | --------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------- |
@@ -43,7 +43,7 @@ Use a hybrid pipeline. Retain procedural road layout, simple surfaces, projectio
 
 Keep the projected walls unless measurements justify replacing them. An atlas of roof details and repeated facade modules is a possible later optimization; a flat full-building sprite cannot reproduce our current camera-dependent projection. Measure facade CPU time and texture switches before deciding how to optimize them.
 
-The current ground texture exceeds 2048 px on a side and uses roughly 24.2 MiB for one uncompressed RGBA copy alone. This is acceptable for the present tested desktop prototype but should not become the multi-map design. Query device texture limits and use bounded ground chunks or tiles for larger/mobile maps. Many unique roof textures also deserve measurement before content expands. PNG compression reduces download size, not uncompressed GPU memory.
+The current ground texture exceeds 2048 px on a side and uses roughly 24.2 MiB for one uncompressed RGBA copy alone. This is acceptable for the current desktop version but should not become the multi-map design. Query device texture limits and use bounded ground chunks or tiles for larger/mobile maps. Many unique roof textures also deserve measurement before content expands. PNG compression reduces download size, not uncompressed GPU memory.
 
 Before importing external graphics, define: pixel/world scale, anchors, frame names, animation timing, atlas padding/extrusion, filtering and maximum atlas dimensions; collision footprints separate from artwork; stable asset IDs and loading-error behavior; licenses and editable source ownership. Current `pixelArt: true` and disabled antialiasing favor crisp small rasters; a smoother illustration direction would need an explicit rendering decision.
 

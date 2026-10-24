@@ -1,16 +1,16 @@
 # Grand Theft Survivors
 
-A top-down city game prototype built with Phaser 3.90, TypeScript and Vite 7. Explore Westbridge on foot, with building collisions, a following camera and a Kerbside interface.
+A top-down city game built with Phaser 3.90, TypeScript and Vite 7. Explore Westbridge on foot, with building collisions, a following camera and a Kerbside interface.
 
 [Play in your browser](https://jakubfalenczyk.github.io/grand-theft-survivors/). A keyboard is required to move.
 
-![Westbridge prototype](docs/prototype-desktop.png)
+![Westbridge streets](docs/game-desktop.png)
 
 ## Current version
 
 Westbridge has a seeded 2520 × 2520 layout with three district palettes, parks and parked cars. Roofs and facades shift with the camera to show building height. The interface includes a minimap, city map, pause, controls, zoom and position reset.
 
-Combat, enemies, XP, bosses, moving traffic and sound are planned. The health bar is a preview. Cars and trees are scenery without collision.
+Combat, enemies, XP, bosses, moving traffic and sound are planned. The health display currently shows a fixed value. Cars and trees are scenery without collision.
 
 The planned game uses player actions to raise hostility with three gangs and the police. Hostile factions send reinforcements and bosses. See the [design](docs/DESIGN.md) and [backlog](docs/BACKLOG.md) for the agreed rules and proposals.
 

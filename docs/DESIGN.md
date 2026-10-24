@@ -4,13 +4,13 @@ Updated 2026-10-24. This document separates implemented behavior from the owner'
 
 ## Implemented baseline
 
-Grand Theft Survivors is a browser prototype with an original top-down Westbridge city and Kerbside interface. Seed 2042 generates a fixed 6 × 6 grid, 2520 units per side, with Old Town, Ironworks and Greenfield material palettes. These are visual prototype districts, not implemented factions.
+Grand Theft Survivors is a browser game with an original top-down Westbridge city and Kerbside interface. Seed 2042 generates a fixed 6 × 6 grid, 2520 units per side, with Old Town, Ironworks and Greenfield material palettes. These district palettes are separate from the planned factions.
 
 The player starts at (1260, 1234). W/S moves forward/backward at 105 units/s; Shift runs forward at 176; A/D turns at 4.8 rad/s. Arrow keys also work. The camera keeps a fixed world orientation and starts at 2× zoom. Collision uses building footprints and world bounds. Cars/trees are scenery without collision.
 
 Height is a 2D projection: `P = C + (p − C) × H / (H − z)`, with virtual camera height 500 and building heights 95/130/165. Roofs expand about 1.23/1.35/1.49×, with dynamic projected facades. It is not an isometric or 3D engine. Roof motion does not move collision footprints.
 
-Minimap, full map, help, pause, fullscreen request, zoom and position reset work. Health is a labeled preview. There are no enemies, damage, weapons, progression, active vehicles or sound. All player-facing text is English and comes from the localization catalog. Material colors restore a subdued city palette while preserving Kerbside UI roles; see `THEMING.md`.
+Minimap, full map, help, pause, fullscreen request, zoom and position reset work. The health display shows a fixed value until combat is implemented. There are no enemies, damage, weapons, progression, active vehicles or sound. All player-facing text is English and comes from the localization catalog. Material colors restore a subdued city palette while preserving Kerbside UI roles; see `THEMING.md`.
 
 ## Requested direction, awaiting detailed review
 
@@ -26,6 +26,6 @@ Rare wandering parody groups may appear near the player, flee when attacked and 
 
 ## Historical context
 
-The initial prototype used olive procedural art; the first Kerbside pass replaced it with exclusively neutral materials. Version 0.3.0 adds subdued physical material colors without changing movement, geometry or UI accents. Earlier JavaScript prototype files were replaced by strict TypeScript feature modules; current architecture is described in `ARCHITECTURE.md`.
+The first version used olive procedural art; the first Kerbside pass replaced it with exclusively neutral materials. Version 0.3.0 adds subdued physical material colors without changing movement, geometry or UI accents. Earlier JavaScript files were replaced by strict TypeScript feature modules; current architecture is described in `ARCHITECTURE.md`.
 
 Reference screenshots in `sources/` are research only. No Rockstar/DMA sprites, logos or Vampire Survivors art are included in the game.

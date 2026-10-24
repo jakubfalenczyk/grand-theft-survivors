@@ -6,6 +6,15 @@
 - Nie opieraj trwałego stanu pracy wyłącznie na historii rozmowy ani plikach tymczasowych, takich jak `/tmp`; istotne ustalenia zapisuj w odpowiednich, trwałych plikach projektu.
 - Jeśli automatyzacja Chromium nie wystarcza do zweryfikowania zachowania, użyj rzeczywistego Chrome na Windows za pośrednictwem dostępnego rozszerzenia lub pluginu. Dobieraj metodę do scenariusza i nie traktuj ograniczeń trybu headless jako ograniczeń całej dostępnej weryfikacji.
 
+## GitHub i commity
+
+- Twórz commity odpowiadające pojedynczemu zadaniu lub spójnej funkcjonalności. Związane z nią zmiany kodu, testów i dokumentacji umieszczaj razem.
+- Listę zadań wykonuj po kolei i zapisuj osobny commit po ukończeniu każdego zadania wymagającego zmian w repozytorium. Trzy takie zadania powinny dać trzy kolejne commity, zamiast jednego zbiorczego.
+- Po ukończeniu i zweryfikowaniu całej listy wypchnij przygotowane commity jednym pushem do `origin/main`, chyba że użytkownik wskaże inny sposób publikacji.
+- Stosuj Conventional Commits w formacie `type(scope): description`. Zakres jest opcjonalny. Dobieraj typ do zmiany, np. `feat`, `fix`, `refactor`, `docs`, `test`, `build`, `ci` lub `chore`.
+- Wiadomości commitów pisz po angielsku. Opisuj konkretną zmianę krótko, w trybie rozkazującym, np. `feat(audio): add footsteps`.
+- Przed każdym `git commit` zastosuj skill `unslop` do tytułu i ewentualnej treści wiadomości. Usuń ogólniki i zbędne słowa, zachowując format Conventional Commits.
+
 ## Obowiązujący stos
 
 - Phaser **3.90**, TypeScript `strict`, Vite 7, Node.js 22.12+, npm z jednym `package-lock.json`. Typy Phasera pochodzą z jego pakietu; nie dodawaj `@types/phaser`.

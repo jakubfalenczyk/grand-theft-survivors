@@ -4,16 +4,16 @@ Reviewed 2026-10-24 against the game running on Phaser 3.90.
 
 ## How the game renders
 
-| Responsibility                                                  | Implementation                                                           | When it runs                                                  |
-| --------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------- |
-| Seeded city data, dimensions and footprints                     | `src/game/features/world/generateCity.ts`, `config.ts`, shared contracts | On scene creation; no rendering dependencies                  |
-| Roads, crossings, parks, street text and decorative parked cars | `createGroundTexture.ts`                                                 | Painted once into a 2520 × 2520 CanvasTexture                 |
-| Individual roofs and rooftop equipment                          | `createRoofTexture.ts`                                                   | Painted once per building; keys include seed and building ID  |
-| Tree silhouette and leaves                                      | `createPropTextures.ts`                                                  | One shared CanvasTexture, reused by tree Images               |
-| Character animation frames                                      | `features/player/createPlayerTextures.ts`                                | One 72 × 24 texture, split into three 24 × 24 frames          |
-| Roof placement and projected facades/windows                    | `BuildingRenderer.ts`                                                    | Each update for visible buildings; depends on camera position |
-| World object composition                                        | `WorldRenderer.ts`                                                       | Owns Phaser objects without mutating the layout               |
-| Minimap/full map                                                | `features/map/drawMap.ts`                                                | Canvas 2D UI projection from snapshots                        |
+| Responsibility                                                  | Implementation                                                           | When it runs                                                      |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| Seeded city data, dimensions and footprints                     | `src/game/features/world/generateCity.ts`, `config.ts`, shared contracts | On scene creation; no rendering dependencies                      |
+| Roads, crossings, parks, street text and decorative parked cars | `createGroundTexture.ts`                                                 | Painted once into a 2520 × 2520 CanvasTexture                     |
+| Individual roofs and rooftop equipment                          | `createRoofTexture.ts`                                                   | Painted once per building; keys include seed and building ID      |
+| Tree silhouette and leaves                                      | `createPropTextures.ts`                                                  | One shared 128 × 128 CanvasTexture, reused at 38 × 42 world units |
+| Character animation frames                                      | `features/player/createPlayerTextures.ts`                                | One 384 × 128 texture, split into three 128 × 128 frames          |
+| Roof placement and projected facades/windows                    | `BuildingRenderer.ts`                                                    | Each update for visible buildings; depends on camera position     |
+| World object composition                                        | `WorldRenderer.ts`                                                       | Owns Phaser objects without mutating the layout                   |
+| Minimap/full map                                                | `features/map/drawMap.ts`                                                | Canvas 2D UI projection from snapshots                            |
 
 These `.ts` files define the drawing operations. The generator produces geometry data, the drawing functions create textures and the renderer displays them. We do not yet have external sprite packs, SVG building definitions, a tileset or a visual map editor. Cars painted into the ground are scenery, so making them destructible later requires independent entities.
 
@@ -39,12 +39,14 @@ Once loaded, Phaser renders a textured Image/Sprite with position, rotation, sca
 
 ## Recommendation for this game
 
-Use a hybrid pipeline. Retain procedural road layout, simple surfaces, projection and collision data. Keep code-generated placeholder art while proving combat. When visual content grows, author character/enemy animations, vehicles, weapon silhouettes, portraits and recognizable props externally and export atlases. Visual editing would help control their silhouettes and animation frames. Try a small character/car/prop sample before committing the entire game to a style.
+Use a hybrid pipeline. Retain procedural road layout, simple surfaces, projection and collision data. Use the detailed procedural art under the [pixel-art standard](art/PIXEL-ART.md) while developing combat. When visual content grows, author character/enemy animations, vehicles, weapon silhouettes, portraits and recognizable props externally and export atlases. Visual editing would help control their silhouettes and animation frames. Try a small character/car/prop sample before committing the entire game to a style.
 
 Keep the projected walls unless measurements justify replacing them. An atlas of roof details and repeated facade modules is a possible later optimization; a flat full-building sprite cannot reproduce our current camera-dependent projection. Measure facade CPU time and texture switches before deciding how to optimize them.
 
 The current ground texture exceeds 2048 px on a side and uses roughly 24.2 MiB for one uncompressed RGBA copy alone. This is acceptable for the current desktop version but should not become the multi-map design. Query device texture limits and use bounded ground chunks or tiles for larger/mobile maps. Many unique roof textures also deserve measurement before content expands. PNG compression reduces download size, not uncompressed GPU memory.
 
-Before importing external graphics, define: pixel/world scale, anchors, frame names, animation timing, atlas padding/extrusion, filtering and maximum atlas dimensions; collision footprints separate from artwork; stable asset IDs and loading-error behavior; licenses and editable source ownership. Current `pixelArt: true` and disabled antialiasing favor crisp small rasters; a smoother illustration direction would need an explicit rendering decision.
+Before importing external graphics, define: pixel/world scale, anchors, frame names, animation timing, atlas padding/extrusion, filtering and maximum atlas dimensions; collision footprints separate from artwork; stable asset IDs and loading-error behavior; licenses and editable source ownership. Current `pixelArt: true` and disabled antialiasing preserve crisp detailed rasters; a smoother illustration direction would need an explicit rendering decision.
 
 The project still uses code-generated graphics. The latest material colors are documented in `THEMING.md`.
+
+Roof sources now use at least two pixels per world unit and a minimum of 128 px per dimension, with explicit display dimensions preserving projection. Larger sources increase roof texture memory relative to the earlier pipeline. Ground resolution stays unchanged. See [the pixel-art standard](art/PIXEL-ART.md).

@@ -16,7 +16,9 @@ export class WorldRenderer {
     const groundKey = createGroundTexture(scene, layout);
     scene.add.image(0, 0, groundKey).setOrigin(0).setDepth(DEPTH.ground);
     const treeKey = createTreeTexture(scene);
-    layout.trees.forEach((tree) => scene.add.image(tree.x, tree.y, treeKey).setDepth(DEPTH.trees));
+    layout.trees.forEach((tree) =>
+      scene.add.image(tree.x, tree.y, treeKey).setDisplaySize(38, 42).setDepth(DEPTH.trees),
+    );
     // Renderer-owned copies: adding GameObjects never mutates the generated layout.
     this.buildings = layout.buildings.map((building) => {
       const district = DISTRICTS.find((d) => d.id === building.district);
@@ -47,7 +49,7 @@ export class WorldRenderer {
         height: b.height,
         roofX: b.image.x,
         roofY: b.image.y,
-        scale: b.image.scaleX,
+        scale: b.image.displayWidth / b.w,
       }));
   }
 }

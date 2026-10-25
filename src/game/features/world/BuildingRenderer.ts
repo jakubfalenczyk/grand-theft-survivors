@@ -36,7 +36,7 @@ export class BuildingRenderer {
       b.image.setVisible(visible);
       b.facade.setVisible(visible).clear();
       if (!visible) continue;
-      b.image.setPosition(roof.x, roof.y).setScale(roof.scale);
+      b.image.setPosition(roof.x, roof.y).setDisplaySize(b.w * roof.scale, b.h * roof.scale);
       if (cy < b.y) this.drawFace(b, b.x, b.y, b.x + b.w, b.y, cx, cy, false);
       if (cy > b.y + b.h) this.drawFace(b, b.x + b.w, b.y + b.h, b.x, b.y + b.h, cx, cy, false);
       if (cx < b.x) this.drawFace(b, b.x, b.y + b.h, b.x, b.y, cx, cy, true);
@@ -71,6 +71,14 @@ export class BuildingRenderer {
     const columns = Math.max(3, Math.floor(Math.hypot(bx - ax, by - ay) / 15));
     const base = side ? b.material.dark : b.material.light;
     quad(0, 1, 0, b.height, base);
+    const length = Math.hypot(bx - ax, by - ay);
+    // Staggered masonry joints stay on the projected wall plane.
+    for (let z = 6; z < b.height - 4; z += 6) {
+      quad(0, 1, z, z + 0.5, ink.mortar, 0.35);
+      for (let x = (Math.floor(z / 6) % 2) * 6; x < length; x += 12) {
+        quad(x / length, Math.min(1, (x + 0.5) / length), z - 5, z, ink.mortar, 0.3);
+      }
+    }
     for (let row = 0; row < floors; row++) {
       const z = row * floorHeight;
       // Window rows and horizontal sills remain attached to the same wall plane.
@@ -85,7 +93,11 @@ export class BuildingRenderer {
           v - 0.012,
           z + floorHeight * 0.33,
           z + floorHeight * 0.7,
-          (row + col + b.floors) % 7 === 0 ? ink['window-lit'] : side ? ink.wall : ink.edge,
+          (row + col + b.floors) % 7 === 0
+            ? ink['window-lit']
+            : side
+              ? ink['glass-deep']
+              : ink['glass-light'],
         );
         quad(u, v, z + floorHeight * 0.25, z + floorHeight * 0.3, ink.detail, 0.65);
         quad(
@@ -99,8 +111,8 @@ export class BuildingRenderer {
     }
     // Dark foundation and a contrasting cornice anchor the wall to street and roof.
     quad(0, 1, 0, 4, ink.deep);
-    quad(0, 1, b.height - 4, b.height - 1.5, ink.dark);
-    quad(0, 1, b.height - 1.5, b.height, ink.light);
+    quad(0, 1, b.height - 2, b.height - 0.5, ink.dark);
+    quad(0, 1, b.height - 0.5, b.height, ink.light);
     g.lineStyle(1, ink.deep, 0.8);
     const a = point(0, 0),
       ar = point(0, b.height),

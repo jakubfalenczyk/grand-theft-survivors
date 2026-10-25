@@ -29,3 +29,7 @@ Rare wandering parody groups may appear near the player, flee when attacked and 
 The first version used olive procedural art; the first Kerbside pass replaced it with exclusively neutral materials. Version 0.3.0 adds subdued physical material colors without changing movement, geometry or UI accents. Earlier JavaScript files were replaced by strict TypeScript feature modules; current architecture is described in `ARCHITECTURE.md`.
 
 Reference screenshots in `sources/` are research only. No Rockstar/DMA sprites, logos or Vampire Survivors art are included in the game.
+
+## World-art direction
+
+Use detailed top-down pixel art with 128 × 128 or larger standalone source frames, a rich RGBA material palette and thin outlines. Roof tiles, metal seams, glass, masonry and foliage should read as distinct materials. Keep hard shadows and nearest sampling. The interface keeps its Kerbside typography and semantic colors. See [the pixel-art standard](art/PIXEL-ART.md) for scale, palette and review rules.

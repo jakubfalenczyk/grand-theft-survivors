@@ -31,6 +31,29 @@ export function createGroundTexture(scene: Phaser.Scene, layout: WorldLayout) {
     rect(c, ink.road, p - ROAD / 2, 0, ROAD, layout.size);
     rect(c, ink.road, 0, p - ROAD / 2, layout.size, ROAD);
   }
+  // Paving slabs, curb joints and drains are baked once at world resolution.
+  for (let i = 0; i <= 6; i++) {
+    const p = i * BLOCK;
+    for (const side of [-1, 1]) {
+      const edge = p + side * (ROAD / 2 + 7);
+      rect(c, ink.paving, edge - 6, 0, 12, layout.size);
+      rect(c, ink.paving, 0, edge - 6, layout.size, 12);
+      rect(c, ink['paving-light'], edge - 6, 0, 1, layout.size);
+      rect(c, ink['paving-light'], 0, edge - 6, layout.size, 1);
+      for (let q = 0; q < layout.size; q += 12) {
+        rect(c, ink['paving-dark'], edge - 6, q, 12, 1);
+        rect(c, ink['paving-dark'], q, edge - 6, 1, 12);
+        if (q % 96 === 0) {
+          rect(c, ink.deep, edge - 3, q + 3, 6, 7);
+          rect(c, ink.deep, q + 3, edge - 3, 7, 6);
+          for (let slat = 0; slat < 3; slat++) {
+            rect(c, ink['metal-light'], edge - 2 + slat * 2, q + 4, 1, 5);
+            rect(c, ink['metal-light'], q + 4, edge - 2 + slat * 2, 5, 1);
+          }
+        }
+      }
+    }
+  }
   for (let i = 0; i < 18000; i++) {
     const x = between(0, layout.size),
       y = between(0, layout.size);
@@ -68,6 +91,11 @@ export function createGroundTexture(scene: Phaser.Scene, layout: WorldLayout) {
   for (const { x, y, park, parking } of layout.blocks) {
     if (park) {
       rect(c, ink.grass, x, y, 260, 260);
+      for (let tuft = 0; tuft < 1600; tuft++) {
+        const tx = x + between(1, 258),
+          ty = y + between(1, 258);
+        rect(c, rng() > 0.5 ? ink['leaf-dark'] : ink['leaf-mid'], tx, ty, 1, 2);
+      }
       rect(c, ink.edge, x + 118, y, 24, 260);
       rect(c, ink.edge, x, y + 118, 260, 24);
       rect(c, ink.wall, x + 90, y + 90, 80, 80);

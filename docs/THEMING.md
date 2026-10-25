@@ -36,3 +36,9 @@ City art will need another review once landmarks and faction signs exist. Future
 5. Run `npm run check`; inspect desktop/mobile views and any changed world art.
 
 The original package gained named shadow/focus/chamfer tokens in 0.2.0 and world material inks in 0.3.0. UI accent roles and fonts have not changed. Reference components: `http://localhost:5173/design-system/kerbside-design-system/components.html`.
+
+## Detailed pixel-art world
+
+The [world-art standard](art/PIXEL-ART.md) requires 128 × 128 or larger standalone source textures/frames, RGBA8888 and thin one-pixel contours. `world.pixel-art` stores these settings. Roof density is at least 2× world dimensions. Images map the larger textures back to their original world dimensions; camera projection and collision remain separate. Trees and character frames use 128 × 128 sources. Roads and decorative parked cars remain baked into the full-resolution ground canvas.
+
+`world.materials` includes paving, mortar, glass, metal, rubber, bark and character materials. `materialShade` derives discrete shades toward asphalt/concrete without introducing local color literals. Detailed roof tiles/seams, equipment, leaf clusters, wall joints, pavement and drains use hard fills. UI accent roles, fonts and the simplified map remain unchanged.

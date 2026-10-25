@@ -63,3 +63,7 @@ The GitHub Pages workflow verifies the project, builds it under `/grand-theft-su
 The app creates and resumes an AudioContext synchronously inside Play and passes it to Phaser. Audio failure can fall back to silent play. `AudioSettings` validates versioned plain data and computes Master × All SFX × subgroup, or Master × Music. Global mute yields zero without changing levels. `src/app/audioStorage.ts` owns local storage reads/writes and catches browser denials and invalid JSON. UI settings use the same dialog controller, pause model, focus trap and English catalog as the other menus. Phaser key capture is disabled while dialogs own input so range inputs retain their native arrow controls.
 
 Only runtime sound exports and notices are committed. Source archives are temporary. Extracted packs and unused samples stay in the ignored `.local/audio-packs/` folder, outside `public/` and the module graph. See `AUDIO-ASSETS.md` for original filenames, hashes, edits and licenses.
+
+## Detailed source textures
+
+The 2026-10-25 [pixel-art decision](art/PIXEL-ART.md) separates source density from world geometry. Roofs use at least double resolution and a 128 px minimum dimension. Projection sets their display dimensions explicitly; debug snapshots report projected world scale rather than texture scale. Trees use 128 px sources at 38 × 42 world units. Character animation uses three 128 px frames at 24 × 24 world units; physics sizes and offsets convert to source coordinates to retain the 10 × 10 world footprint. Texture creation remains cached and deterministic.

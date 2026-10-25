@@ -1,6 +1,6 @@
 # Kerbside design system
 
-Kerbside is the internal name of the custom design system for Grand Theft Survivors. Jakub Falenczyk created it in Claude Design for this game. This package defines the interface colors, typography and shared components.
+Kerbside is the internal name of the custom design system for Grand Theft Survivors. Jakub Falenczyk created it in Claude Design for this game. This package defines interface colors, typography, shared components and world-art rules.
 
 ## Files
 
@@ -11,7 +11,7 @@ Kerbside is the internal name of the custom design system for Grand Theft Surviv
 
 ## Concept
 
-Top-down night city, printed like a two-ink risograph plan. Flat color fields, a hard offset "misregistration" shadow in a second ink, chamfered corners, road-marking dividers. It keeps the GTA2 mood (gangs, pager missions, wanted level, multiplier) without copying its UI, fonts or logo.
+The interface uses a top-down night-city plan printed like a two-ink risograph. Flat color fields, a hard offset "misregistration" shadow in a second ink, chamfered corners, road-marking dividers. It keeps the GTA2 mood (gangs, pager missions, wanted level, multiplier) without copying its UI, fonts or logo.
 
 ## Rules (do)
 
@@ -44,3 +44,7 @@ Icon set, vehicle/pickup sprites, full screens (garage, gang select, pause), mot
 This is the canonical package. Read [the integration guide](../../docs/THEMING.md) for the implemented adapters and additions in version 0.3.0. `tokens.css` is generated from `tokens.json`: run `npm run theme:build` from the project root. The app imports this `components.css` directly and self-hosts the three font families through Fontsource, including Latin Extended characters.
 
 The integration adds subdued physical world materials in `world.materials`; these do not change UI accent roles. See the integration guide for the distinction between material color and faction/interaction signals.
+
+## Detailed world pixel art
+
+World art follows the [detailed pixel-art standard](../../docs/art/PIXEL-ART.md): source textures/frames at least 128 × 128, RGBA8888, rich physical material ramps, one-pixel contours, nearest sampling and hard stepped shading. The world uses detailed pixel materials while the interface retains the risograph components above. Source resolution does not change object size or collision. `world.pixel-art` and `world.materials` in `tokens.json` are the specification.

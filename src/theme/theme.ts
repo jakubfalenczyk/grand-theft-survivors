@@ -43,3 +43,17 @@ export const withAlpha = (color: string, alpha: number) =>
     .padStart(2, '0');
 export const factionTheme = (id: keyof typeof tokens.faction) => tokens.faction[id];
 export const THEME_VERSION = tokens.version;
+
+/** Discrete material ramps add surface detail without repurposing UI accents. */
+export function materialShade(color: string, amount: number) {
+  const target = amount < 0 ? colors.asphalt : colors.concrete;
+  const strength = Math.min(1, Math.abs(amount));
+  const channels = [1, 3, 5].map((offset) => {
+    const source = Number.parseInt(color.slice(offset, offset + 2), 16);
+    const end = Number.parseInt(target.slice(offset, offset + 2), 16);
+    return Math.round(source + (end - source) * strength)
+      .toString(16)
+      .padStart(2, '0');
+  });
+  return `#${channels.join('')}`;
+}

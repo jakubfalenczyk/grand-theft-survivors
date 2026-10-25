@@ -3,7 +3,11 @@ import type { Point } from '../../../shared/contracts.ts';
 import { phaserColors } from '../../../theme/theme.ts';
 import { DEPTH } from '../../config.ts';
 import { PLAYER } from './config.ts';
-import { createPlayerTextures } from './createPlayerTextures.ts';
+import {
+  createPlayerTextures,
+  PLAYER_FRAME_SIZE,
+  PLAYER_DISPLAY_SIZE,
+} from './createPlayerTextures.ts';
 
 type PlayerKey =
   'forward' | 'backward' | 'left' | 'right' | 'up' | 'down' | 'arrowLeft' | 'arrowRight' | 'run';
@@ -24,10 +28,14 @@ export class PlayerController {
     this.shadow = scene.add
       .ellipse(spawn.x + 2, spawn.y + 3, 14, 10, phaserColors.asphalt, 0.48)
       .setDepth(DEPTH.playerShadow);
-    this.sprite = scene.physics.add.sprite(spawn.x, spawn.y, 'player', 0).setDepth(DEPTH.player);
+    this.sprite = scene.physics.add
+      .sprite(spawn.x, spawn.y, 'player', 0)
+      .setScale(PLAYER_DISPLAY_SIZE / PLAYER_FRAME_SIZE)
+      .setDepth(DEPTH.player);
     const body = this.sprite.body;
     if (!body) throw new Error('Arcade Physics body is required');
-    body.setSize(10, 10).setOffset(7, 9);
+    const density = PLAYER_FRAME_SIZE / PLAYER_DISPLAY_SIZE;
+    body.setSize(10 * density, 10 * density).setOffset(7 * density, 9 * density);
     this.sprite.setCollideWorldBounds(true);
     if (!scene.input.keyboard) throw new Error('Keyboard input is required');
     this.keys = scene.input.keyboard.addKeys({

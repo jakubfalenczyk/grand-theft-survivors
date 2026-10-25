@@ -54,7 +54,7 @@
 
 ## Audio assets
 
-- Download audio archives and extract source packs outside the repository. Commit only sounds used by the game, retained license notices and their source inventory.
+- Download audio archives to temporary storage. Keep extracted original packs in the ignored `.local/audio-packs/` folder for future selection. Never put packs in `public/` or import them into the build. Commit only sounds used by the game, retained license notices and their source inventory.
 - Map semantic cues to files and mix settings in the audio manifest. Preserve the Master, Music and SFX subgroup hierarchy; keep local storage in the app layer.
 
 ## Lifecycle, performance and verification

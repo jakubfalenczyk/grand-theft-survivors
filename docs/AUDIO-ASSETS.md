@@ -1,6 +1,6 @@
 # Audio assets
 
-Downloaded 2026-10-24. Only these seven exports are shipped. Source archives and extracted packs remain outside the repository. The selected samples were checked for duration, silence and peak level. The owner can review their sound in the game and replace entries in the manifest. No listening approval has been recorded.
+Downloaded 2026-10-24. Only these seven exports are shipped. Source archives are downloaded to temporary storage. Extracted originals are retained locally in `.local/audio-packs/`, which Git and repository checks ignore. They are not published. The selected samples were checked for duration, silence and peak level. The owner can review their sound in the game and replace entries in the manifest. No listening approval has been recorded.
 
 | Export           | Source file                                        | Seconds |
 | ---------------- | -------------------------------------------------- | ------- |
@@ -27,3 +27,9 @@ SHA-256 identifies the original files without storing unused pack contents.
 - `Wav/Confirm_tones/style5/confirm_style_5_001.wav`: `d76e27331c0392afda66ec07f81c6b556a57fec0d58f4e35ea124c49eedbe51b`
 - `Wav/Back_tones/style5/back_style_5_001.wav`: `808be63b75c9c9443fe50634d9b1bc900d0bd11077392611b31e950c81026cbe`
 - `Wav/Cursor_tones/cursor_style_4.wav`: `8726bf3a9787172af2447ae87fd58c6a2d3d2ef3919e1a916f35dbfc5a8e246d`
+
+## Local source library
+
+The original Mayra and ObsydianX packs are available under `.local/audio-packs/mayra-footsteps/` and `.local/audio-packs/obsydianx-interface/` on the working machine. These ignored files do not arrive in a fresh clone. Download them from the source pages listed in the retained notices when setting up another machine. Keep archives in temporary storage and extract only into the ignored directory.
+
+Audition originals there, then copy and process only selected effects into `public/audio/`. Add the selected filenames, transformations and license to this inventory and the manifest. Never import or copy the whole local library into the build.

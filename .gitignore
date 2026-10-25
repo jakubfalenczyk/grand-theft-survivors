@@ -8,3 +8,6 @@ playwright-report/
 *.pem
 *.key
 *:Zone.Identifier
+
+# Local source assets, never shipped or committed.
+.local/

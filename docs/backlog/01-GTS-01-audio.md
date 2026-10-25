@@ -33,7 +33,7 @@ Use existing [audio candidates](../AUDIO-CANDIDATES.md), audition UI and concret
 ## Confirmed implementation decisions
 
 - Show a start screen and create the game only after the player presses Play. Initialize audio in that user gesture.
-- Download source packs outside the repository. Commit only selected effects and their license notices.
+- Download archives to temporary storage. Keep extracted originals in the ignored `.local/audio-packs/` library for later selection. Commit only selected effects and their license notices.
 - Use the Mayra footsteps and ObsydianX interface packs for this first selection. Sound choices can be replaced after listening in the game. Do not add music or uncleared city ambience.
 - Provide Master and Music levels, plus All SFX with Player, Enemy, World and Interface subgroups. Include a global mute. Music and Enemy controls reserve preferences for later content without loading unused files.
 - Persist volume levels and mute in local storage. Invalid or unavailable storage must not prevent play.

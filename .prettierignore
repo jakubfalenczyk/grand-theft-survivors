@@ -4,3 +4,5 @@ test-results/
 playwright-report/
 package-lock.json
 design-system/kerbside-design-system/tokens.css
+
+.local/

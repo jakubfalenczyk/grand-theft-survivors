@@ -4,8 +4,12 @@ import { clamp } from './math.ts';
 /** Exclusive UI modes prevent overlapping pause/help/map state. No engine or DOM. */
 export class GameSession {
   #state: SessionState = Object.freeze({ mode: 'playing', zoom: 2 });
+  #audioReturn: 'playing' | 'paused' = 'playing';
   #listeners = new Set<(state: SessionState) => void>();
 
+  constructor(mode: SessionMode = 'playing') {
+    this.#state = Object.freeze({ mode, zoom: 2 });
+  }
   get state() {
     return this.#state;
   }
@@ -20,15 +24,29 @@ export class GameSession {
   }
 
   setMode(mode: SessionMode) {
-    if (!['playing', 'paused', 'help', 'map'].includes(mode))
+    if (!['start', 'loading', 'playing', 'paused', 'help', 'map', 'audio'].includes(mode))
       throw new Error(`Unknown mode: ${mode}`);
     this.#update({ mode });
   }
 
+  openAudio() {
+    if (this.state.mode === 'start' || this.state.mode === 'loading') return;
+    this.#audioReturn = this.blocked ? 'paused' : 'playing';
+    this.setMode('audio');
+  }
+  closeAudio() {
+    this.setMode(this.#audioReturn);
+  }
   toggleMap() {
+    if (this.state.mode === 'start' || this.state.mode === 'loading') return;
     this.setMode(this.state.mode === 'map' ? 'playing' : 'map');
   }
   togglePause() {
+    if (this.state.mode === 'audio') {
+      this.closeAudio();
+      return;
+    }
+    if (this.state.mode === 'start' || this.state.mode === 'loading') return;
     this.setMode(this.blocked ? 'playing' : 'paused');
   }
   zoomBy(delta: number) {

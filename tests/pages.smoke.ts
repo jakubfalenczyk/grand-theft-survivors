@@ -10,6 +10,7 @@ test('the Pages build loads assets, dialogs and licenses at the repository path'
     if (response.status() >= 400) errors.push(`${response.status()} ${response.url()}`);
   });
   await page.goto('./');
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
   await expect(page.locator('#game canvas')).toBeVisible();
   await expect(page).toHaveTitle('Grand Theft Survivors');
   await page.evaluate(() => document.fonts.ready);

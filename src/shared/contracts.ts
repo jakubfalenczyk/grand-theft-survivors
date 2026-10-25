@@ -1,3 +1,4 @@
+import type { AudioCue, AudioStatus } from './audio/types.ts';
 /** Plain-data boundary contracts; never place engine or DOM objects here. */
 export interface Point {
   x: number;
@@ -41,17 +42,30 @@ export interface BuildingView extends Footprint {
   roofY: number;
   scale: number;
 }
-export type SessionMode = 'playing' | 'paused' | 'help' | 'map';
+export type SessionMode = 'start' | 'loading' | 'playing' | 'paused' | 'help' | 'map' | 'audio';
 export interface SessionState {
   readonly mode: SessionMode;
   readonly zoom: number;
 }
 export interface AppEvents {
+  'command:play': undefined;
+  'audio:cue': AudioCue;
+  'audio:status': AudioStatus;
   'command:reset-player': undefined;
   'game:world-ready': WorldLayout;
   'game:snapshot': GameSnapshot;
 }
+export interface AudioDebugSnapshot {
+  status: AudioStatus;
+  played: number;
+  lastCue: string;
+  active: { cue: string; bus: string; volume: number }[];
+  context: string;
+  cached: number;
+  managed: number;
+}
 export interface DebugBridge {
+  getAudio(): AudioDebugSnapshot;
   isReady(): boolean;
   getState(): GameSnapshot & { paused: boolean; map: boolean; zoom: number };
   getBuildings(): Footprint[];

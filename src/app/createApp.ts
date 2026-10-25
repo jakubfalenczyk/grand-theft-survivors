@@ -3,24 +3,52 @@ import { GameSession } from '../shared/GameSession.ts';
 import { createEventBus } from '../shared/EventBus.ts';
 import { createInterface } from '../ui/createInterface.ts';
 import { installDebugBridge } from './debug.ts';
+import { persistAudioSettings, restoreAudioSettings } from './audioStorage.ts';
 
 export function createApp(root: HTMLElement) {
-  const session = new GameSession(),
+  const session = new GameSession('start'),
     bus = createEventBus();
-  const services = { session, bus };
+  const audio = restoreAudioSettings();
+  const services = { session, bus, audio };
   const ui = createInterface(root, services);
-  const game = createGame(ui.host, services);
+  const stopStorage = persistAudioSettings(audio, () => ui.setStorageUnavailable());
+  let game: ReturnType<typeof createGame> | undefined;
+  let context: AudioContext | undefined;
+  let removeDebug = () => {};
   const observer = new ResizeObserver(() =>
-    game.scale.resize(ui.host.clientWidth, ui.host.clientHeight),
+    game?.scale.resize(ui.host.clientWidth, ui.host.clientHeight),
   );
   observer.observe(ui.host);
-  const removeDebug = import.meta.env.DEV ? installDebugBridge(game, session) : () => {};
+  const stopReady = bus.on('game:world-ready', () => {
+    if (session.state.mode === 'loading') session.setMode('playing');
+  });
+  const stopPlay = bus.on('command:play', () => {
+    if (session.state.mode !== 'start' || game) return;
+    session.setMode('loading');
+    let audioContext: AudioContext | false | undefined;
+    try {
+      if (typeof AudioContext !== 'undefined') {
+        context = new AudioContext();
+        audioContext = context;
+        void context.resume().catch(() => bus.emit('audio:status', 'unavailable'));
+      }
+    } catch {
+      audioContext = false;
+    }
+    game = createGame(ui.host, services, audioContext);
+    if (import.meta.env.DEV) removeDebug = installDebugBridge(game, session);
+  });
   return {
     destroy() {
+      stopPlay();
+      stopReady();
+      stopStorage();
       observer.disconnect();
       removeDebug();
-      game.destroy(true);
+      game?.destroy(true);
+      if (context && context.state !== 'closed') void context.close().catch(() => {});
       ui.destroy();
+      audio.destroy();
       session.destroy();
       bus.destroy();
     },

@@ -4,6 +4,7 @@
     ><span>{{brand.first}}<br /><span>{{brand.last}}</span></span></a
   >
   <p class="kb-meta edition">{{edition}} <span>{{separator.slash}}</span> {{release.version}}</p>
+  <button class="kb-btn kb-btn--secondary" id="audio-button">{{audio.open}}</button>
   <button class="kb-btn kb-btn--secondary" id="help-button">
     {{controls.title}} <kbd>{{key.help}}</kbd>
   </button>
@@ -104,6 +105,10 @@
           <span class="kb-meta">{{dialog.brand}}</span>
           <h2 class="kb-card__title" id="dialog-title">{{pause.title}}</h2>
           <p id="dialog-description">{{pause.description}}</p>
+          <div id="start-content" hidden>
+            <button id="play-button" class="kb-btn">{{start.play}}</button>
+            <p id="start-loading" role="status" hidden>{{start.loading}}</p>
+          </div>
           <div id="help-content" hidden>
             <dl>
               <div>
@@ -139,6 +144,7 @@
             </dl>
           </div>
           <button id="resume-button" class="kb-btn">{{resume.button}}</button>
+          <button id="pause-audio-button" class="kb-btn kb-btn--secondary">{{audio.open}}</button>
         </div>
       </div>
     </div>
@@ -156,6 +162,30 @@
           <h2 class="kb-card__title" id="map-title">{{map.title}}</h2>
           <canvas id="city-map" width="540" height="540" aria-label="{{map.full}}"></canvas
           ><button id="close-map" class="kb-btn">{{map.close}} <kbd>{{key.map}}</kbd></button>
+        </div>
+      </div>
+    </div>
+    <div
+      id="audio-overlay"
+      class="overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="audio-title"
+      aria-describedby="audio-description"
+      hidden
+    >
+      <div class="dialog-ink audio-dialog">
+        <div class="dialog kb-card">
+          <h2 class="kb-card__title" id="audio-title">{{audio.title}}</h2>
+          <p id="audio-description">{{audio.description}}</p>
+          <label class="audio-mute"><input id="audio-mute" type="checkbox" />{{audio.mute}}</label>
+          <div id="audio-fields"></div>
+          <p id="audio-status" role="status">{{audio.status.initial}}</p>
+          <p id="audio-storage-status" role="status"></p>
+          <div class="audio-actions">
+            <button id="audio-test" class="kb-btn kb-btn--secondary">{{audio.test}}</button
+            ><button id="audio-close" class="kb-btn">{{audio.close}}</button>
+          </div>
         </div>
       </div>
     </div>
@@ -192,6 +222,8 @@
         {{credits.martian.copyright}}
         <a href="./licenses/martian-mono.txt">{{credits.license}}</a>{{punctuation.period}}
       </li>
+      <li><a href="./licenses/audio-mayra.txt">{{credits.audio.mayra}}</a></li>
+      <li><a href="./licenses/audio-obsydianx.txt">{{credits.audio.obsydianx}}</a></li>
       <li><a href="./licenses/phaser.txt">{{credits.phaser}}</a></li>
       <li><a href="./licenses/eventemitter3.txt">{{credits.eventemitter}}</a></li>
       <li><a href="./licenses/phaser-vendored.txt">{{credits.vendored}}</a></li>

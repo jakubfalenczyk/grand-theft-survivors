@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
   await page.waitForFunction(() => window.__gameDebug?.isReady());
 });
 
@@ -44,6 +45,7 @@ test('game and its fonts load without third-party network requests', async ({ pa
       external.push(request.url());
   });
   await page.reload();
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
   await page.waitForFunction(() => window.__gameDebug?.isReady());
   await page.evaluate(() => document.fonts.ready);
   expect(external).toEqual([]);
@@ -62,6 +64,8 @@ test('restarting a scene reuses textures and does not multiply listeners', async
     await expect(page.locator('#textures')).toHaveText(textures!);
     await expect(page.locator('#listeners')).toHaveText(listeners!);
     await expect(page.locator('#game canvas')).toHaveCount(1);
+    await expect.poll(() => page.evaluate(() => window.__gameDebug!.getAudio().managed)).toBe(0);
+    expect(await page.evaluate(() => window.__gameDebug!.getAudio().cached)).toBe(7);
     await page.keyboard.press('m');
     await expect(page.locator('#map-overlay')).toBeVisible();
     await page.keyboard.press('m');

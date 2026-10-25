@@ -1,6 +1,6 @@
 # Planned work
 
-Created 2026-10-24. These tasks are ready for design review. Implementation has not started. Task IDs identify work for later discussion. Proposed numbers still need playtesting and approval.
+Created 2026-10-24. Task files record current status. GTS-01 is implemented; the remaining tasks await design review. Task IDs identify work for later discussion. Proposed numbers still need playtesting and approval.
 
 ## Using this backlog
 

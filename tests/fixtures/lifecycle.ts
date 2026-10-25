@@ -1,3 +1,4 @@
+import { AudioSettings } from '../../src/shared/audio/AudioSettings.ts';
 import Phaser from 'phaser';
 import '../../src/theme/index.css';
 import '../../src/ui/styles/layout.css';
@@ -13,7 +14,8 @@ import { installDebugBridge } from '../../src/app/debug.ts';
 
 const session = new GameSession(),
   bus = createEventBus();
-const services = { session, bus };
+const audio = new AudioSettings();
+const services = { session, bus, audio };
 const ui = createInterface(element(document, '#app'), services);
 const game = createGame(ui.host, services);
 const removeDebug = installDebugBridge(game, session);
@@ -36,6 +38,7 @@ element(document, '#destroy-interface').addEventListener('click', () => {
   removeDebug();
   game.destroy(true);
   ui.destroy();
+  audio.destroy();
   session.destroy();
   bus.destroy();
 });

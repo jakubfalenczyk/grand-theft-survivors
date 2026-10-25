@@ -10,11 +10,12 @@ export function installDebugBridge(game: Phaser.Game, session: GameSession) {
   const ready = () => Boolean(scene()?.playerController);
   const bridge: DebugBridge = {
     isReady: ready,
+    getAudio: () => scene()!.audioDirector.getSnapshot(),
     getState: () => {
       const state = session.state;
       return {
         ...scene()!.getSnapshot(),
-        paused: ['paused', 'help'].includes(state.mode),
+        paused: ['paused', 'help', 'audio'].includes(state.mode),
         map: state.mode === 'map',
         zoom: state.zoom,
       };

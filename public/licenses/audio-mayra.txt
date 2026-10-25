@@ -1,0 +1,23 @@
+Copyright and permission notice for Mayra footsteps
+
+Creator: Mayra
+Source: https://mayragandra.itch.io/free-footsteps-sound-effects
+Downloaded and checked: 2026-10-24
+Package: Free Footsteps Pack.zip. No separate license file was supplied.
+
+Permission statement on the publisher page:
+"All of the sounds can be used for commercial or non commercial use. Crediting me is not required, but highly appreciated."
+"You don't have to ask for permission or inform me that you're using it, but feel free to tell if you are :D"
+
+An older author comment asks free users to credit Mayra. This game credits Mayra in all cases.
+
+Selected source files:
+Free Footsteps Pack/Concrete 1.wav
+Free Footsteps Pack/Concrete 2.wav
+Free Footsteps Pack/Grass 1.wav, segment 0.00 to 0.26 seconds
+Free Footsteps Pack/Grass Running.wav
+
+Exports: concrete-1.wav, concrete-2.wav, grass-1.wav, grass-2.wav.
+Modified for the game: mono PCM 16-bit WAV at the original sample rate,
+silence trimmed, peak normalized to 0.35, with 3 ms edge fades.
+These sound recordings are covered by the creator's permission, not the project's MIT license.

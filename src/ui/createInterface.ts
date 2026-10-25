@@ -1,3 +1,4 @@
+import { attachAudioControls } from './components/AudioControls.ts';
 import { locale, t, translateMarkup } from '../shared/intl/index.ts';
 import type { AppServices } from '../shared/services.ts';
 import shell from './shell.html?raw';
@@ -7,15 +8,33 @@ import { DialogController } from './components/DialogController.ts';
 import { attachHud } from './components/Hud.ts';
 import { attachMapView } from './components/MapView.ts';
 
-export function createInterface(root: HTMLElement, { session, bus }: AppServices) {
+export function createInterface(root: HTMLElement, services: AppServices) {
+  const { session, bus } = services;
   document.documentElement.lang = locale;
   document.title = t('page.title');
   root.innerHTML = translateMarkup(shell);
   const $ = <T extends HTMLElement = HTMLElement>(id: string) => element<T>(root, `#${id}`);
   const events = new AbortController();
   const onClick = (id: string, handler: () => void) =>
-    $(id).addEventListener('click', handler, { signal: events.signal });
+    $(id).addEventListener(
+      'click',
+      () => {
+        handler();
+        if (id !== 'audio-test')
+          bus.emit('audio:cue', {
+            id: ['resume-button', 'close-map', 'audio-close'].includes(id)
+              ? 'ui:back'
+              : 'ui:confirm',
+          });
+      },
+      { signal: events.signal },
+    );
   const dialogs = new DialogController(root);
+  onClick('play-button', () => bus.emit('command:play', undefined));
+  onClick('audio-button', () => session.openAudio());
+  onClick('pause-audio-button', () => session.openAudio());
+  onClick('audio-close', () => session.closeAudio());
+  onClick('audio-test', () => bus.emit('audio:cue', { id: 'ui:confirm' }));
   onClick('help-button', () => session.setMode('help'));
   onClick('resume-button', () => session.setMode('playing'));
   onClick('pause-button', () => session.togglePause());
@@ -36,8 +55,10 @@ export function createInterface(root: HTMLElement, { session, bus }: AppServices
   window.addEventListener(
     'keydown',
     (event) => {
+      if (session.state.mode === 'start' || session.state.mode === 'loading') return;
       if (event.repeat || event.ctrlKey || event.metaKey || event.altKey) return;
       if (
+        event.code !== 'Escape' &&
         event.target instanceof Element &&
         event.target.closest('input,textarea,select,[contenteditable="true"]')
       )
@@ -45,14 +66,17 @@ export function createInterface(root: HTMLElement, { session, bus }: AppServices
       if (event.code === 'Escape') {
         event.preventDefault();
         session.togglePause();
+        bus.emit('audio:cue', { id: 'ui:back' });
       }
       if (event.code === 'KeyM') {
         event.preventDefault();
         session.toggleMap();
+        bus.emit('audio:cue', { id: session.state.mode === 'map' ? 'ui:confirm' : 'ui:back' });
       }
       if (event.code === 'KeyH') {
         event.preventDefault();
         session.setMode('help');
+        bus.emit('audio:cue', { id: 'ui:confirm' });
       }
     },
     { signal: events.signal },
@@ -68,9 +92,17 @@ export function createInterface(root: HTMLElement, { session, bus }: AppServices
     $<HTMLButtonElement>('zoom-out').disabled = zoom <= 1;
     $<HTMLButtonElement>('zoom-in').disabled = zoom >= 3;
   });
-  const cleanups = [stopSession, attachHud(root, bus, session), attachMapView(root, bus, session)];
+  const cleanups = [
+    attachAudioControls(root, services),
+    stopSession,
+    attachHud(root, bus, session),
+    attachMapView(root, bus, session),
+  ];
   return {
     host: $('game'),
+    setStorageUnavailable() {
+      $('audio-storage-status').textContent = t('audio.storageUnavailable');
+    },
     destroy() {
       events.abort();
       cleanups.forEach((cleanup) => cleanup());

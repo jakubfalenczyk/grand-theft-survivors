@@ -10,7 +10,9 @@ A top-down city game set in Westbridge, built with Phaser 3.90, TypeScript and V
 
 Westbridge has a seeded 2520 × 2520 layout with three district palettes, parks and parked cars. Roofs and facades shift with the camera to show building height. The interface includes a minimap, city map, pause, controls, zoom and position reset.
 
-Combat, enemies, XP, bosses, moving traffic and sound are planned. The health display currently shows a fixed value. Cars and trees are scenery without collision.
+Press Play to enter the city. Concrete and grass footsteps and interface sounds are included. Open Sound to adjust Master, Music, All SFX, Player, Enemy, World and Interface levels or mute everything. The mix is saved on this device.
+
+Combat, enemies, XP, bosses, moving traffic and music are planned. The health display currently shows a fixed value. Cars and trees are scenery without collision.
 
 The planned game uses player actions to raise hostility with three gangs and the police. Hostile factions send reinforcements and bosses. See the [design](docs/DESIGN.md) and [backlog](docs/backlog/README.md) for the agreed rules and proposals.
 
@@ -76,6 +78,7 @@ All player-facing text comes from `src/shared/intl/en.ts`. English is the only c
 - [Architecture review](docs/ARCHITECTURE-REVIEW.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Game design](docs/DESIGN.md)
+- [Audio assets and sources](docs/AUDIO-ASSETS.md)
 - [Planned tasks and decisions](docs/backlog/README.md)
 - [GitHub Pages deployment](docs/PUBLISHING.md)
 - [Localization](docs/LOCALIZATION.md)

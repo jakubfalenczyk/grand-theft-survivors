@@ -51,6 +51,11 @@
 - Preserve accent roles, fonts, hard shadows, chamfered corners and 48 px targets. Do not add blur, glow, soft gradients or rounded cards. Pair faction colors with labels and use the correct text color. Use `muted` only for disabled text.
 - Dialogs use `DialogController`, pause gameplay through `GameSession`, manage focus and have accessible labels. Do not add independent booleans for map, pause or help state.
 
+## Audio assets
+
+- Download audio archives and extract source packs outside the repository. Commit only sounds used by the game, retained license notices and their source inventory.
+- Map semantic cues to files and mix settings in the audio manifest. Preserve the Master, Music and SFX subgroup hierarchy; keep local storage in the app layer.
+
 ## Lifecycle, performance and verification
 
 - Every subscription needs an owner and cleanup. Remove listeners on `game.events` with their exact handler during `SHUTDOWN`. Never remove another owner's listeners. Clean up DOM listeners, observers and the debug bridge when unmounting the application.

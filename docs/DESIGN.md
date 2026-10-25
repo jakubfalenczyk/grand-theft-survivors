@@ -10,7 +10,7 @@ The player starts at (1260, 1234). W/S moves forward/backward at 105 units/s; Sh
 
 Height is a 2D projection: `P = C + (p − C) × H / (H − z)`, with virtual camera height 500 and building heights 95/130/165. Roofs expand about 1.23/1.35/1.49×, with dynamic projected facades. It is not an isometric or 3D engine. Roof motion does not move collision footprints.
 
-Minimap, full map, help, pause, fullscreen request, zoom and position reset work. The health display shows a fixed value until combat is implemented. There are no enemies, damage, weapons, progression, active vehicles or sound. All player-facing text is English and comes from the localization catalog. Material colors restore a subdued city palette while preserving Kerbside UI roles; see `THEMING.md`.
+The Play screen starts the game and unlocks audio after user input. Concrete and grass footsteps follow distance traveled. Interface sounds and a saved volume mixer are implemented. Minimap, full map, help, pause, fullscreen request, zoom and position reset work. The health display shows a fixed value until combat is implemented. There are no enemies, damage, weapons, progression, active vehicles or music. All player-facing text is English and comes from the localization catalog. Material colors restore a subdued city palette while preserving Kerbside UI roles; see `THEMING.md`.
 
 ## Requested direction, awaiting detailed review
 

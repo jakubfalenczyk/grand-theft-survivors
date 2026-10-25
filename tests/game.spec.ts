@@ -3,6 +3,7 @@ import { test, expect } from '@playwright/test';
 const state = (page: Page) => page.evaluate(() => window.__gameDebug!.getState());
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
   await page.waitForFunction(() => window.__gameDebug?.isReady());
 });
 
@@ -10,6 +11,7 @@ test('boots without browser errors and renders the playable city', async ({ page
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.reload();
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
   await page.waitForFunction(() => window.__gameDebug?.isReady());
   await expect(page.locator('#game canvas')).toBeVisible();
   await expect(page).toHaveTitle('Grand Theft Survivors');
@@ -25,6 +27,7 @@ test('tank controls: forward, backward, rotation, and faster running', async ({ 
   const time = new Date('2026-10-24T12:00:00Z');
   await page.clock.install({ time });
   await page.reload();
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
   await page.clock.pauseAt(new Date(time.getTime() + 60000));
   await page.clock.runFor(1000);
   await page.waitForFunction(() => window.__gameDebug?.isReady());

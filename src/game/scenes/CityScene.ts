@@ -1,3 +1,5 @@
+import { AudioDirector, preloadAudio } from '../features/audio/AudioDirector.ts';
+import { Footsteps } from '../features/audio/Footsteps.ts';
 import type { AppServices } from '../../shared/services.ts';
 import type { WorldLayout } from '../../shared/contracts.ts';
 import type { GameSession } from '../../shared/GameSession.ts';
@@ -15,6 +17,9 @@ import { attachFollowCamera } from '../camera/FollowCamera.ts';
 
 /** Composition only. Features own behavior; UI receives plain data through the bus. */
 export class CityScene extends Phaser.Scene {
+  audioDirector!: AudioDirector;
+  footsteps!: Footsteps;
+  services: AppServices;
   session: GameSession;
   bus: EventBus;
   layout!: WorldLayout;
@@ -22,13 +27,19 @@ export class CityScene extends Phaser.Scene {
   playerController!: PlayerController;
   follow!: ReturnType<typeof attachFollowCamera>;
   lastHud = -Infinity;
-  constructor({ session, bus }: AppServices) {
+  constructor(services: AppServices) {
     super(GAME.scene);
-    this.session = session;
-    this.bus = bus;
+    this.services = services;
+    this.session = services.session;
+    this.bus = services.bus;
+  }
+  preload() {
+    preloadAudio(this);
   }
   create() {
+    this.audioDirector = new AudioDirector(this, this.services);
     this.layout = generateCity();
+    this.footsteps = new Footsteps(this.layout, this.bus);
     this.worldRenderer = new WorldRenderer(this, this.layout);
     this.playerController = new PlayerController(this, SPAWN);
     this.physics.world.setBounds(8, 8, this.layout.size - 16, this.layout.size - 16);
@@ -43,6 +54,7 @@ export class CityScene extends Phaser.Scene {
     this.lastHud = -Infinity;
     const reset = () => {
       this.playerController.reset();
+      this.footsteps.reset();
       this.follow.camera.centerOn(SPAWN.x, SPAWN.y);
       this.session.setMode('playing');
       this.publishSnapshot();
@@ -55,6 +67,11 @@ export class CityScene extends Phaser.Scene {
     const cleanups = [
       this.bus.on(EVENTS.RESET_PLAYER, reset),
       this.session.subscribe(() => {
+        if (this.input.keyboard) {
+          this.input.keyboard.enabled = !this.session.blocked;
+          if (this.session.blocked) this.input.keyboard.disableGlobalCapture();
+          else this.input.keyboard.enableGlobalCapture();
+        }
         if (this.session.blocked) this.playerController.stop();
       }),
     ];
@@ -62,12 +79,18 @@ export class CityScene extends Phaser.Scene {
       cleanups.forEach((cleanup) => cleanup());
       this.game.events.off(Phaser.Core.Events.BLUR, onBlur);
       this.follow.destroy();
+      this.audioDirector.destroy();
     });
     this.bus.emit(EVENTS.WORLD_READY, this.layout);
     this.publishSnapshot();
   }
   update(time: number, delta: number) {
     this.playerController.update(delta, this.session.blocked);
+    this.footsteps.update(
+      this.playerController.sprite,
+      this.playerController.running,
+      this.session.blocked,
+    );
     this.worldRenderer.update(this.cameras.main);
     if (time - this.lastHud >= GAME.hudIntervalMs) {
       this.lastHud = time;

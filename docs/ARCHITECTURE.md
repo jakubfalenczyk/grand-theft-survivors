@@ -12,11 +12,11 @@ Phaser 3.90, strict TypeScript, Vite 7, Node.js 22.12+ and npm with one `package
 
 ## Data flow
 
-The application creates and injects `GameSession` and `EventBus` into game and UI. Interface commands change session mode/zoom or emit reset. The scene coordinates player, colliders, world renderer and camera. The seeded generator returns plain `WorldLayout` data; rendering does not add GameObjects to that data. Separate colliders use the ground footprints, even when roofs project outward.
+The application creates and injects `GameSession`, `EventBus` and engine-independent `AudioSettings` into game and UI. The interface is mounted first; Phaser and its audio context are created only in the Play input handler. Interface commands change session mode/zoom or emit reset. The scene coordinates player, colliders, world renderer and camera. The seeded generator returns plain `WorldLayout` data; rendering does not add GameObjects to that data. Separate colliders use the ground footprints, even when roofs project outward.
 
 `game:world-ready` publishes the layout. `game:snapshot` publishes player position, movement and `DistrictId` at most once per 80 ms. The HUD translates district IDs; no localized display names cross the game/UI boundary. UI maps consume the same data. Snapshots never contain Phaser or DOM objects.
 
-`GameSession` has exactly one mode: `playing`, `paused`, `help` or `map`. One `DialogController` owns visibility, background blocking and focus across all dialogs. It remembers the initial opener while the player switches dialogs, then restores focus when returning to play. Future gameplay state belongs to its feature, not this application session class.
+`GameSession` has exactly one mode: `start`, `loading`, `playing`, `paused`, `help`, `map` or `audio`. One `DialogController` owns visibility, background blocking and focus across all dialogs. It remembers the initial opener while the player switches dialogs, then restores focus when returning to play. Future gameplay state belongs to its feature, not this application session class.
 
 The event map checks names/payloads at compile time; its one internal `unknown` narrowing is isolated. Every subscription has an owner and cleanup. Global Phaser event listeners are removed with the exact handler on scene `SHUTDOWN`; never remove other owners' listeners. App destruction aborts DOM listeners, disconnects resize observers and removes its development debug bridge.
 
@@ -53,3 +53,13 @@ The GitHub Pages workflow verifies the project, builds it under `/grand-theft-su
 ## Task browser
 
 `docs/backlog/index.html` is a separate Vite entry, published alongside the game at `/docs/backlog/`. Its TypeScript module uses an eager raw Markdown glob, so adding or removing a Markdown file changes the list without a registry. Markdown-it renders tables and lists with raw HTML disabled and unsafe link schemes rejected. The browser shares the canonical design tokens, components and local fonts without loading Phaser. Shared decisions live in the backlog README; each task has its own Markdown file. Feedback drafts stay in memory per document, and the copy button prepares a message for the project chat. There is no comment service or repository write access in the page.
+
+## Audio
+
+`src/game/features/audio/manifest.ts` maps semantic cues to selected assets, weighted variants, buses, gain, rate range, cooldown, priority and voice limits. Files and tuning belong there. Footsteps use actual displacement and a separate stride configuration. World-owned `surfaceAt` resolves the current lawn and concrete path shapes from layout data. Audio randomness uses its own seed and never advances world generation.
+
+`AudioDirector` preloads only selected files, reuses the game cache and owns scene voices and bus/session subscriptions. It updates active voice levels when preferences change, stops world sounds in dialogs and destroys all owned voices on shutdown. Each cue has a voice cap, and the global cap is eight. UI cues remain available during pause. Failed files have an eight-second request timeout and produce a readable status while play continues. There are no ambience loops to resume in this release. Positional attenuation is deferred until a world emitter needs it.
+
+The app creates and resumes an AudioContext synchronously inside Play and passes it to Phaser. Audio failure can fall back to silent play. `AudioSettings` validates versioned plain data and computes Master × All SFX × subgroup, or Master × Music. Global mute yields zero without changing levels. `src/app/audioStorage.ts` owns local storage reads/writes and catches browser denials and invalid JSON. UI settings use the same dialog controller, pause model, focus trap and English catalog as the other menus. Phaser key capture is disabled while dialogs own input so range inputs retain their native arrow controls.
+
+Only runtime sound exports and notices are committed. Source archives and unused samples stay in temporary storage outside the checkout. See `AUDIO-ASSETS.md` for original filenames, hashes, edits and licenses.

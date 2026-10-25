@@ -112,6 +112,7 @@ footer {
     display: none;
   }
   .topbar {
+    flex-wrap: wrap;
     padding: var(--kb-space-5);
   }
   main {
@@ -126,6 +127,7 @@ footer {
 }
 @media (max-width: 650px) {
   .topbar {
+    flex-wrap: wrap;
     padding: var(--kb-space-4);
     gap: var(--kb-space-4);
     min-height: 96px;

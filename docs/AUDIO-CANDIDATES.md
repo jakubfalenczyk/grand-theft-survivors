@@ -12,7 +12,7 @@ Initial research: 2026-10-24. These are candidates identified from publisher des
 | Pistol/SMG/shotgun | [Snake's SECOND Authentic Gun Sounds Pack](https://f8studios.itch.io/snakes-second-authentic-gun-sounds-pack) | 68 sounds, 9 mm/.308/20 Gauge and mechanisms; WAV/MP3, wet/dry variants, 12 MB ZIP. Description allowed free commercial use without mandatory credit; author comments referred to public domain/CC0. | Audition dry 9 mm and 20 Gauge; test fatigue under repeated automatic fire. Retain actual license and add voluntary credit.            |
 | Rifle families     | [Snake's Authentic Gun Sounds](https://f8studios.itch.io/snakes-authentic-gun-sounds)                         | 54 sounds, .22LR/5.56/7.62x39/7.62x54r and mechanisms; WAV/MP3, 11 MB ZIP; commercial use permitted, credit optional in description.                                                                 | Compare 5.56/7.62x39 short variants when that weapon content is designed.                                                              |
 
-These notes record the initial review. Verify the selected files and their license when downloading a pack.
+Mayra footsteps and ObsydianX interface effects were selected on 2026-10-24. See [the shipped file inventory](AUDIO-ASSETS.md) and retained notices for the exact exports. Other rows remain candidates. Verify their licenses before downloading or integrating them.
 
 ## Outstanding licensing issue
 

@@ -47,4 +47,4 @@ The integration adds subdued physical world materials in `world.materials`; thes
 
 ## Detailed world pixel art
 
-World art follows the [detailed pixel-art standard](../../docs/art/PIXEL-ART.md): source textures/frames at least 128 × 128, RGBA8888, rich physical material ramps, one-pixel contours, nearest sampling and hard stepped shading. The world uses detailed pixel materials while the interface retains the risograph components above. Source resolution does not change object size or collision. `world.pixel-art` and `world.materials` in `tokens.json` are the specification.
+World art follows the [detailed pixel-art standard](../../docs/art/PIXEL-ART.md): source textures/frames at least 128 × 128, RGBA8888, rich physical material ramps, one-pixel contours on hard surfaces, unoutlined tree canopies, nearest sampling and hard stepped shading. The world uses detailed pixel materials while the interface retains the risograph components above. Source resolution does not change object size or collision. `world.pixel-art` and `world.materials` in `tokens.json` are the specification.

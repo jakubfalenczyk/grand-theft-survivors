@@ -43,7 +43,7 @@ export function createTreeTexture(scene: Phaser.Scene) {
   const rng = seededRandom(711);
   rect(c, ink['bark'], 57, 84, 12, 36);
   rect(c, ink.deep, 65, 88, 3, 32);
-  // Overlapping stepped leaf clusters give a deliberate pixel silhouette.
+  // Leaf clusters merge without a dark contour around each lobe.
   const clusters = [
     [41, 33, 28],
     [69, 29, 26],
@@ -56,8 +56,7 @@ export function createTreeTexture(scene: Phaser.Scene) {
   for (const [cx, cy, radius] of clusters) {
     for (let y = -radius; y <= radius; y++) {
       const half = Math.floor(Math.sqrt(radius * radius - y * y) / 2) * 2;
-      rect(c, ink['leaf-deep'], cx - half, cy + y, half * 2 + 1, 1);
-      if (half > 2) rect(c, ink['leaf-mid'], cx - half + 1, cy + y, half * 2 - 1, 1);
+      rect(c, ink['leaf-mid'], cx - half, cy + y, half * 2 + 1, 1);
     }
     for (let leaf = 0; leaf < 180; leaf++) {
       const x = Math.floor((rng() * 2 - 1) * radius),

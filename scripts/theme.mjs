@@ -19,7 +19,21 @@ for (const [name, value] of Object.entries(tokens.shape)) {
 }
 for (const [name, value] of Object.entries(tokens.shadow)) add(`shadow-${name}`, value);
 for (const [name, value] of Object.entries(tokens.focus)) add(`focus-${name}`, `${value}px`);
-const css = `/* Generated from tokens.json by npm run theme:build. Do not edit. */\n:root {\n${entries.join('\n')}\n}\n`;
+add('ui-scale', tokens.responsive.scale.desktop);
+let responsiveCss = '';
+for (const name of ['compact', 'tablet', 'phone']) {
+  const scale = tokens.responsive.scale[name];
+  const values = [`  --kb-ui-scale: ${scale};`];
+  for (const [role, size] of Object.entries(tokens['type-scale-px'])) {
+    const value = Math.max(tokens.responsive['type-min-px'][role] ?? 0, size * scale);
+    values.push(`  --kb-text-${role}: ${Number(value.toFixed(3))}px;`);
+  }
+  tokens['space-px'].forEach((size, index) =>
+    values.push(`  --kb-space-${index + 1}: ${Number((size * scale).toFixed(3))}px;`),
+  );
+  responsiveCss += `\n@media (max-width: ${tokens.responsive[`${name}-max-width-px`]}px) {\n  :root {\n${values.map((line) => `  ${line}`).join('\n')}\n  }\n}\n`;
+}
+const css = `/* Generated from tokens.json by npm run theme:build. Do not edit. */\n:root {\n${entries.join('\n')}\n}\n${responsiveCss}`;
 if (process.argv.includes('--check')) {
   if ((await readFile(output, 'utf8')) !== css) {
     throw new Error('Theme CSS is out of date. Run npm run theme:build.');

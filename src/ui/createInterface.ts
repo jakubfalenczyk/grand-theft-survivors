@@ -39,6 +39,7 @@ export function createInterface(root: HTMLElement, services: AppServices) {
   onClick('resume-button', () => session.setMode('playing'));
   onClick('pause-button', () => session.togglePause());
   onClick('open-map', () => session.toggleMap());
+  onClick('open-map-compact', () => session.toggleMap());
   onClick('close-map', () => session.setMode('playing'));
   onClick('zoom-in', () => session.zoomBy(0.5));
   onClick('zoom-out', () => session.zoomBy(-0.5));

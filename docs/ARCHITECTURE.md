@@ -67,3 +67,7 @@ Only runtime sound exports and notices are committed. Source archives are tempor
 ## Detailed source textures
 
 The 2026-10-25 [pixel-art decision](art/PIXEL-ART.md) separates source density from world geometry. Roofs use at least double resolution and a 128 px minimum dimension. Projection sets their display dimensions explicitly; debug snapshots report projected world scale rather than texture scale. Trees use 128 px sources at 38 × 42 world units. Character animation uses three 128 px frames at 24 × 24 world units; physics sizes and offsets convert to source coordinates to retain the 10 × 10 world footprint. Texture creation remains cached and deterministic.
+
+## Responsive interface
+
+The theme generator derives type and spacing for four width ranges from `tokens.json`. `--kb-ui-scale` also sizes panels without transforming the game canvas. CSS rearranges the HUD independently from camera zoom and game movement. The resize observer keeps the renderer fitted to its host. Responsive browser tests cover breakpoint edges, dialog scrolling, HUD intersections, short fullscreen windows, task tables and live resizing without changes to world state. See `RESPONSIVE.md`.

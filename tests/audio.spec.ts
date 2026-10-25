@@ -29,9 +29,15 @@ test('Play gates engine and audio, footsteps play only while moving and pause st
   await expect.poll(async () => (await audio(page)).context).toBe('running');
   expect((await audio(page)).cached).toBe(7);
   const before = (await audio(page)).played;
+  const startY = await page.evaluate(() => window.__gameDebug!.getState().y);
   await page.keyboard.down('w');
-  await page.waitForTimeout(1050);
+  await expect
+    .poll(async () => startY - (await page.evaluate(() => window.__gameDebug!.getState().y)), {
+      timeout: 8000,
+    })
+    .toBeGreaterThan(70);
   await page.keyboard.up('w');
+  await expect.poll(() => page.evaluate(() => window.__gameDebug!.getState().moving)).toBe(0);
   expect((await audio(page)).played).toBeGreaterThan(before + 1);
   expect((await audio(page)).lastCue).toBe('player:footstep:concrete');
   const idle = (await audio(page)).played;

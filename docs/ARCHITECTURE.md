@@ -36,7 +36,7 @@ Vite separates the Phaser chunk for caching. The engine remains about 1.2 MB bef
 
 ## Verification
 
-`npm run check` runs token synchronization/usage, strict types, lint, formatting, unit tests, production build and Chromium E2E. Contracts cover deterministic world data, non-overlapping footprints, projection, session and listener cleanup, faction contrast and localization. Browser tests cover real movement/collision, pause/map/help, keyboard focus, local fonts, scene restart, English accessibility and mobile layout. The movement speed test uses a controlled browser clock so runner load does not determine its simulated interval. Keyboard is required to play; touch controls are not implemented.
+`npm run check` runs token synchronization/usage, strict types, lint, formatting, unit tests, production build and Chromium E2E. Contracts cover deterministic world data, non-overlapping footprints, projection, session and listener cleanup, faction contrast and localization. Browser tests cover real movement/collision, pause/map/help, keyboard focus, local fonts, scene restart, English accessibility and mobile layout. The movement speed test uses a controlled browser clock so runner load does not determine its simulated interval. The footstep playback test waits for 70 units of movement before checking its sound count. Keyboard is required to play; touch controls are not implemented.
 
 ## Sources
 

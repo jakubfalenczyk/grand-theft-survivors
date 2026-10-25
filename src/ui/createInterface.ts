@@ -36,6 +36,7 @@ export function createInterface(root: HTMLElement, services: AppServices) {
   onClick('audio-close', () => session.closeAudio());
   onClick('audio-test', () => bus.emit('audio:cue', { id: 'ui:confirm' }));
   onClick('help-button', () => session.setMode('help'));
+  onClick('restart-run-button', () => bus.emit('command:restart-run', undefined));
   onClick('resume-button', () => session.setMode('playing'));
   onClick('pause-button', () => session.togglePause());
   onClick('open-map', () => session.toggleMap());

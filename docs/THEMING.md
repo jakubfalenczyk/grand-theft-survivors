@@ -46,3 +46,7 @@ The [world-art standard](art/PIXEL-ART.md) requires 128 × 128 or larger standal
 ## Responsive scale: version 0.4.0
 
 `responsive` in the canonical token source defines the four breakpoint ranges and their UI scales. The generator applies 85%, 90%, 95% and 100% to typography and spacing, with minimum readable text sizes. Panel dimensions consume `--kb-ui-scale`. Target sizes stay at least 48 px and focus, stroke and shadow tokens keep their original dimensions. See [responsive UI](RESPONSIVE.md) for layout rules and test coverage. Game units and camera zoom are separate from UI scaling.
+
+## Map reload interface
+
+The pause dialog includes a secondary Restart run action using the existing canonical button, spacing and target tokens. Position reset remains separate. Dialog mode changes reset scrolling so the pause heading stays visible after returning from Sound on short screens. Full-map labels and minimap names come from the loaded map data; rectangular maps keep their aspect ratio.

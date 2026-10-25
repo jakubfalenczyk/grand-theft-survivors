@@ -13,7 +13,18 @@ import type { WorldLayout } from '../../src/shared/contracts.ts';
 
 const layout: WorldLayout = {
   seed: 1,
-  size: 1000,
+  mapId: 'footsteps-fixture',
+  nameKey: 'city',
+  bounds: { width: 1000, height: 1000 },
+  spawns: [{ x: 500, y: 500 }],
+  streets: { vertical: [], horizontal: [], width: 108, labels: [] },
+  districts: [],
+  surfaces: [
+    { x: 0, y: 0, w: 260, h: 260, material: 'grass', role: 'lawn' },
+    { x: 118, y: 0, w: 24, h: 260, material: 'concrete', role: 'path' },
+    { x: 0, y: 118, w: 260, h: 24, material: 'concrete', role: 'path' },
+    { x: 90, y: 90, w: 80, h: 80, material: 'concrete', role: 'plaza' },
+  ],
   buildings: [],
   trees: [],
   blocks: [{ x: 0, y: 0, park: true, parking: false }],

@@ -4,101 +4,147 @@ import type Phaser from 'phaser';
 import { seededRandom } from '../../../shared/math.ts';
 import { tokens, worldInk as ink, withAlpha } from '../../../theme/theme.ts';
 import { rect, createCanvasTexture } from '../../rendering/canvas.ts';
-import { BLOCK, ROAD } from './config.ts';
+import { mapTexturePrefix } from './mapTextures.ts';
 import { drawCar } from './createPropTextures.ts';
 
 export function createGroundTexture(scene: Phaser.Scene, layout: WorldLayout) {
-  const key = `city-${layout.seed}-ground`;
+  const key = `${mapTexturePrefix(layout)}ground`;
   if (scene.textures.exists(key)) return key;
-  const texture = createCanvasTexture(scene, key, layout.size, layout.size),
+  const { width, height } = layout.bounds;
+  const ROAD = layout.streets.width;
+  const texture = createCanvasTexture(scene, key, width, height),
     c = texture.context;
   const rng = seededRandom(layout.seed + 99),
     between = (a: number, b: number) => Math.floor(a + rng() * (b - a));
-  rect(c, ink.ground, 0, 0, layout.size, layout.size);
+  rect(c, ink.ground, 0, 0, width, height);
   for (let i = 0; i < 40000; i++)
     rect(
       c,
       withAlpha(rng() > 0.5 ? ink.detail : ink.shadow, 0.12),
-      between(0, layout.size),
-      between(0, layout.size),
+      between(0, width),
+      between(0, height),
       between(1, 4),
       1,
     );
-  for (let i = 0; i <= 6; i++) {
-    const p = i * BLOCK;
-    rect(c, ink.wall, p - ROAD / 2 - 14, 0, ROAD + 28, layout.size);
-    rect(c, ink.wall, 0, p - ROAD / 2 - 14, layout.size, ROAD + 28);
-    rect(c, ink.road, p - ROAD / 2, 0, ROAD, layout.size);
-    rect(c, ink.road, 0, p - ROAD / 2, layout.size, ROAD);
+  const roads = [
+    ...layout.streets.vertical.map((p, index) => ({
+      p,
+      index,
+      vertical: true,
+      length: height,
+      crossings: layout.streets.horizontal,
+    })),
+    ...layout.streets.horizontal.map((p, index) => ({
+      p,
+      index,
+      vertical: false,
+      length: width,
+      crossings: layout.streets.vertical,
+    })),
+  ];
+  const along = (vertical: boolean, color: string, x: number, y: number, w: number, h: number) => {
+    if (vertical) rect(c, color, x, y, w, h);
+    else rect(c, color, y, x, h, w);
+  };
+  // Interleave the two axes to preserve Westbridge's original intersection layering.
+  const roadPairs = Array.from(
+    { length: Math.max(layout.streets.vertical.length, layout.streets.horizontal.length) },
+    (_, index) => roads.filter((road) => road.index === index),
+  );
+  for (const pair of roadPairs) {
+    for (const { p, vertical, length } of pair)
+      along(vertical, ink.wall, p - ROAD / 2 - 14, 0, ROAD + 28, length);
+    for (const { p, vertical, length } of pair)
+      along(vertical, ink.road, p - ROAD / 2, 0, ROAD, length);
   }
-  // Paving slabs, curb joints and drains are baked once at world resolution.
-  for (let i = 0; i <= 6; i++) {
-    const p = i * BLOCK;
+  for (const pair of roadPairs) {
     for (const side of [-1, 1]) {
-      const edge = p + side * (ROAD / 2 + 7);
-      rect(c, ink.paving, edge - 6, 0, 12, layout.size);
-      rect(c, ink.paving, 0, edge - 6, layout.size, 12);
-      rect(c, ink['paving-light'], edge - 6, 0, 1, layout.size);
-      rect(c, ink['paving-light'], 0, edge - 6, layout.size, 1);
-      for (let q = 0; q < layout.size; q += 12) {
-        rect(c, ink['paving-dark'], edge - 6, q, 12, 1);
-        rect(c, ink['paving-dark'], q, edge - 6, 1, 12);
+      for (const { p, vertical, length } of pair)
+        along(vertical, ink.paving, p + side * (ROAD / 2 + 7) - 6, 0, 12, length);
+      for (const { p, vertical, length } of pair)
+        along(vertical, ink['paving-light'], p + side * (ROAD / 2 + 7) - 6, 0, 1, length);
+      const length = Math.max(...pair.map((road) => road.length));
+      for (let q = 0; q < length; q += 12) {
+        for (const road of pair)
+          if (q < road.length)
+            along(road.vertical, ink['paving-dark'], road.p + side * (ROAD / 2 + 7) - 6, q, 12, 1);
         if (q % 96 === 0) {
-          rect(c, ink.deep, edge - 3, q + 3, 6, 7);
-          rect(c, ink.deep, q + 3, edge - 3, 7, 6);
-          for (let slat = 0; slat < 3; slat++) {
-            rect(c, ink['metal-light'], edge - 2 + slat * 2, q + 4, 1, 5);
-            rect(c, ink['metal-light'], q + 4, edge - 2 + slat * 2, 5, 1);
-          }
+          for (const road of pair)
+            if (q < road.length)
+              along(road.vertical, ink.deep, road.p + side * (ROAD / 2 + 7) - 3, q + 3, 6, 7);
+          for (let slat = 0; slat < 3; slat++)
+            for (const road of pair)
+              if (q < road.length)
+                along(
+                  road.vertical,
+                  ink['metal-light'],
+                  road.p + side * (ROAD / 2 + 7) - 2 + slat * 2,
+                  q + 4,
+                  1,
+                  5,
+                );
         }
       }
     }
   }
   for (let i = 0; i < 18000; i++) {
-    const x = between(0, layout.size),
-      y = between(0, layout.size);
+    const x = between(0, width),
+      y = between(0, height);
     if (
-      Math.min(x % BLOCK, BLOCK - (x % BLOCK)) < ROAD / 2 ||
-      Math.min(y % BLOCK, BLOCK - (y % BLOCK)) < ROAD / 2
+      layout.streets.vertical.some((p) => Math.abs(x - p) < ROAD / 2) ||
+      layout.streets.horizontal.some((p) => Math.abs(y - p) < ROAD / 2)
     )
       rect(c, withAlpha(rng() > 0.5 ? ink.highlight : ink.deep, 0.06), x, y, 2, 1);
   }
-  for (let i = 0; i <= 6; i++)
-    for (let q = 0; q < layout.size; q += 22) {
-      const p = i * BLOCK;
-      if (Math.min(q % BLOCK, BLOCK - (q % BLOCK)) > 75) {
-        rect(c, ink.edge, p - 1, q, 2, 10);
-        rect(c, ink.edge, q, p - 1, 10, 2);
+  for (const pair of roadPairs) {
+    const length = Math.max(...pair.map((road) => road.length));
+    for (let q = 0; q < length; q += 22) {
+      for (const road of pair) {
+        if (
+          q < road.length &&
+          road.crossings.every((crossing) => Math.abs(q - crossing) > ROAD / 2 + 21)
+        )
+          along(road.vertical, ink.edge, road.p - 1, q, 2, 10);
       }
-      rect(c, ink.dark, p - 66, q, 2, 1);
-      rect(c, ink.dark, p + 64, q, 2, 1);
-      rect(c, ink.dark, q, p - 66, 1, 2);
-      rect(c, ink.dark, q, p + 64, 1, 2);
+      for (const road of pair)
+        if (q < road.length) {
+          along(road.vertical, ink.dark, road.p - ROAD / 2 - 12, q, 2, 1);
+          along(road.vertical, ink.dark, road.p + ROAD / 2 + 10, q, 2, 1);
+        }
     }
-  for (let i = 0; i <= 6; i++)
-    for (let j = 0; j <= 6; j++) {
-      const x = i * BLOCK,
-        y = j * BLOCK;
+  }
+  for (const x of layout.streets.vertical)
+    for (const y of layout.streets.horizontal) {
       for (let z = -36; z < 40; z += 10) {
-        rect(c, ink.light, x + z, y - 72, 6, 15);
-        rect(c, ink.light, x + z, y + 57, 6, 15);
-        rect(c, ink.light, x - 72, y + z, 15, 6);
-        rect(c, ink.light, x + 57, y + z, 15, 6);
+        rect(c, ink.light, x + z, y - ROAD / 2 - 18, 6, 15);
+        rect(c, ink.light, x + z, y + ROAD / 2 + 3, 6, 15);
+        rect(c, ink.light, x - ROAD / 2 - 18, y + z, 15, 6);
+        rect(c, ink.light, x + ROAD / 2 + 3, y + z, 15, 6);
       }
       rect(c, ink.wall, x + 32, y + 33, 8, 8);
       rect(c, ink.deep, x + 34, y + 35, 4, 4);
     }
   for (const { x, y, park, parking } of layout.blocks) {
     if (park) {
-      rect(c, ink.grass, x, y, 260, 260);
+      const regions = layout.surfaces.filter(
+        (region) => region.x >= x && region.y >= y && region.x < x + 260 && region.y < y + 260,
+      );
+      for (const region of regions.filter((region) => region.material === 'grass'))
+        rect(c, ink.grass, region.x, region.y, region.w, region.h);
       for (let tuft = 0; tuft < 1600; tuft++) {
         const tx = x + between(1, 258),
           ty = y + between(1, 258);
         rect(c, rng() > 0.5 ? ink['leaf-dark'] : ink['leaf-mid'], tx, ty, 1, 2);
       }
-      rect(c, ink.edge, x + 118, y, 24, 260);
-      rect(c, ink.edge, x, y + 118, 260, 24);
-      rect(c, ink.wall, x + 90, y + 90, 80, 80);
+      for (const region of regions.filter((region) => region.material === 'concrete'))
+        rect(
+          c,
+          region.role === 'plaza' ? ink.wall : ink.edge,
+          region.x,
+          region.y,
+          region.w,
+          region.h,
+        );
       rect(c, ink.deep, x + 103, y + 103, 54, 54);
       rect(c, ink.roof, x + 108, y + 108, 44, 44);
       rect(c, ink.light, x + 125, y + 123, 9, 12);
@@ -148,19 +194,8 @@ export function createGroundTexture(scene: Phaser.Scene, layout: WorldLayout) {
   c.fillStyle = ink.edge;
   c.font = `600 11px ${tokens.font.mono}`;
   c.textAlign = 'center';
-  for (let j = 1; j < 6; j++)
-    c.fillText(
-      [
-        '',
-        t('street.mercer'),
-        t('street.foundry'),
-        t('street.westbridge'),
-        t('street.grove'),
-        t('street.south'),
-      ][j],
-      BLOCK * 3 + 210,
-      j * BLOCK + 27,
-    );
+  for (const { key: labelKey, position } of layout.streets.labels)
+    c.fillText(t(labelKey), position.x, position.y);
   texture.refresh();
   return key;
 }

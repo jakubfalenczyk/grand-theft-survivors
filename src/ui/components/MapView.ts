@@ -1,3 +1,4 @@
+import { t } from '../../shared/intl/index.ts';
 import type { WorldLayout, PlayerSnapshot } from '../../shared/contracts.ts';
 import type { EventBus } from '../../shared/EventBus.ts';
 import type { GameSession } from '../../shared/GameSession.ts';
@@ -17,7 +18,11 @@ export function attachMapView(root: HTMLElement, bus: EventBus, session: GameSes
   const cleanups = [
     bus.on(EVENTS.WORLD_READY, (value) => {
       layout = value;
-      render();
+      player = undefined;
+      const name = t(layout.nameKey).toUpperCase();
+      element(root, '#map-name').textContent = name;
+      element(root, '#map-heading').textContent = t('map.heading', { name });
+      // Wait for the new map's first snapshot before drawing its player marker.
     }),
     bus.on(EVENTS.SNAPSHOT, (value) => {
       player = value;

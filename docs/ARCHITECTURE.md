@@ -16,13 +16,19 @@ The application creates and injects `GameSession`, `EventBus` and engine-indepen
 
 `game:world-ready` publishes the layout. `game:snapshot` publishes player position, movement and `DistrictId` at most once per 80 ms. The HUD translates district IDs; no localized display names cross the game/UI boundary. UI maps consume the same data. Snapshots never contain Phaser or DOM objects.
 
-`GameSession` has exactly one mode: `start`, `loading`, `playing`, `paused`, `help`, `map` or `audio`. One `DialogController` owns visibility, background blocking and focus across all dialogs. It remembers the initial opener while the player switches dialogs, then restores focus when returning to play. Future gameplay state belongs to its feature, not this application session class.
+`GameSession` has exactly one mode: `start`, `loading`, `playing`, `paused`, `help`, `map` or `audio`. One `DialogController` owns visibility, background blocking and focus across all dialogs. Mode changes reset scrolling so a taller pause menu remains readable after returning from another dialog. It remembers the initial opener while the player switches dialogs, then restores focus when returning to play. Future gameplay state belongs to its feature, not this application session class.
 
 The event map checks names/payloads at compile time; its one internal `unknown` narrowing is isolated. Every subscription has an owner and cleanup. Global Phaser event listeners are removed with the exact handler on scene `SHUTDOWN`; never remove other owners' listeners. App destruction aborts DOM listeners, disconnects resize observers and removes its development debug bridge.
 
 ## World and rendering
 
-The current seed is 2042, with a fixed 6 × 6 block grid and a 2520-unit square world. Generation uses seeded randomness; independent decorative streams prevent changing roof details from rearranging buildings. It is not yet a chunked world or a curated multi-map system.
+Westbridge is the only production map. Its typed definition in `features/world/maps/westbridge/` owns seed 2042, explicit streets and blocks, district geometry/labels, player spawns and 2520 × 2520 bounds. `MapCatalog` resolves stable IDs and `generateMap` returns a deeply frozen `WorldLayout`. Seeded building and decoration generation preserves the existing layout. Independent decorative streams prevent roof changes from moving buildings. The layout has independent width/height bounds; camera, physics, ground drawing and UI maps use them. The current renderer still creates one ground bitmap per map. Chunk rendering and larger city content remain future work.
+
+Surface regions carry material and lawn/path/plaza roles. Footsteps and visible park paths consume the same geometry. District geometry belongs to the map; material palettes remain in the theme adapter. Static spawn validation expands obstacles by the actual player footprint, partitions free space at obstacle edges and checks connection to the largest walkable area. It is not runtime NPC navigation.
+
+The pause dialog emits `command:restart-run`; the app resolves the current map ID and emits `command:load-map`. The scene resolves and validates the replacement before stopping the old map. Loading blocks input, scene restart creates fresh mutable state, and `game:world-ready` resumes play. Invalid IDs leave the current scene playable and publish a readable error. Position reset is a separate action. Audio preferences and camera zoom survive reload; there is no map selector or seed picker.
+
+Map-specific texture keys include map ID and seed. Scene shutdown/destruction evicts its ground and roofs after its game objects are destroyed, while shared player/tree textures and audio buffers stay cached. Cleanup removes owned bus/session subscriptions, the exact blur handler and player keys. Equal-seed rectangular fixtures verify repeated A → B → A loads without retaining old resources.
 
 Canvas textures are created once and reused with stable keys. Roofs and ground include seed/ID where needed. Scene restart must not accumulate textures/listeners. Dynamic facades use projected Phaser Graphics; see `ART-PIPELINE.md` for the audit and external-asset recommendation. Kerbside tokens, material inks and adapters are documented in `THEMING.md`; English catalog rules are in `LOCALIZATION.md`.
 

@@ -110,6 +110,10 @@ for (const viewport of viewports) {
     await minimumTargets(page);
     await page.locator('#help-button').click();
     await dialogIsUsable(page, page.locator('#resume-button'));
+    await page.locator('#pause-button').click();
+    await minimumTargets(page);
+    await dialogIsUsable(page, page.locator('#restart-run-button'));
+    await expect(page.getByRole('dialog')).toHaveCount(0);
     if (viewport.width <= 480) {
       await expect(page.locator('.minimap-wrap')).toBeHidden();
       await page.locator('#open-map-compact').click();
@@ -149,7 +153,7 @@ for (const viewport of [
     await page.keyboard.press('Escape');
     await page.locator('#pause-audio-button').click();
     await dialogIsUsable(page, page.locator('#audio-close'));
-    await page.locator('#resume-button').click();
+    await dialogIsUsable(page, page.locator('#restart-run-button'));
     await page.locator('#fullscreen-button').click();
     await expect.poll(() => page.evaluate(() => document.fullscreenElement === null)).toBe(true);
   });

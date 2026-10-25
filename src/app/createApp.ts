@@ -1,3 +1,4 @@
+import type { MapId } from '../shared/contracts.ts';
 import { createGame } from '../game/createGame.ts';
 import { GameSession } from '../shared/GameSession.ts';
 import { createEventBus } from '../shared/EventBus.ts';
@@ -19,7 +20,12 @@ export function createApp(root: HTMLElement) {
     game?.scale.resize(ui.host.clientWidth, ui.host.clientHeight),
   );
   observer.observe(ui.host);
-  const stopReady = bus.on('game:world-ready', () => {
+  let currentMap: MapId | undefined;
+  const stopRestart = bus.on('command:restart-run', () => {
+    if (currentMap && session.state.mode === 'paused') bus.emit('command:load-map', currentMap);
+  });
+  const stopReady = bus.on('game:world-ready', (layout) => {
+    currentMap = layout.mapId;
     if (session.state.mode === 'loading') session.setMode('playing');
   });
   const stopPlay = bus.on('command:play', () => {
@@ -42,6 +48,7 @@ export function createApp(root: HTMLElement) {
     destroy() {
       stopPlay();
       stopReady();
+      stopRestart();
       stopStorage();
       observer.disconnect();
       removeDebug();

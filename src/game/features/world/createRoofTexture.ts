@@ -5,9 +5,14 @@ import { tokens, worldInk as ink, materialShade } from '../../../theme/theme.ts'
 import { rect, createCanvasTexture } from '../../rendering/canvas.ts';
 import { DISTRICTS } from './districts.ts';
 
-export function createRoofTexture(scene: Phaser.Scene, building: BuildingData, seed: number) {
+export function createRoofTexture(
+  scene: Phaser.Scene,
+  building: BuildingData,
+  seed: number,
+  prefix: string,
+) {
   const { id, w, h } = building,
-    key = `city-${seed}-roof-${id}`;
+    key = `${prefix}roof-${id}`;
   if (scene.textures.exists(key)) return key;
   const spec = tokens.world['pixel-art'];
   const density = Math.max(spec['roof-density'], Math.ceil(spec['min-frame-px'] / Math.min(w, h)));

@@ -4,6 +4,7 @@ import type { RenderedBuilding } from './types.ts';
 import { toPhaserColor } from '../../../theme/theme.ts';
 import { DEPTH } from '../../config.ts';
 import { BuildingRenderer } from './BuildingRenderer.ts';
+import { mapTexturePrefix } from './mapTextures.ts';
 import { DISTRICTS } from './districts.ts';
 import { createGroundTexture } from './createGroundTexture.ts';
 import { createRoofTexture } from './createRoofTexture.ts';
@@ -29,7 +30,11 @@ export class WorldRenderer {
         facade: scene.add.graphics(),
         material: { light: toPhaserColor(material.light), dark: toPhaserColor(material.dark) },
         image: scene.add
-          .image(building.x, building.y, createRoofTexture(scene, building, layout.seed))
+          .image(
+            building.x,
+            building.y,
+            createRoofTexture(scene, building, layout.seed, mapTexturePrefix(layout)),
+          )
           .setOrigin(0),
       };
     });

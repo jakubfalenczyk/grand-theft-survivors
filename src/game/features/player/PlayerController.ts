@@ -2,7 +2,7 @@ import type Phaser from 'phaser';
 import type { Point } from '../../../shared/contracts.ts';
 import { phaserColors } from '../../../theme/theme.ts';
 import { DEPTH } from '../../config.ts';
-import { PLAYER } from './config.ts';
+import { PLAYER, PLAYER_FOOTPRINT } from './config.ts';
 import {
   createPlayerTextures,
   PLAYER_FRAME_SIZE,
@@ -35,7 +35,12 @@ export class PlayerController {
     const body = this.sprite.body;
     if (!body) throw new Error('Arcade Physics body is required');
     const density = PLAYER_FRAME_SIZE / PLAYER_DISPLAY_SIZE;
-    body.setSize(10 * density, 10 * density).setOffset(7 * density, 9 * density);
+    body
+      .setSize(PLAYER_FOOTPRINT.w * density, PLAYER_FOOTPRINT.h * density)
+      .setOffset(
+        (PLAYER_DISPLAY_SIZE / 2 + PLAYER_FOOTPRINT.x) * density,
+        (PLAYER_DISPLAY_SIZE / 2 + PLAYER_FOOTPRINT.y) * density,
+      );
     this.sprite.setCollideWorldBounds(true);
     if (!scene.input.keyboard) throw new Error('Keyboard input is required');
     this.keys = scene.input.keyboard.addKeys({
@@ -90,6 +95,10 @@ export class PlayerController {
     this.walkTime = 0;
     this.moving = 0;
     this.running = false;
+  }
+  destroy() {
+    for (const key of Object.values(this.keys))
+      if (key.plugin) this.scene.input.keyboard?.removeKey(key, true, true);
   }
   getSnapshot() {
     return {

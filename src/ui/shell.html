@@ -82,7 +82,9 @@
       </div>
     </div>
     <div class="minimap-wrap">
-      <div class="minimap-heading kb-meta"><span>{{city}}</span><span>{{map.north}}</span></div>
+      <div class="minimap-heading kb-meta">
+        <span id="map-name">{{city}}</span><span>{{map.north}}</span>
+      </div>
       <canvas
         id="minimap"
         class="kb-minimap"
@@ -151,6 +153,7 @@
             </dl>
           </div>
           <button id="resume-button" class="kb-btn">{{resume.button}}</button>
+          <button id="restart-run-button" class="kb-btn kb-btn--secondary">{{restart.run}}</button>
           <button id="pause-audio-button" class="kb-btn kb-btn--secondary">{{audio.open}}</button>
         </div>
       </div>
@@ -165,7 +168,7 @@
     >
       <div class="dialog-ink map-dialog">
         <div class="dialog kb-card">
-          <span class="kb-meta">{{map.heading}}</span>
+          <span class="kb-meta" id="map-heading">{{map.heading.initial}}</span>
           <h2 class="kb-card__title" id="map-title">{{map.title}}</h2>
           <canvas id="city-map" width="540" height="540" aria-label="{{map.full}}"></canvas
           ><button id="close-map" class="kb-btn">{{map.close}} <kbd>{{key.map}}</kbd></button>

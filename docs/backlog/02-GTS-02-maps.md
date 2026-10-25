@@ -1,6 +1,6 @@
 # GTS-02. Map definitions and switching
 
-> Status: Owner scope decisions confirmed on 2026-10-25. Implementation has not started.
+> Status: Implemented and verified on 2026-10-25.
 
 ## Goal
 
@@ -47,7 +47,7 @@ Use plain typed map data for this task. Revisit Tiled after the GTS-07 blockout 
 
 ## Repository review — 2026-10-25
 
-Reviewed against commit `99af829`. Owner answers are recorded above; implementation has not started.
+Reviewed against commit `99af829`. This review preceded implementation; confirmed answers and delivered behavior are recorded in this task.
 
 - `generateCity.ts` already returns deterministic plain data. Preserve that boundary and the current Westbridge appearance, including the detailed textures added after the initial task plan.
 - World configuration fixes the seed at 2042, bounds at 2520 square and spawn at (1260, 1234). Generation and ground drawing independently assume six blocks; map drawing imports the global block pitch. District lookup and map labels also use fixed coordinates. Move these assumptions into map data consumed by all readers.
@@ -58,6 +58,26 @@ Reviewed against commit `99af829`. Owner answers are recorded above; implementat
 - The current reset command only repositions the player. A full run reload needs a separate command and fresh scene state; the owner confirmed a separate pause-menu action. Preserve saved audio preferences across reloads.
 - Navigation, population, factions, reinforcements and bosses do not exist yet. Recommend defining their detailed data alongside the owning tasks rather than requiring unused placeholders here. Keep the confirmed three-gangs-plus-police direction.
 
-The owner resolved all three scope questions in this review. No remaining blocking product decision was identified. Technical recommendations above remain implementation choices within this scope. Planning does not authorize implementation.
+The owner resolved all three scope questions in this review. No remaining blocking product decision was identified. Technical recommendations above remain implementation choices within this scope. The owner authorized implementation on 2026-10-25.
 
 Baseline verification: `npm run typecheck` and all 14 unit tests passed on Node.js 22.22.1. Full browser verification was not run during this planning review.
+
+## Delivered behavior
+
+Westbridge is the only production map. Its explicit street coordinates, district bounds/labels, block placements, seed and spawns live under `src/game/features/world/maps/westbridge/`. `MapCatalog` resolves IDs; `generateMap` produces deeply frozen layout data. The original building/block/tree geometry matches the pre-migration SHA-256 fixture.
+
+World drawing, map drawing, camera bounds, physics and footsteps consume that layout. Bounds have independent width and height. Surface regions distinguish material from lawn/path/plaza appearance; material lookup and ground paths use the same regions. The initial content recipe still generates the existing block style, not arbitrary authored city assets. Larger maps, chunk rendering, navigation and Tiled remain outside this task.
+
+The app translates the pause dialog's `command:restart-run` into `command:load-map` with the current `MapId`. The scene prepares and validates the requested layout before shutdown, enters loading, then restarts with fresh player, physics, footsteps and audio state. The app resumes play on `game:world-ready`. The current map keeps its configured seed. Camera zoom and audio preferences remain session preferences. Position reset remains separate.
+
+Each scene removes its own subscriptions, blur handler and player keys on shutdown or destruction. Shared textures/audio buffers remain cached; map textures use map ID and seed and are evicted when their scene ends. Invalid map IDs preserve the active map and report a persistent readable error until a successful load.
+
+Spawn checks use the player's actual offset ground footprint. They reject blocked starts, insufficient boundary clearance and disconnected pockets. An obstacle-edge partition finds the largest connected walkable component and requires every spawn to belong to it. This is static spawn validation, not an NPC pathfinder.
+
+The pause action uses the existing dialog controller, catalog and 48 px controls. Mode changes reset dialog scrolling so returning from Sound keeps the pause heading visible in short fullscreen windows.
+
+## Verification
+
+Unit coverage includes original Westbridge geometry, immutable layouts, deterministic rectangular fixtures, shared surface data, invalid IDs/definitions, player clearance, enclosed starts and narrow passages. Browser coverage uses two test-only definitions with equal seeds and different bounds/materials. Repeated A → B → A checks spawns, snapshots, map labels, camera/physics/ground bounds, old objects/bodies/keys/audio voices, collider counts, subscriptions and texture retention. Separate tests exercise repeated player-facing restarts, saved audio preferences and focus restoration. Responsive coverage includes the restart action at all existing width ranges and short fullscreen sizes.
+
+Verification on 2026-10-25: `npm run check` passed token checks, strict types, lint, formatting, 18 unit tests, production build and 48 Chromium browser tests. A direct same-browser comparison against the ground renderer at commit `99af829` found zero changed pixels across the 2520 × 2520 Westbridge ground texture. The comparison includes the original intersection layering. The desktop pause dialog was also inspected visually. GitHub Pages deployment remains manual.

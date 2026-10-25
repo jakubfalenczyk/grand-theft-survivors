@@ -7,7 +7,10 @@ import { GAME } from '../game/config.ts';
 /** Development only, read-only. Never attach engine objects to browser globals. */
 export function installDebugBridge(game: Phaser.Game, session: GameSession) {
   const scene = () => game.scene.getScene(GAME.scene) as CityScene | null;
-  const ready = () => Boolean(scene()?.playerController);
+  const ready = () => {
+    const current = scene();
+    return Boolean(current?.sys.isActive() && current.playerController?.sprite.scene);
+  };
   const bridge: DebugBridge = {
     isReady: ready,
     getAudio: () => scene()!.audioDirector.getSnapshot(),

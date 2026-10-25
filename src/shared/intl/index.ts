@@ -7,6 +7,9 @@ export const locale = 'en';
 type Placeholders<S extends string> = S extends `${string}{${infer P}}${infer Rest}`
   ? P | Placeholders<Rest>
   : never;
+export type StaticMessageKey = {
+  [K in MessageKey]: [Placeholders<(typeof en)[K]>] extends [never] ? K : never;
+}[MessageKey];
 type Arguments<K extends MessageKey> = [Placeholders<(typeof en)[K]>] extends [never]
   ? []
   : [values: Record<Placeholders<(typeof en)[K]>, string | number>];

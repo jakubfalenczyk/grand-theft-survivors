@@ -13,6 +13,3 @@ export const DISTRICTS = Object.freeze(
     },
   ),
 );
-export function districtAt(x: number, y: number) {
-  return DISTRICTS[y < 840 ? 0 : x < 1680 ? 1 : 2];
-}

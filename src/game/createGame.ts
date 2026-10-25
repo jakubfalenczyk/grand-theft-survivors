@@ -1,12 +1,14 @@
 import type { AppServices } from '../shared/services.ts';
 import Phaser from 'phaser';
 import { colors } from '../theme/theme.ts';
+import { MapCatalog } from './features/world/maps/catalog.ts';
 import { CityScene } from './scenes/CityScene.ts';
 
 export function createGame(
   host: HTMLElement,
   services: AppServices,
   audioContext?: AudioContext | false,
+  maps = new MapCatalog(),
 ) {
   return new Phaser.Game({
     type: Phaser.AUTO,
@@ -18,7 +20,7 @@ export function createGame(
     roundPixels: true,
     scale: { mode: Phaser.Scale.RESIZE, width: host.clientWidth, height: host.clientHeight },
     physics: { default: 'arcade', arcade: { debug: false, gravity: { x: 0, y: 0 } } },
-    scene: new CityScene(services),
+    scene: new CityScene(services, maps),
     input: { keyboard: true },
     render: { antialias: false },
   });

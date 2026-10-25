@@ -10,6 +10,7 @@ export class DialogController {
   #audio: HTMLElement;
   #background: HTMLElement[];
   #active: HTMLElement | null = null;
+  #mode: SessionMode | null = null;
   #previousFocus: HTMLElement | null = null;
   #events = new AbortController();
 
@@ -30,12 +31,15 @@ export class DialogController {
   }
 
   setMode(mode: SessionMode) {
+    const changed = mode !== this.#mode;
+    this.#mode = mode;
     const starting = mode === 'start' || mode === 'loading';
     element(this.#root, '#start-content').hidden = !starting;
     element(this.#root, '#play-button').hidden = mode !== 'start';
     element(this.#root, '#start-loading').hidden = mode !== 'loading';
     element(this.#root, '#resume-button').hidden = starting;
     element(this.#root, '#pause-audio-button').hidden = mode !== 'paused';
+    element(this.#root, '#restart-run-button').hidden = mode !== 'paused';
     element(this.#root, '#help-content').hidden = mode !== 'help';
     element(this.#root, '#dialog-title').textContent = starting
       ? t('start.title')
@@ -56,6 +60,7 @@ export class DialogController {
           : mode === 'audio'
             ? this.#audio
             : this.#pause;
+    if (changed && next) next.scrollTop = 0;
     if (next === this.#active) {
       if (
         next &&

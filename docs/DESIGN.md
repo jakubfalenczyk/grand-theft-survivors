@@ -4,13 +4,13 @@ Updated 2026-10-24. This document separates implemented behavior from the owner'
 
 ## Implemented baseline
 
-Grand Theft Survivors is a top-down browser game set in Westbridge. Seed 2042 generates a fixed 6 × 6 grid, 2520 units per side, with Old Town, Ironworks and Greenfield material palettes. These district palettes are separate from the planned factions.
+Grand Theft Survivors is a top-down browser game set in Westbridge. A typed map definition loads its existing 6 × 6 street grid, 2520 units per side, with buildings and decoration generated from seed 2042 and Old Town, Ironworks and Greenfield material palettes. These district palettes are separate from the planned factions.
 
 The player starts at (1260, 1234). W/S moves forward/backward at 105 units/s; Shift runs forward at 176; A/D turns at 4.8 rad/s. Arrow keys also work. The camera keeps a fixed world orientation and starts at 2× zoom. Collision uses building footprints and world bounds. Cars/trees are scenery without collision.
 
 Height is a 2D projection: `P = C + (p − C) × H / (H − z)`, with virtual camera height 500 and building heights 95/130/165. Roofs expand about 1.23/1.35/1.49×, with dynamic projected facades. It is not an isometric or 3D engine. Roof motion does not move collision footprints.
 
-The Play screen starts the game and unlocks audio after user input. Concrete and grass footsteps follow distance traveled. Interface sounds and a saved volume mixer are implemented. Minimap, full map, help, pause, fullscreen request, zoom and position reset work. The health display shows a fixed value until combat is implemented. There are no enemies, damage, weapons, progression, active vehicles or music. All player-facing text is English and comes from the localization catalog. Material colors restore a subdued city palette while preserving Kerbside UI roles; see `THEMING.md`.
+The Play screen starts the game and unlocks audio after user input. Concrete and grass footsteps follow distance traveled. Interface sounds and a saved volume mixer are implemented. Minimap, full map, help, pause, fullscreen request, zoom and position reset work. The pause menu also offers Restart run, which reloads Westbridge with the same seed and a fresh player state while preserving sound settings and camera zoom. The health display shows a fixed value until combat is implemented. There are no enemies, damage, weapons, progression, active vehicles or music. All player-facing text is English and comes from the localization catalog. Material colors restore a subdued city palette while preserving Kerbside UI roles; see `THEMING.md`.
 
 ## Requested direction, awaiting detailed review
 

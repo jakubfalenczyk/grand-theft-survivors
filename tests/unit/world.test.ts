@@ -2,7 +2,8 @@ import type { Point, Footprint } from '../../src/shared/contracts.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { generateCity } from '../../src/game/features/world/generateCity.ts';
-import { SPAWN } from '../../src/game/features/world/config.ts';
+import { westbridge } from '../../src/game/features/world/maps/westbridge/index.ts';
+const SPAWN = westbridge.spawns[0];
 import { projectPoint } from '../../src/game/camera/projection.ts';
 
 const inside = (point: Point, b: Footprint) =>
@@ -18,7 +19,9 @@ test('layout generation is seeded and independent of rendering', () => {
 test('footprints remain within the world and do not overlap', () => {
   const world = generateCity();
   for (const b of world.buildings) {
-    assert.ok(b.x >= 0 && b.y >= 0 && b.x + b.w <= world.size && b.y + b.h <= world.size);
+    assert.ok(
+      b.x >= 0 && b.y >= 0 && b.x + b.w <= world.bounds.width && b.y + b.h <= world.bounds.height,
+    );
     for (const other of world.buildings)
       if (b.id !== other.id) {
         assert.equal(

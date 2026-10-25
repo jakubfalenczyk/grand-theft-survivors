@@ -2,7 +2,6 @@ import { t } from '../../../shared/intl/index.ts';
 import type { WorldLayout, PlayerSnapshot } from '../../../shared/contracts.ts';
 import { clamp } from '../../../shared/math.ts';
 import { colors, tokens } from '../../../theme/theme.ts';
-import { BLOCK } from '../world/config.ts';
 
 /** Canvas UI projection of layout data; independent of Phaser and world textures. */
 export function drawMap(
@@ -18,11 +17,17 @@ export function drawMap(
   c.imageSmoothingEnabled = false;
   c.fillStyle = colors['asphalt-2'];
   c.fillRect(0, 0, w, h);
-  const range = full ? layout.size : 910;
-  const ox = full ? 0 : clamp(player.x - range / 2, 0, layout.size - range);
-  const oy = full ? 0 : clamp(player.y - range / 2, 0, layout.size - range);
-  const sx = w / range,
-    sy = h / range;
+  const rangeX = full ? layout.bounds.width : Math.min(910, layout.bounds.width);
+  const rangeY = full ? layout.bounds.height : Math.min(910, layout.bounds.height);
+  const ox = full ? 0 : clamp(player.x - rangeX / 2, 0, layout.bounds.width - rangeX);
+  const oy = full ? 0 : clamp(player.y - rangeY / 2, 0, layout.bounds.height - rangeY);
+  const scale = Math.min(w / rangeX, h / rangeY);
+  const offsetX = (w - rangeX * scale) / 2,
+    offsetY = (h - rangeY * scale) / 2;
+  c.save();
+  c.translate(offsetX, offsetY);
+  const sx = scale,
+    sy = scale;
   c.strokeStyle = colors['asphalt-3'];
   c.lineWidth = 2;
   for (let p = 0; p <= w; p += 38) {
@@ -39,14 +44,16 @@ export function drawMap(
   }
   c.strokeStyle = colors.concrete;
   c.lineWidth = full ? 12 : 9;
-  for (let p = 0; p <= layout.size; p += BLOCK) {
+  for (const p of layout.streets.vertical) {
     c.beginPath();
-    c.moveTo((p - ox) * sx, 0);
-    c.lineTo((p - ox) * sx, h);
+    c.moveTo((p - ox) * sx, -oy * sy);
+    c.lineTo((p - ox) * sx, (layout.bounds.height - oy) * sy);
     c.stroke();
+  }
+  for (const p of layout.streets.horizontal) {
     c.beginPath();
-    c.moveTo(0, (p - oy) * sy);
-    c.lineTo(w, (p - oy) * sy);
+    c.moveTo(-ox * sx, (p - oy) * sy);
+    c.lineTo((layout.bounds.width - ox) * sx, (p - oy) * sy);
     c.stroke();
   }
   for (const b of layout.buildings) {
@@ -57,9 +64,12 @@ export function drawMap(
     c.fillStyle = colors.concrete;
     c.font = `600 ${tokens['type-scale-px']['mono-label']}px ${tokens.font.mono}`;
     c.textAlign = 'center';
-    c.fillText(t('district.old-town').toUpperCase(), w * 0.5, h * 0.16);
-    c.fillText(t('district.ironworks').toUpperCase(), w * 0.28, h * 0.58);
-    c.fillText(t('district.greenfield').toUpperCase(), w * 0.79, h * 0.7);
+    for (const district of layout.districts)
+      c.fillText(
+        t(`district.${district.id}`).toUpperCase(),
+        district.label.x * sx,
+        district.label.y * sy,
+      );
   }
   const px = (player.x - ox) * sx,
     py = (player.y - oy) * sy;
@@ -71,4 +81,5 @@ export function drawMap(
   c.moveTo(px + Math.cos(player.heading) * 8, py + Math.sin(player.heading) * 8);
   c.lineTo(px + Math.cos(player.heading) * 16, py + Math.sin(player.heading) * 16);
   c.stroke();
+  c.restore();
 }

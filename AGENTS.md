@@ -24,6 +24,7 @@
 - Make each commit cover one task or coherent feature. Include its related code, tests and documentation together.
 - Complete task lists in order. Commit each completed task that changes the repository separately. Three such tasks should produce three commits rather than one combined commit.
 - After completing and verifying the whole list, push the prepared commits together to `origin/main`, unless the user requests another publication workflow.
+- GitHub Pages publication is manual. Push completed work to `main`, but do not dispatch the deployment workflow unless the owner explicitly requests a release.
 - Use Conventional Commits in the form `type(scope): description`. The scope is optional. Choose the type that matches the change, such as `feat`, `fix`, `refactor`, `docs`, `test`, `build`, `ci` or `chore`.
 - Write commit messages in English. Describe the change briefly in the imperative, for example `feat(audio): add footsteps`.
 - Before every `git commit`, apply the `unslop` skill to the subject and any body text. Remove vague language and unnecessary words while preserving the Conventional Commits format.

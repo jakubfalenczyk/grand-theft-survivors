@@ -12,11 +12,13 @@ Keep these settings unless the owner explicitly changes the contribution policy.
 
 ## Release workflow
 
-`.github/workflows/pages.yml` runs on pushes to `main` or a manual dispatch. Its build job installs Node.js 22 and locked npm dependencies, installs Chromium, and runs `npm run check`.
+`.github/workflows/pages.yml` runs only through manual dispatch. Pushing to `main` does not build or publish the site. Its build job installs Node.js 22 and locked npm dependencies, installs Chromium, and runs `npm run check`.
 
 After the checks pass, it rebuilds with `--base=/grand-theft-survivors/`. A separate browser test loads that build at the repository path and checks the game canvas, dialogs, asset URLs and license links. GitHub receives only `dist/` as the Pages artifact. A deployment job publishes it through the `github-pages` environment.
 
 The build job can read repository content and Pages configuration. The deployment job has `pages: write` and `id-token: write`. It does not need a stored personal access token. A newer deployment cancels an unfinished older one.
+
+To publish accumulated changes, open GitHub Actions, select **Verify and deploy to GitHub Pages**, choose **Run workflow**, select `main` and confirm. The owner controls when to publish. Agents must not dispatch this workflow unless explicitly asked.
 
 To reproduce the Pages build locally:
 
@@ -37,7 +39,7 @@ MIT allows use, modification and redistribution, including commercial use. Copie
 
 The `private` field in `package.json` prevents accidental npm publication. It does not control GitHub repository visibility.
 
-Reference screenshots in `sources/` are not part of the MIT grant or the deployed build. Audio candidates remain research links, with no audio files included.
+Reference screenshots in `sources/` are not part of the MIT grant or the deployed build. Only selected runtime audio exports and their notices are deployed. Source packs and unused files are excluded.
 
 ## Hosting limits
 

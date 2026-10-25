@@ -82,6 +82,7 @@ All player-facing text comes from `src/shared/intl/en.ts`. English is the only c
 - [Planned tasks and decisions](docs/backlog/README.md)
 - [GitHub Pages deployment](docs/PUBLISHING.md)
 - [Localization](docs/LOCALIZATION.md)
+- [Responsive UI and test coverage](docs/RESPONSIVE.md)
 - [Design system integration](docs/THEMING.md)
 - [Graphics and asset formats](docs/ART-PIPELINE.md)
 - [Audio candidates](docs/AUDIO-CANDIDATES.md)

@@ -8,6 +8,7 @@
   border-bottom: var(--kb-stroke) dashed var(--kb-concrete);
 }
 .brand {
+  min-height: var(--kb-min-touch);
   display: flex;
   align-items: center;
   gap: var(--kb-space-4);
@@ -104,7 +105,7 @@ footer {
   padding: var(--kb-space-5) 0;
   font-size: var(--kb-text-label);
 }
-@media (max-width: 1100px) {
+@media (max-width: 1279px) {
   .edition {
     display: none;
   }
@@ -125,7 +126,7 @@ footer {
     display: none;
   }
 }
-@media (max-width: 650px) {
+@media (max-width: 768px) {
   .topbar {
     flex-wrap: wrap;
     padding: var(--kb-space-4);
@@ -170,5 +171,14 @@ footer {
   }
   footer > span:last-child {
     display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar {
+    gap: var(--kb-space-3);
+  }
+  .intro .kb-title {
+    overflow-wrap: anywhere;
   }
 }

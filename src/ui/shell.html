@@ -31,6 +31,13 @@
       </div>
     </div>
     <div class="game-tools" role="group" aria-label="{{camera.tools}}">
+      <button
+        class="kb-btn kb-btn--secondary compact-map-button"
+        id="open-map-compact"
+        aria-label="{{map.open}}"
+      >
+        {{controls.map}}
+      </button>
       <button class="kb-btn kb-btn--secondary" id="zoom-out" aria-label="{{camera.out}}">
         {{camera.minus}}</button
       ><output id="zoom-label" aria-label="{{camera.zoom}}">{{camera.initial}}</output

@@ -84,6 +84,7 @@ export class DialogController {
       const target =
         previous?.isConnected &&
         previous !== document.body &&
+        previous.getClientRects().length > 0 &&
         !previous.matches(':disabled') &&
         !previous.closest('[hidden], [inert]')
           ? previous
@@ -102,7 +103,7 @@ export class DialogController {
       ...root.querySelectorAll<HTMLElement>(
         'button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [href], [tabindex="0"]',
       ),
-    ].filter((node) => !node.closest('[hidden], [inert]'));
+    ].filter((node) => node.getClientRects().length > 0 && !node.closest('[hidden], [inert]'));
   }
 
   #trapFocus(event: KeyboardEvent) {

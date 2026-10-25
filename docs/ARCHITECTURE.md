@@ -63,3 +63,7 @@ The GitHub Pages workflow verifies the project, builds it under `/grand-theft-su
 The app creates and resumes an AudioContext synchronously inside Play and passes it to Phaser. Audio failure can fall back to silent play. `AudioSettings` validates versioned plain data and computes Master × All SFX × subgroup, or Master × Music. Global mute yields zero without changing levels. `src/app/audioStorage.ts` owns local storage reads/writes and catches browser denials and invalid JSON. UI settings use the same dialog controller, pause model, focus trap and English catalog as the other menus. Phaser key capture is disabled while dialogs own input so range inputs retain their native arrow controls.
 
 Only runtime sound exports and notices are committed. Source archives are temporary. Extracted packs and unused samples stay in the ignored `.local/audio-packs/` folder, outside `public/` and the module graph. See `AUDIO-ASSETS.md` for original filenames, hashes, edits and licenses.
+
+## Responsive interface
+
+The theme generator derives type and spacing for four width ranges from `tokens.json`. `--kb-ui-scale` also sizes panels without transforming the game canvas. CSS rearranges the HUD independently from camera zoom and game movement. The resize observer keeps the renderer fitted to its host. Responsive browser tests cover breakpoint edges, dialog scrolling, HUD intersections, short fullscreen windows, task tables and live resizing without changes to world state. See `RESPONSIVE.md`.

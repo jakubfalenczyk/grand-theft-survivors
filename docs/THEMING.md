@@ -36,3 +36,7 @@ City art will need another review once landmarks and faction signs exist. Future
 5. Run `npm run check`; inspect desktop/mobile views and any changed world art.
 
 The original package gained named shadow/focus/chamfer tokens in 0.2.0 and world material inks in 0.3.0. UI accent roles and fonts have not changed. Reference components: `http://localhost:5173/design-system/kerbside-design-system/components.html`.
+
+## Responsive scale: version 0.4.0
+
+`responsive` in the canonical token source defines the four breakpoint ranges and their UI scales. The generator applies 85%, 90%, 95% and 100% to typography and spacing, with minimum readable text sizes. Panel dimensions consume `--kb-ui-scale`. Target sizes stay at least 48 px and focus, stroke and shadow tokens keep their original dimensions. See [responsive UI](RESPONSIVE.md) for layout rules and test coverage. Game units and camera zoom are separate from UI scaling.

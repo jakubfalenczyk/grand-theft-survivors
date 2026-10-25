@@ -50,6 +50,7 @@
 - `design-system/kerbside-design-system/tokens.json` is the only token source. Add new tokens there, then run `npm run theme:build`. Do not edit the generated `tokens.css`.
 - Shared `.kb-*` components belong in the canonical `components.css`. Application layout belongs in `src/ui/styles`. Get JavaScript, Canvas and Phaser colors from `src/theme/theme.ts`. Do not use local color literals in UI or renderers.
 - Preserve accent roles, fonts, hard shadows, chamfered corners and 48 px targets. Do not add blur, glow, soft gradients or rounded cards. Pair faction colors with labels and use the correct text color. Use `muted` only for disabled text.
+- Responsive scales and text floors belong in the canonical tokens. Keep layout ranges aligned at 480, 768 and 1279 px. Preserve 48 px targets when scaling and keep game units and camera zoom independent from UI size. Run the responsive tests after layout changes.
 - Dialogs use `DialogController`, pause gameplay through `GameSession`, manage focus and have accessible labels. Do not add independent booleans for map, pause or help state.
 
 ## Audio assets

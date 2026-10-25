@@ -18,7 +18,7 @@
   left: var(--kb-space-5);
   top: var(--kb-space-5);
   box-shadow: var(--kb-shadow-hud);
-  max-width: 360px;
+  max-width: calc(360px * var(--kb-ui-scale));
 }
 .location .kb-card {
   padding: var(--kb-space-4) var(--kb-space-5);
@@ -56,7 +56,7 @@
   align-items: stretch;
   flex-direction: column;
   gap: var(--kb-space-3);
-  width: 320px;
+  width: calc(320px * var(--kb-ui-scale));
   padding: var(--kb-space-4);
 }
 .player-identity {
@@ -84,6 +84,8 @@
 #minimap {
   display: block;
   image-rendering: pixelated;
+  width: calc(180px * var(--kb-ui-scale));
+  height: calc(180px * var(--kb-ui-scale));
 }
 .minimap-wrap .kb-btn {
   width: 100%;
@@ -108,14 +110,15 @@
   inset: 0;
   background: var(--kb-asphalt);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   overflow-y: auto;
   padding: var(--kb-space-5);
   z-index: 10;
 }
 .dialog-ink {
-  width: min(100%, 500px);
+  margin-block: auto;
+  width: min(100%, calc(500px * var(--kb-ui-scale)));
   box-shadow: var(--kb-shadow-hud);
 }
 .dialog {
@@ -148,7 +151,7 @@
   font-size: var(--kb-text-label);
 }
 .map-dialog {
-  width: min(100%, 600px);
+  width: min(100%, calc(600px * var(--kb-ui-scale)));
 }
 .map-dialog .dialog {
   gap: var(--kb-space-4);
@@ -169,7 +172,7 @@
   width: 100vw;
   border: 0;
 }
-@media (max-width: 1100px) {
+@media (max-width: 1279px) {
   .game-tools {
     top: 128px;
   }
@@ -180,7 +183,7 @@
     min-width: var(--kb-space-6);
   }
 }
-@media (max-width: 650px) {
+@media (max-width: 768px) {
   .game-frame {
     height: 720px;
   }
@@ -204,15 +207,15 @@
   .player-card {
     left: var(--kb-space-4);
     bottom: 96px;
-    width: calc(100% - var(--kb-space-6));
+    width: min(calc(320px * var(--kb-ui-scale)), calc(100% - var(--kb-space-6)));
   }
   .minimap-wrap {
     right: var(--kb-space-4);
     bottom: 280px;
   }
   #minimap {
-    width: 144px;
-    height: 144px;
+    width: calc(180px * var(--kb-ui-scale));
+    height: calc(180px * var(--kb-ui-scale));
   }
   .minimap-wrap .kb-btn {
     font-size: var(--kb-text-label);
@@ -245,7 +248,7 @@
 }
 
 .audio-dialog {
-  width: min(100%, 520px);
+  width: min(100%, calc(520px * var(--kb-ui-scale)));
 }
 .audio-dialog .dialog {
   gap: var(--kb-space-2);
@@ -300,7 +303,7 @@
 #start-content .kb-btn {
   min-width: 160px;
 }
-@media (max-width: 650px) {
+@media (max-width: 768px) {
   .audio-dialog .dialog {
     padding: var(--kb-space-4);
   }
@@ -322,4 +325,93 @@
 
 #audio-storage-status:empty {
   display: none;
+}
+
+@media (max-width: 480px) {
+  #minimap {
+    width: 144px;
+    height: 144px;
+  }
+  .game-tools {
+    flex-wrap: wrap;
+    max-width: calc(100% - 2 * var(--kb-space-4));
+  }
+  .audio-row {
+    grid-template-columns: 64px minmax(0, 1fr) 44px;
+  }
+}
+@media (max-height: 480px) {
+  .game-frame:fullscreen .location {
+    top: var(--kb-space-4);
+    left: var(--kb-space-4);
+  }
+  .game-frame:fullscreen .location .kb-card {
+    padding: var(--kb-space-2) var(--kb-space-3);
+  }
+  .game-frame:fullscreen .location .kb-meta {
+    display: none;
+  }
+  .game-frame:fullscreen #district-name {
+    font-size: var(--kb-text-ui-l);
+  }
+  .game-frame:fullscreen .game-tools {
+    top: var(--kb-space-4);
+    right: var(--kb-space-4);
+    left: auto;
+  }
+  .game-frame:fullscreen .player-card {
+    left: var(--kb-space-4);
+    bottom: 64px;
+    width: min(240px, calc(100% - 176px));
+    gap: var(--kb-space-1);
+    padding: var(--kb-space-3);
+  }
+  .game-frame:fullscreen .minimap-wrap {
+    right: var(--kb-space-4);
+    bottom: 64px;
+    width: 128px;
+  }
+  .game-frame:fullscreen #minimap {
+    width: 96px;
+    height: 96px;
+    margin-inline: auto;
+  }
+  .game-frame:fullscreen .minimap-wrap .kb-btn {
+    padding-inline: var(--kb-space-2);
+    font-size: var(--kb-text-label);
+  }
+  .game-frame:fullscreen .game-bottom {
+    min-height: 48px;
+    flex-direction: row;
+    align-items: center;
+  }
+  .game-frame:fullscreen .health-label {
+    flex-wrap: wrap;
+  }
+}
+@media (max-height: 480px) and (max-width: 480px) {
+  .game-frame:fullscreen .game-tools {
+    top: 64px;
+    left: var(--kb-space-4);
+    right: auto;
+  }
+  .game-frame:fullscreen #minimap {
+    display: none;
+  }
+  .game-frame:fullscreen .game-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.compact-map-button {
+  display: none;
+}
+@media (max-width: 480px) {
+  .minimap-wrap {
+    display: none;
+  }
+  .compact-map-button {
+    display: inline-flex;
+  }
 }

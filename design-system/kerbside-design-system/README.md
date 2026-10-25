@@ -44,3 +44,5 @@ Icon set, vehicle/pickup sprites, full screens (garage, gang select, pause), mot
 This is the canonical package. Read [the integration guide](../../docs/THEMING.md) for the implemented adapters and additions in version 0.3.0. `tokens.css` is generated from `tokens.json`: run `npm run theme:build` from the project root. The app imports this `components.css` directly and self-hosts the three font families through Fontsource, including Latin Extended characters.
 
 The integration adds subdued physical world materials in `world.materials`; these do not change UI accent roles. See the integration guide for the distinction between material color and faction/interaction signals.
+
+Version 0.4.0 adds responsive scales and minimum text sizes under `responsive`. Generated media queries adjust type and spacing for phone, tablet, laptop and desktop widths. Interaction targets remain at least 48 px. See [responsive UI](../../docs/RESPONSIVE.md) for the exact ranges and application layouts.

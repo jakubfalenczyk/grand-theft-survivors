@@ -50,3 +50,7 @@ The [world-art standard](art/PIXEL-ART.md) requires 128 × 128 or larger standal
 ## Map reload interface
 
 The pause dialog includes a secondary Restart run action using the existing canonical button, spacing and target tokens. Position reset remains separate. Dialog mode changes reset scrolling so the pause heading stays visible after returning from Sound on short screens. Full-map labels and minimap names come from the loaded map data; rectangular maps keep their aspect ratio.
+
+## Combat and population signals
+
+Combat reuses the detailed character source frames at their existing world size. Candidate triangles and selected-target rings use acid; damage bars and attack windups use riot; health retains canal. Docklands actors use their faction token and text labels, and police use ultramarine with a Police label. Canvas actor labels use the theme mono font. Snapshot-driven HUD text reports health, XP, labeled pressure out of 100 and the latest crime contribution. No new color tokens or component variants are needed. The player card is narrower through 768 px so the extra data fits beside the minimap; breakpoint scales and minimum targets remain unchanged.

@@ -207,7 +207,7 @@
   .player-card {
     left: var(--kb-space-4);
     bottom: 96px;
-    width: min(calc(320px * var(--kb-ui-scale)), calc(100% - var(--kb-space-6)));
+    width: min(calc(280px * var(--kb-ui-scale)), calc(100% - var(--kb-space-6)));
   }
   .minimap-wrap {
     right: var(--kb-space-4);

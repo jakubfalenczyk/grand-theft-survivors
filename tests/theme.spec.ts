@@ -38,10 +38,13 @@ test('Kerbside fonts, ink, shadows, targets and modal focus are applied', async 
   await expect(page.locator('#help-button')).toBeFocused();
 });
 
-test('game and its fonts load without third-party network requests', async ({ page }) => {
+test('game and its fonts load without third-party network requests', async ({ page, baseURL }) => {
   const external: string[] = [];
   page.on('request', (request) => {
-    if (!request.url().startsWith('http://127.0.0.1:5173') && !request.url().startsWith('data:'))
+    if (
+      new URL(request.url()).origin !== new URL(baseURL!).origin &&
+      !request.url().startsWith('data:')
+    )
       external.push(request.url());
   });
   await page.reload();

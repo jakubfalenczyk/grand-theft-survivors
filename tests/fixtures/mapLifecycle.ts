@@ -83,7 +83,7 @@ bus.on('game:world-ready', () => {
     oldSceneObjects = [...scene.children.list];
     oldPhysics = [body];
     oldAudio = scene.audioDirector;
-    oldKeyboard = Object.values(scene.playerController.keys);
+    oldKeyboard = scene.input.keyboard!.keys.filter((key) => Boolean(key));
     element(document, '#metrics').textContent = JSON.stringify(metrics);
     element(document, '#loads').textContent = String(++loads);
   });

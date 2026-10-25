@@ -11,6 +11,7 @@ export interface Actor extends Point {
   health: number;
   maxHealth: number;
   hostile: boolean;
+  hitByPlayer: boolean;
   heading: number;
   radius: number;
   nextAttack: number;

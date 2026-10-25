@@ -54,6 +54,7 @@ export class CombatSimulation {
       health: COMBAT.health[kind],
       maxHealth: COMBAT.health[kind],
       hostile,
+      hitByPlayer: false,
       heading: 0,
       radius: 8,
       nextAttack: 0,
@@ -109,9 +110,10 @@ export class CombatSimulation {
     if (!Number.isFinite(event.amount) || event.amount <= 0 || this.player.health <= 0) return;
     const actor = this.find(event.target);
     if (!actor) return;
-    const firstHit = !actor.hostile && actor.frightenedUntil === 0;
+    const firstHit = event.instigator === 0 && !actor.hitByPlayer;
     actor.health = Math.max(0, actor.health - event.amount);
     if (event.instigator === 0) {
+      actor.hitByPlayer = true;
       actor.hostile = actor.kind !== 'civilian';
       actor.frightenedUntil = this.time + 8;
     }

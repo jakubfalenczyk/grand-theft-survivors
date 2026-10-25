@@ -1,5 +1,5 @@
 import type Phaser from 'phaser';
-import { colors, factionTheme, phaserColors, toPhaserColor } from '../../../theme/theme.ts';
+import { colors, factionTheme, phaserColors, toPhaserColor, tokens } from '../../../theme/theme.ts';
 import { t } from '../../../shared/intl/index.ts';
 import {
   PLAYER_DISPLAY_SIZE,
@@ -34,7 +34,7 @@ export class CombatRenderer {
           .setDepth(10);
         label = this.scene.add
           .text(0, 0, '', {
-            fontFamily: 'monospace',
+            fontFamily: tokens.font.mono,
             fontSize: '8px',
             color: colors.concrete,
             backgroundColor: colors.asphalt,
@@ -56,7 +56,9 @@ export class CombatRenderer {
             : toPhaserColor(factionTheme('docklands').value);
       sprite.setPosition(actor.x, actor.y).setRotation(actor.heading).setTint(tint);
       sprite.setFrame(Math.floor(sim.time * 7 + actor.id) % 3);
-      label.setPosition(actor.x, actor.y - 16).setText(t(`actor.${actor.kind}`));
+      label
+        .setPosition(actor.x, actor.y - 16)
+        .setText(t(actor.faction === 'police' ? 'actor.officer' : `actor.${actor.kind}`));
       if (actor.windupUntil)
         this.#marks.lineStyle(1, phaserColors.riot).strokeCircle(actor.x, actor.y, 12);
       if (actor.id === sim.selected || actor.id === sim.preview) {

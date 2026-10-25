@@ -1,3 +1,6 @@
+import { MapCatalog } from '../../src/game/features/world/maps/catalog.ts';
+import { westbridge } from '../../src/game/features/world/maps/westbridge/index.ts';
+import { mapB } from './maps.ts';
 import { AudioSettings } from '../../src/shared/audio/AudioSettings.ts';
 import Phaser from 'phaser';
 import '../../src/theme/index.css';
@@ -18,7 +21,7 @@ const session = new GameSession(),
 const audio = new AudioSettings();
 const services = { session, bus, audio };
 const ui = createInterface(element(document, '#app'), services);
-const game = createGame(ui.host, services);
+const game = createGame(ui.host, services, undefined, new MapCatalog([westbridge, mapB]));
 const removeDebug = installDebugBridge(game, session);
 let restarts = 0;
 bus.on(EVENTS.WORLD_READY, () => {
@@ -79,3 +82,40 @@ element(document, '#destroy-interface').addEventListener('click', () => {
   session.destroy();
   bus.destroy();
 });
+
+function cityScene() {
+  const scene = game.scene.getScene(GAME.scene);
+  if (!(scene instanceof CityScene)) throw new Error('Expected city scene');
+  return scene;
+}
+element(document, '#stage-crime').addEventListener('click', () => {
+  const sim = cityScene().combat.simulation;
+  for (const actor of sim.actors) actor.active = false;
+  const point = { x: sim.player.x, y: sim.player.y - 90 };
+  const victim = sim.spawn('civilian', 'civilian', point);
+  const officer = sim.spawn('officer', 'police', { x: point.x + 25, y: point.y });
+  if (!victim || !officer) throw new Error('Crime fixture requires clear entry points');
+  sim.damage({
+    sourceActor: 0,
+    sourceFaction: 'player',
+    instigator: 0,
+    target: victim.id,
+    effect: 'pistol',
+    amount: 100,
+    damageType: 'kinetic',
+    position: point,
+    chainId: 100000,
+  });
+});
+element(document, '#end-run').addEventListener('click', () => {
+  cityScene().combat.simulation.player.health = 0;
+});
+
+bus.on('command:restart-run', () => bus.emit('command:load-map', cityScene().layout.mapId));
+
+element(document, '#load-alternate').addEventListener('click', () =>
+  bus.emit('command:load-map', mapB.id),
+);
+element(document, '#load-westbridge').addEventListener('click', () =>
+  bus.emit('command:load-map', westbridge.id),
+);

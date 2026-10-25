@@ -15,9 +15,10 @@ To discuss a task, open it in the browser, write your notes and copy the generat
 - A living city with civilians, traffic, three gangs and police per map. Escalation reacts to player actions instead of arbitrary timed enemy waves.
 - Start with a pistol. Character levels offer three applicable upgrade choices for owned weapons; boss crates offer three new weapon choices. Maxed weapons can combine into original evolutions.
 - **D01.** Faction bosses trigger only from hostility thresholds. No three-minute schedule, minimum elapsed time or time cooldown gates their appearance. This supersedes the initial three-minute boss suggestion.
-- **D02.** Automatic fire targets hostile enemies; attacking/provoking neutral NPCs is a deliberate player action. The exact input and target selection are still a design proposal.
+- **D02.** Automatic fire targets hostile enemies; attacking/provoking neutral NPCs is a deliberate player action. Press Space once to engage the neutral person nearest the facing direction inside the targeting cone. A candidate triangle and selected ring show the target; autoattack can continue while that individual flees.
 - **D03.** Each faction has four bosses in an ordered chain. Defeating boss four of any faction wins the map.
 - **D04.** No global concurrent boss limit or cross-faction arrival queue. Every eligible faction may send its boss immediately even when other factions have active bosses. Within each faction, the next chain member follows its predecessor's defeat.
+- **D05.** Civilians award XP, with a lower initial reward than armed opponents. Permanent faction hostility does not decay; local alert does. First damage adds 1 and a member kill adds 3; civilian harm creates police pressure when witnessed.
 - A run targets roughly 15 to 20 minutes. Killing the final boss of any one faction's chain completes the map. Time is a balancing outcome, not a boss trigger or forced victory timer.
 - Future maps are separate content tasks; provide map selection architecture while retaining one implemented map initially.
 - No player driving in the traffic task. Vehicles can collide, take damage and explode.

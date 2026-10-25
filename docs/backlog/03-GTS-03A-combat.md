@@ -1,6 +1,6 @@
 # GTS-03A. Combat foundation and deliberate provocation
 
-> Status: Implemented on the isolated combat branch. GTS-02 integration and final combined verification remain.
+> Status: Implemented and verified on 2026-10-25, integrated with GTS-02.
 
 ## Goal
 
@@ -12,7 +12,7 @@ Health, damage/death and XP ownership; pistol auto-target/fire; projectiles; one
 
 ## D02 behavior
 
-Auto-fire considers actors already hostile to the player. Proposed input: hold Space to aim/fire at a neutral target inside a facing cone. Show the selected neutral target before an attack. A successful damaging attack creates the provocation event; merely facing someone does not. Auto-fire must not silently attack unprovoked civilians, neutral gang members, neutral police or traffic. Discuss whether one deliberate hit should allow continued auto-targeting of that individual while they flee.
+Auto-fire considers actors already hostile to the player. Press Space once to engage the nearest neutral person inside the facing cone. A small triangle previews the candidate; a ring identifies the selected actor. Holding Space does not select another person. The chosen person remains eligible for autoattack while fleeing, within range and line of sight. A successful damaging attack creates provocation; selection alone does not. Default auto-fire ignores unprovoked civilians, gang members, police and traffic.
 
 ## Selection details
 
@@ -35,7 +35,7 @@ Each damage event records the source actor and faction, instigator, weapon or ef
 
 ## Implementation review, 2026-10-25
 
-Reviewed against committed baseline `a982ebd` and the separate, uncommitted GTS-02 changes on `main`. Implementation of GTS-03A and GTS-04A is authorized in the `codex/gts-03a-04a` worktree. Product decisions below remain pending; proposals are not confirmed rules.
+Reviewed against committed baseline `a982ebd` and the separate, uncommitted GTS-02 changes on `main`. Implementation of GTS-03A and GTS-04A is authorized in the `codex/gts-03a-04a` worktree. The confirmed owner decisions below supersede the proposals.
 
 - The baseline has no actor health, damage, weapons or XP. The HUD health meter is static. Add feature-owned combat state and immutable snapshots; keep progression choices in GTS-03B.
 - `CityScene` currently composes world, player, footsteps and camera. Keep targeting, cooldowns, projectile simulation, damage resolution and rendering outside the scene. Separate actor identity from reusable pool slots so delayed damage cannot affect a replacement actor.
@@ -57,3 +57,5 @@ The first pistol uses the proposed 12 damage, 0.6 s cooldown, 300-unit range and
 Baseline verification: Node.js 22.22.1, clean `npm ci`, token checks, TypeScript, lint, formatting, all 14 unit tests and production build passed. The first browser suite passed 45 of 46 tests. The perspective test lost `window.__gameDebug` during execution; its isolated rerun passed. The full `npm run check` is therefore not yet recorded as passing. No combat or population code was changed during this review.
 
 Implementation verification: `npm run check` passed with 20 unit tests and 47 browser tests, including responsive and restart checks. Combat uses at most 64 actor slots and 96 projectile slots. GTS-04A replaces the two initial review actors with the living population.
+
+Final integration verification: based on GTS-02 commit `e8e3907`. `PLAYWRIGHT_PORT=5175 npm run check` passed all token, type, lint, formatting, unit, build and browser checks: 33 unit tests and 52 browser tests. Coverage includes populated Westbridge → rectangular fixture map → Westbridge after a crime, fresh XP/health/hostility, crossing waits and flight, pause, death recovery, audio persistence, owned keyboard cleanup and responsive HUD layout. Fixture maps without authored population data remain empty; new map content must supply its own population definition.

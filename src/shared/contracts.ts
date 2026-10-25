@@ -77,6 +77,17 @@ export interface CombatSnapshot {
   readonly maxHealth: number;
   readonly xp: number;
   readonly kills: number;
+  readonly lastCrime?: {
+    readonly cause: 'assault' | 'kill';
+    readonly gang: number;
+    readonly police: number;
+  } | null;
+  readonly hostility?: readonly {
+    readonly id: 'docklands' | 'velvet-ward' | 'rust-union' | 'police';
+    readonly progress: number;
+    readonly alert: number;
+    readonly cause: 'none' | 'assault' | 'kill';
+  }[];
 }
 export type SessionMode =
   'start' | 'loading' | 'playing' | 'paused' | 'help' | 'map' | 'audio' | 'dead';
@@ -120,6 +131,13 @@ export interface DebugBridge {
       hostile: boolean;
     }[];
     projectiles: readonly { x: number; y: number; target: number }[];
+    population?: {
+      ambient: number;
+      response: number;
+      nodes: number;
+      pathRequests: number;
+      recentSpawns: readonly { x: number; y: number; visible: boolean; initial: boolean }[];
+    };
     actorSlots: number;
     projectileSlots: number;
   };

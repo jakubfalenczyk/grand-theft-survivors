@@ -187,7 +187,7 @@ test('live resizing changes UI scale without restarting or changing world state'
     const scale = width <= 480 ? 0.85 : width <= 768 ? 0.9 : width <= 1279 ? 0.95 : 1;
     expect(metrics.title).toBeCloseTo(44 * scale, 1);
     expect(metrics.gap).toBeCloseTo(24 * scale, 1);
-    expect(metrics.panel).toBeCloseTo(320 * scale, 1);
+    expect(metrics.panel).toBeCloseTo((width <= 768 ? 280 : 320) * scale, 1);
     expect(metrics.metadata).toBeGreaterThanOrEqual(13);
     expect(metrics.transform).toBe('none');
     await noPageOverflow(page);

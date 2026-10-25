@@ -30,6 +30,35 @@ export function attachHud(root: HTMLElement, bus: EventBus, session: GameSession
       meter.setAttribute('aria-valuenow', String(health));
       element<HTMLElement>(meter, 'i').style.width = `${(health / maxHealth) * 100}%`;
       element(root, '#combat-xp').textContent = t('combat.xp', { xp });
+      const crime = snapshot.combat.lastCrime;
+      const causeLabel = element(root, '#hostility-cause');
+      causeLabel.hidden = !crime;
+      if (crime)
+        causeLabel.textContent = t('hostility.event', {
+          cause: t(`crime.${crime.cause}`),
+          gang: crime.gang,
+          police: crime.police,
+        });
+      const gang = snapshot.combat.hostility?.find((faction) => faction.id === 'docklands');
+      const police = snapshot.combat.hostility?.find((faction) => faction.id === 'police');
+      const pressure = element(root, '#hostility-summary');
+      if (gang && police) {
+        pressure.textContent = t('hostility.summary', {
+          gang: gang.progress,
+          police: police.progress,
+        });
+        pressure.setAttribute(
+          'aria-label',
+          t('hostility.label', {
+            gang: gang.progress,
+            police: police.progress,
+            gangAlert: Math.round(gang.alert),
+            policeAlert: Math.round(police.alert),
+          }),
+        );
+        const cause = police.cause !== 'none' ? police.cause : gang.cause;
+        pressure.title = cause === 'none' ? '' : t(`hostility.${cause}`);
+      }
     }
     district.textContent = t(`district.${snapshot.district}`);
     coordinates.textContent = t('hud.coordinates', {

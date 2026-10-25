@@ -68,9 +68,11 @@
         <span class="kb-meta">{{player.identity}}</span>
       </div>
       <div class="health-label">
-        <span>{{hud.health}}</span><span class="kb-meta">{{hud.health.initial}}</span>
+        <span>{{hud.health}}</span
+        ><span class="kb-meta" id="health-value">{{hud.health.initial}}</span>
       </div>
       <div
+        id="health-meter"
         class="kb-bar"
         role="meter"
         aria-label="{{hud.health.label}}"
@@ -80,6 +82,7 @@
       >
         <i></i>
       </div>
+      <span class="kb-meta" id="combat-xp">{{combat.xp.initial}}</span>
     </div>
     <div class="minimap-wrap">
       <div class="minimap-heading kb-meta">
@@ -121,6 +124,10 @@
           <div id="help-content" hidden>
             <dl>
               <div>
+                <dt><kbd>{{key.space}}</kbd></dt>
+                <dd>{{combat.controls}}</dd>
+              </div>
+              <div>
                 <dt>
                   <kbd>{{key.forward}}</kbd> {{separator.slash}}
                   <kbd>{{key.up}}</kbd>
@@ -152,6 +159,7 @@
               </div>
             </dl>
           </div>
+          <button id="restart-combat" class="kb-btn" hidden>{{death.restart}}</button>
           <button id="resume-button" class="kb-btn">{{resume.button}}</button>
           <button id="restart-run-button" class="kb-btn kb-btn--secondary">{{restart.run}}</button>
           <button id="pause-audio-button" class="kb-btn kb-btn--secondary">{{audio.open}}</button>

@@ -24,7 +24,8 @@ export class GameSession {
   }
 
   setMode(mode: SessionMode) {
-    if (!['start', 'loading', 'playing', 'paused', 'help', 'map', 'audio'].includes(mode))
+    if (this.state.mode === 'dead' && mode !== 'loading') return;
+    if (!['start', 'loading', 'playing', 'paused', 'help', 'map', 'audio', 'dead'].includes(mode))
       throw new Error(`Unknown mode: ${mode}`);
     this.#update({ mode });
   }

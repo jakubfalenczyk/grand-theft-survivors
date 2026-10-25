@@ -1,5 +1,19 @@
 /** English is the source catalog. Add locales with the same keys and placeholders. */
 export const en = {
+  'actor.civilian': 'Civilian',
+  'actor.melee': 'Docklands',
+  'actor.ranged': 'Docklands gunner',
+  'actor.officer': 'Police',
+  'key.space': 'SPACE',
+  'combat.controls':
+    'Press once to attack the neutral person ahead. A small triangle marks the candidate; a ring marks your chosen target.',
+  'combat.health': '{health} / {maxHealth}',
+  'combat.xp.initial': 'XP 0',
+  'combat.xp': 'XP {xp}',
+  'death.title': 'RUN ENDED',
+  'death.description': 'You ran out of health. Start a new run to try again.',
+  'death.restart': 'Start new run',
+
   'start.title': 'WESTBRIDGE IS WAITING.',
   'start.description': 'Walk the streets. Find your way through the city.',
   'start.play': 'Play',

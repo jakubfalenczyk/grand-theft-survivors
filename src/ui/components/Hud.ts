@@ -23,6 +23,14 @@ export function attachHud(root: HTMLElement, bus: EventBus, session: GameSession
   };
   const unsubscribe = bus.on(EVENTS.SNAPSHOT, (snapshot) => {
     player = snapshot;
+    if (snapshot.combat) {
+      const { health, maxHealth, xp } = snapshot.combat;
+      element(root, '#health-value').textContent = t('combat.health', { health, maxHealth });
+      const meter = element(root, '#health-meter');
+      meter.setAttribute('aria-valuenow', String(health));
+      element<HTMLElement>(meter, 'i').style.width = `${(health / maxHealth) * 100}%`;
+      element(root, '#combat-xp').textContent = t('combat.xp', { xp });
+    }
     district.textContent = t(`district.${snapshot.district}`);
     coordinates.textContent = t('hud.coordinates', {
       x: Math.round(snapshot.x).toString().padStart(4, '0'),

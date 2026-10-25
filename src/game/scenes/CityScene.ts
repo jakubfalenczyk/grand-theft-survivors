@@ -1,3 +1,4 @@
+import { CombatFeature } from '../features/combat/CombatFeature.ts';
 import { AudioDirector, preloadAudio } from '../features/audio/AudioDirector.ts';
 import { Footsteps } from '../features/audio/Footsteps.ts';
 import type { AppServices } from '../../shared/services.ts';
@@ -19,6 +20,7 @@ import { attachFollowCamera } from '../camera/FollowCamera.ts';
 
 /** Composition only. Features own behavior; UI receives plain data through the bus. */
 export class CityScene extends Phaser.Scene {
+  combat!: CombatFeature;
   audioDirector!: AudioDirector;
   footsteps!: Footsteps;
   services: AppServices;
@@ -64,6 +66,7 @@ export class CityScene extends Phaser.Scene {
       this.session,
       this.layout.bounds,
     );
+    this.combat = new CombatFeature(this, this.layout, this.playerController, this.services);
     this.lastHud = -Infinity;
     const reset = () => {
       this.playerController.reset();
@@ -108,6 +111,7 @@ export class CityScene extends Phaser.Scene {
       this.events.off(Phaser.Scenes.Events.DESTROY, shutdown);
       cleanups.forEach((cleanup) => cleanup());
       this.game.events.off(Phaser.Core.Events.BLUR, onBlur);
+      this.combat.destroy();
       this.follow.destroy();
       this.audioDirector.destroy();
       this.playerController.destroy();
@@ -115,6 +119,7 @@ export class CityScene extends Phaser.Scene {
     };
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, shutdown);
     this.events.once(Phaser.Scenes.Events.DESTROY, shutdown);
+    if (this.session.state.mode === 'loading') this.session.setMode('playing');
     this.bus.emit(EVENTS.WORLD_READY, this.layout);
     this.publishSnapshot();
   }
@@ -125,6 +130,7 @@ export class CityScene extends Phaser.Scene {
       this.playerController.running,
       this.session.blocked,
     );
+    this.combat.update(delta);
     this.worldRenderer.update(this.cameras.main);
     if (time - this.lastHud >= GAME.hudIntervalMs) {
       this.lastHud = time;
@@ -135,6 +141,7 @@ export class CityScene extends Phaser.Scene {
     const player = this.playerController.getSnapshot();
     return {
       ...player,
+      combat: this.combat.getSnapshot(),
       mapId: this.layout.mapId,
       district: districtAt(this.layout.districts, player.x, player.y).id,
       seed: this.layout.seed,

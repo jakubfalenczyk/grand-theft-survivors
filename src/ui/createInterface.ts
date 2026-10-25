@@ -30,6 +30,7 @@ export function createInterface(root: HTMLElement, services: AppServices) {
       { signal: events.signal },
     );
   const dialogs = new DialogController(root);
+  onClick('restart-combat', () => bus.emit('command:restart-run', undefined));
   onClick('play-button', () => bus.emit('command:play', undefined));
   onClick('audio-button', () => session.openAudio());
   onClick('pause-audio-button', () => session.openAudio());

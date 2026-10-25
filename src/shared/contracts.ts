@@ -61,6 +61,7 @@ export interface PlayerSnapshot extends Point {
 }
 export interface GameSnapshot extends PlayerSnapshot {
   mapId: MapId;
+  combat?: CombatSnapshot;
   district: DistrictId;
   seed: number;
   buildings: number;
@@ -71,7 +72,14 @@ export interface BuildingView extends Footprint {
   roofY: number;
   scale: number;
 }
-export type SessionMode = 'start' | 'loading' | 'playing' | 'paused' | 'help' | 'map' | 'audio';
+export interface CombatSnapshot {
+  readonly health: number;
+  readonly maxHealth: number;
+  readonly xp: number;
+  readonly kills: number;
+}
+export type SessionMode =
+  'start' | 'loading' | 'playing' | 'paused' | 'help' | 'map' | 'audio' | 'dead';
 export interface SessionState {
   readonly mode: SessionMode;
   readonly zoom: number;
@@ -97,6 +105,24 @@ export interface AudioDebugSnapshot {
   managed: number;
 }
 export interface DebugBridge {
+  getCombat(): CombatSnapshot & {
+    selected: number | null;
+    preview: number | null;
+    shots: number;
+    time: number;
+    actors: readonly {
+      id: number;
+      kind: string;
+      faction: string;
+      x: number;
+      y: number;
+      health: number;
+      hostile: boolean;
+    }[];
+    projectiles: readonly { x: number; y: number; target: number }[];
+    actorSlots: number;
+    projectileSlots: number;
+  };
   getAudio(): AudioDebugSnapshot;
   isReady(): boolean;
   getState(): GameSnapshot & { paused: boolean; map: boolean; zoom: number };

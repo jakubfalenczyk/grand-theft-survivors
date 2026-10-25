@@ -36,7 +36,7 @@ Movement remains 105 world units/s forward/backward, 176 running forward and 4.8
 
 ## Growth rules
 
-Add abstractions only for a real feature. Scenes decide when modules start/update/stop; modules decide how they behave. Keep configuration with the owning feature. Future enemies/projectiles should use bounded pools when introduced. Weapons own targeting/cooldown; spawn pressure belongs to a director; leveling does not belong to the player renderer. No such future feature is implemented yet.
+Add abstractions only for a real feature. Scenes decide when modules start/update/stop; modules decide how they behave. Keep configuration with the owning feature. Future enemies/projectiles should use bounded pools when introduced. Weapons own targeting/cooldown; spawn pressure belongs to a director; leveling does not belong to the player renderer. Combat now supplies the first bounded actor and projectile pools. Population and weapon progression remain separate features.
 
 Vite separates the Phaser chunk for caching. The engine remains about 1.2 MB before gzip; the size warning is intentional and is not suppressed. Keep npm as the only package manager. Consider a runtime change only after measuring a build or test problem. `window.__gameDebug` is development-only, read-only and removed on destroy; it is not gameplay communication.
 
@@ -77,3 +77,11 @@ The 2026-10-25 [pixel-art decision](art/PIXEL-ART.md) separates source density f
 ## Responsive interface
 
 The theme generator derives type and spacing for four width ranges from `tokens.json`. `--kb-ui-scale` also sizes panels without transforming the game canvas. CSS rearranges the HUD independently from camera zoom and game movement. The resize observer keeps the renderer fitted to its host. Responsive browser tests cover breakpoint edges, dialog scrolling, HUD intersections, short fullscreen windows, task tables and live resizing without changes to world state. See `RESPONSIVE.md`.
+
+## Combat foundation
+
+GTS-03A adds engine-independent combat state under `features/combat`. `CombatSimulation` owns stable actor identities, damage attribution, health, exactly-once XP, target locks and projectile sweeps at 120 Hz. `targeting` and `geometry` share ground-footprint line-of-sight rules. `CombatRenderer` owns bounded sprite/label slots and markers. `CombatFeature` connects keyboard input and session blocking without accessing the DOM.
+
+Space uses an input edge to engage a neutral actor in the facing cone. The candidate triangle and selected ring are separate from damage provocation. The selected actor remains eligible while fleeing; default auto-fire considers hostiles only. Player shots affect their target only, enemy attacks affect the player only, and buildings block both. Causal damage outcomes record source actor/faction, instigator, effect, type, position and chain ID. Reused pool slots receive new identities.
+
+Every blocked session mode stops simulation time and attack windups. A dead player enters the exclusive `dead` mode managed by `DialogController`; only a new run can leave death. Health and XP reach the HUD through snapshots. The read-only debug bridge returns copied combat data. Scene shutdown releases the feature renderer and owned keyboard key. Position reset preserves health, XP and world state; full restart replaces all run-owned combat state.

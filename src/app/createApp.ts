@@ -22,7 +22,8 @@ export function createApp(root: HTMLElement) {
   observer.observe(ui.host);
   let currentMap: MapId | undefined;
   const stopRestart = bus.on('command:restart-run', () => {
-    if (currentMap && session.state.mode === 'paused') bus.emit('command:load-map', currentMap);
+    if (currentMap && (session.state.mode === 'paused' || session.state.mode === 'dead'))
+      bus.emit('command:load-map', currentMap);
   });
   const stopReady = bus.on('game:world-ready', (layout) => {
     currentMap = layout.mapId;

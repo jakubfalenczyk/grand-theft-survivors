@@ -13,6 +13,7 @@ export function installDebugBridge(game: Phaser.Game, session: GameSession) {
   };
   const bridge: DebugBridge = {
     isReady: ready,
+    getCombat: () => scene()!.combat.getSnapshot(),
     getAudio: () => scene()!.audioDirector.getSnapshot(),
     getState: () => {
       const state = session.state;

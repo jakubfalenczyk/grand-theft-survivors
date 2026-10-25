@@ -33,24 +33,30 @@ export class DialogController {
   setMode(mode: SessionMode) {
     const changed = mode !== this.#mode;
     this.#mode = mode;
+    const dead = mode === 'dead';
+    element(this.#root, '#restart-combat').hidden = !dead;
     const starting = mode === 'start' || mode === 'loading';
     element(this.#root, '#start-content').hidden = !starting;
     element(this.#root, '#play-button').hidden = mode !== 'start';
     element(this.#root, '#start-loading').hidden = mode !== 'loading';
-    element(this.#root, '#resume-button').hidden = starting;
+    element(this.#root, '#resume-button').hidden = starting || dead;
     element(this.#root, '#pause-audio-button').hidden = mode !== 'paused';
     element(this.#root, '#restart-run-button').hidden = mode !== 'paused';
     element(this.#root, '#help-content').hidden = mode !== 'help';
     element(this.#root, '#dialog-title').textContent = starting
       ? t('start.title')
-      : mode === 'help'
-        ? t('help.title')
-        : t('pause.title');
+      : dead
+        ? t('death.title')
+        : mode === 'help'
+          ? t('help.title')
+          : t('pause.title');
     element(this.#root, '#dialog-description').textContent = starting
       ? t('start.description')
-      : mode === 'help'
-        ? t('help.description')
-        : t('pause.description');
+      : dead
+        ? t('death.description')
+        : mode === 'help'
+          ? t('help.description')
+          : t('pause.description');
 
     const next =
       mode === 'playing'
